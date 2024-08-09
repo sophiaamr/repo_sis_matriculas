@@ -15,21 +15,21 @@ Eu como funcionário da secretaria, quero poder cadastrar alunos e professores n
 
 #### US004 - Definição do período de matrículas. 
 Eu como funcionário da secretaria, quero poder definir o período de matrículas para manter a organização do semestre seguinte.
+
+#### US005 - Gerenciar disciplinas.
+Eu como funcionário da secretaria, quero poder gerenciar as disciplinas dos professores. 
 ***
 
 *  **Aluno**
 
-#### US005 - Notificação de Faturas em Aberto
+#### US006 - Notificação de Faturas em Aberto
 Eu como aluno, quero ser notificado pelo mesmo sistema sobre minhas faturas em aberto, para melhor organização financeira. 
 
-#### US006 - Cancelamento de Matrículas Anteriores
+#### US007 - Cancelamento de Matrículas Anteriores
 Eu como aluno, quero poder cancelar as matrículas feitas anteriormente, para que eu possa ajustar meu plano de estudos de acordo com novas necessidades.
 
-#### US007 - Matrícula em Disciplinas Obrigatórias e Optativas
+#### US008 - Matrícula em Disciplinas Obrigatórias e Optativas
 Eu como aluno, quero poder me matricular em disciplinas obrigatórias e optativas para preencher a minha grade.
-
-#### US008 - Segurança das Informações Pessoais por Senha
-Eu como aluno, quero poder garantir que minhas informações pessoais estejam seguras. Para isso, é necessária uma senha, garantindo que apenas eu possa acessar o sistema.
 
 ***
 * **Professor**
