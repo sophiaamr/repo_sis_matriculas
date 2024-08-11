@@ -46,3 +46,11 @@ Eu como usuário, quero realizar login no sistema para ter acesso as minhas info
 #### US011 - Gerência de cadastro
 Eu como usuário, quero poder gerenciar meus dados pessoais para sempre mantê-los atualizados.
 ***
+
+## Diagrama de Caso de Uso
+
+<div>
+ <img src="docs/Sprint1_Matriculas_LabDev.png" alt="Diagrama de Caso de Uso" width="76%">
+</div>
+
+***
