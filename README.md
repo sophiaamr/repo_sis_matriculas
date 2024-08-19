@@ -1,4 +1,12 @@
-# repo_sis_matriculas
+# Laboratório 1 - Sistema de Matrículas
+
+Este repositório contém o projeto de um Sistema de Matrículas para uma Universidade, desenvolvido com o objetivo de informatizar o processo de matrícula dos alunos. O sistema foi projetado para atender às necessidades da secretaria da universidade, professores e alunos, facilitando o gerenciamento de disciplinas, inscrições e cobranças.
+
+## Integrantes
+* [Ana Julia Teixeira Candido](https://github.com/anajuliateixeiracandido)
+*  [Marcella Ferreira Chaves Costa](https://github.com/marcellafccosta)
+*  [Sophia Mendes Rabelo ](https://github.com/sophiaamr)
+  
 
 ## Histórias de Usuário 
 
