@@ -2,12 +2,12 @@ import mysql from 'mysql2';
 
 export const connection = mysql.createConnection({
   host: 'localhost',
-  user: '',
+  user: 'root',
   password: '',
-  database: ''
+  database: 'sisMatricula'
 });
 
-db.connect((err) => {
+connection.connect((err) => {
   if (err) {
     console.error('Erro ao conectar ao banco de dados:', err);
     return;
