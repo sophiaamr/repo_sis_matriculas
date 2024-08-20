@@ -1,23 +1,29 @@
-const express = require('express')
-const app = express()
-const PORT = 3000
-const cors = require("cors")
+import express, { json } from 'express';
+import { routes } from './src/routes/routes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const loginRouter = require('./routes/loginRoute')
+import * as dotnv from 'dotenv';
+import  cors  from 'cors'
 
-app.use(cors)
-app.use(loginRouter) 
-//usar o use pq ele vai ser utilizado p todas as requisicoes independente se eh post get etc
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.get('/', (req, res) =>{
-    res.send('<h1>ola mundo</h1>')
-})
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-app.get("/sobre", (req, res) => {
-    res.send("<h1>esta funcionando</h1>")
-})
+const app = express();
+const PORT = 3000;
 
-app.listen(PORT, () =>{
+app.use(json());
+app.use(cors());
 
-    console.log(`app funcionando na porta ${PORT}`)
-})
+app.use('/api', routes);
+
+app.use((request, response) => {
+    response.status(404).send('Rota não encontrada');
+});
+
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});
