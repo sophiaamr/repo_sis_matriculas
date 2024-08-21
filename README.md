@@ -64,7 +64,7 @@ Eu como usuário, quero poder gerenciar meus dados pessoais para sempre mantê-l
 </div>
 
 <div>
- <img src="docs/DiagramaClasse_Lab01.png" alt="Diagrama de classe" width="76%">
+ <img src="docs/DiagramaDeClasseV2.png" alt="Diagrama de classe" width="76%">
 </div>
 
 ***
