@@ -57,11 +57,13 @@ Eu como usuário, quero poder gerenciar meus dados pessoais para sempre mantê-l
 
 ## Diagramas
 
-### Diagrama de caso de uso
+### Diagrama de Caso de Uso
 
 <div>
  <img src="docs/Sprint1_Matriculas_LabDev.png" alt="Diagrama de Caso de Uso" width="76%">
 </div>
+
+### Diagrama de Classes
 
 <div>
  <img src="docs/DiagramaDeClasseV2.png" alt="Diagrama de classe" width="76%">
