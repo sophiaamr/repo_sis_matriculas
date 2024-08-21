@@ -1,37 +1,38 @@
+DROP DATABASE IF EXISTS sisMatricula;
 CREATE DATABASE sisMatricula;
-DROP DATABASE sismatricula;
 USE sisMatricula;
 
-CREATE TABLE IF NOT EXISTS Usuario(
+CREATE TABLE IF NOT EXISTS Usuario (
     idUsuario INT PRIMARY KEY AUTO_INCREMENT,
-    nome varchar(150) NOT NULL,
-    cpf varchar(11) not null,
-    telefone varchar(11) not null,
-    email varchar(100) not null,
-    senha varchar(20) not null
+    nome VARCHAR(150) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    telefone VARCHAR(11) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    senha VARCHAR(20) NOT NULL,
+    tipo ENUM('secretaria', 'professor', 'aluno') NOT NULL
 );
 
-CREATE TABLE Aluno (
+CREATE TABLE IF NOT EXISTS Aluno (
     idAluno INT PRIMARY KEY AUTO_INCREMENT,
-    matricula VARCHAR(20) NOT NULL,
+    matricula VARCHAR(20) NOT NULL UNIQUE,
     idUsuario INT,
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
 
-CREATE TABLE Professor (
+CREATE TABLE IF NOT EXISTS Professor (
     idProfessor INT PRIMARY KEY AUTO_INCREMENT,
     cargaHorario INT NOT NULL,
     idUsuario INT,
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
 
-CREATE TABLE Curso (
+CREATE TABLE IF NOT EXISTS Curso (
     idCurso INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
     numCredito INT NOT NULL
 );
 
-CREATE TABLE Disciplina (
+CREATE TABLE IF NOT EXISTS Disciplina (
     idDisciplina INT PRIMARY KEY AUTO_INCREMENT,
     nomeDisciplina VARCHAR(255) NOT NULL,
     status ENUM('ativa', 'inativa') NOT NULL,
@@ -40,7 +41,7 @@ CREATE TABLE Disciplina (
     FOREIGN KEY (idCurso) REFERENCES Curso(idCurso)
 );
 
-CREATE TABLE Matricula (
+CREATE TABLE IF NOT EXISTS Matricula (
     idMatricula INT PRIMARY KEY AUTO_INCREMENT,
     status ENUM('ativa', 'cancelada', 'encerrada') NOT NULL,
     idAluno INT,
@@ -49,7 +50,7 @@ CREATE TABLE Matricula (
     FOREIGN KEY (idDisciplina) REFERENCES Disciplina(idDisciplina)
 );
 
-CREATE TABLE Cobranca (
+CREATE TABLE IF NOT EXISTS Cobranca (
     idCobranca INT PRIMARY KEY AUTO_INCREMENT,
     status ENUM('pendente', 'paga', 'cancelada') NOT NULL,
     juros DOUBLE NOT NULL,
@@ -57,4 +58,11 @@ CREATE TABLE Cobranca (
     dataFim DATE NOT NULL,
     idAluno INT,
     FOREIGN KEY (idAluno) REFERENCES Aluno(idAluno)
+);
+
+CREATE TABLE IF NOT EXISTS Secretaria (
+    usuario_id INT NOT NULL,
+    departamento VARCHAR(255),
+    PRIMARY KEY (usuario_id),
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(idUsuario)
 );
