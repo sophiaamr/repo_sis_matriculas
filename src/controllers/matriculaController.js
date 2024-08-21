@@ -79,7 +79,7 @@ export class MatriculaController {
 
         try {
             // Verifica se status é um valor válido do Enum
-            const validStatuses = ['ATIVA', 'CANCELADA', 'PENDENTE'];
+            const validStatuses = ['ATIVA', 'ENCERRADA'];
             if (status && !validStatuses.includes(status)) {
                 return response.status(400).send("Status inválido.");
             }
