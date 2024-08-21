@@ -1,116 +1,61 @@
-import UserModel from '../models/userModel.js'; // Import default
-import autoBind from 'auto-bind';
+import Usuario from '../models/userModel.js';
+import Aluno from '../models/alunoModel.js';
+import Professor from '../models/professorModel.js';
+import Secretaria from '../models/secretariaModel.js';
 
 export class UserController {
-    constructor() {
-        autoBind(this);
+  async createAluno(req, res) {
+    try {
+      const { nome, cpf, telefone, email, senha, matricula } = req.body;
+
+      const usuarioModel = new Usuario();
+      const result = await usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'aluno' });
+      const userId = result.insertId;
+
+      const alunoModel = new Aluno();
+      await alunoModel.create({ idUsuario: userId, matricula });
+
+      return res.status(201).json({ success: true, message: 'Aluno criado com sucesso!' });
+    } catch (err) {
+      console.error('Erro ao criar aluno:', err);
+      return res.status(500).json({ error: 'Erro interno do servidor' });
     }
-
-    async create(request, response) {
-        try {
-            const { nome, cpf, telefone, email, senha } = request.body;
-
-            if (!nome || !cpf || !telefone || !email || !senha) {
-                return response.status(400).send("Revise as informações fornecidas.");
-            }
-
-            UserModel.create({ nome, cpf, telefone, email, senha }, (err, result) => {
-                if (err) {
-                    console.error('Erro ao criar usuário:', err.message);
-                    return response.status(500).send('Erro ao criar usuário.');
-                }
-                return response.status(201).json({
-                    success: true,
-                    message: "Usuário criado com sucesso",
-                    result
-                });
-            });
-
-        } catch (error) {
-            console.error('Erro ao criar usuário:', error.message);
-            return response.status(500).json({ error: "Erro interno do servidor" });
-        }
+  }
+  async createProfessor(req, res) {
+    try {
+      const { nome, cpf, telefone, email, senha, cargaHorario } = req.body;
+  
+      const usuarioModel = new Usuario();
+      const result = await usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'professor' });
+      const userId = result.insertId;
+  
+      const professorModel = new Professor();
+      await professorModel.create({ idUsuario: userId, cargaHorario });
+  
+      return res.status(201).json({ success: true, message: 'Professor criado com sucesso!' });
+    } catch (err) {
+      console.error('Erro ao criar professor:', err);
+      return res.status(500).json({ error: 'Erro interno do servidor' });
     }
-
-    async getAll(request, response) {
-        try {
-            UserModel.getAll((err, users) => {
-                if (err) {
-                    console.error('Erro ao buscar usuários:', err.message);
-                    return response.status(500).send('Erro ao buscar usuários.');
-                }
-                return response.status(200).json(users);
-            });
-        } catch (error) {
-            console.error('Erro ao buscar usuários:', error.message);
-            return response.status(500).json({ error: "Erro interno do servidor" });
-        }
+  }
+  async createSecretaria(req, res) {
+    try {
+      const { nome, cpf, telefone, email, senha, departamento } = req.body;
+  
+      const usuarioModel = new Usuario();
+      const result = await usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'secretaria' });
+      const userId = result.insertId;
+  
+      const secretariaModel = new Secretaria();
+      await secretariaModel.create({ usuario_id: userId, departamento });
+  
+      return res.status(201).json({ success: true, message: 'Secretário criado com sucesso!' });
+    } catch (err) {
+      console.error('Erro ao criar secretário:', err);
+      return res.status(500).json({ error: 'Erro interno do servidor' });
     }
-
-    async getById(request, response) {
-        const { id } = request.params;
-
-        try {
-            UserModel.getById(id, (err, user) => {
-                if (err) {
-                    console.error('Erro ao buscar usuário:', err.message);
-                    return response.status(500).send('Erro ao buscar usuário.');
-                }
-                if (!user) {
-                    return response.status(404).send('Usuário não encontrado.');
-                }
-                return response.status(200).json(user);
-            });
-        } catch (error) {
-            console.error('Erro ao buscar usuário:', error.message);
-            return response.status(500).json({ error: "Erro interno do servidor" });
-        }
-    }
-
-    async update(request, response) {
-        const { id } = request.params;
-        const { nome, cpf, telefone, email, senha } = request.body;
-
-        try {
-            UserModel.update(id, { nome, cpf, telefone, email, senha }, (err, result) => {
-                if (err) {
-                    console.error('Erro ao atualizar usuário:', err.message);
-                    return response.status(500).send('Erro ao atualizar usuário.');
-                }
-                if (result.affectedRows === 0) {
-                    return response.status(404).send('Usuário não encontrado.');
-                }
-                return response.status(200).json({
-                    success: true,
-                    message: "Usuário atualizado com sucesso"
-                });
-            });
-        } catch (error) {
-            console.error('Erro ao atualizar usuário:', error.message);
-            return response.status(500).json({ error: "Erro interno do servidor" });
-        }
-    }
-
-    async delete(request, response) {
-        const { id } = request.params;
-
-        try {
-            UserModel.delete(id, (err, result) => {
-                if (err) {
-                    console.error('Erro ao deletar usuário:', err.message);
-                    return response.status(500).send('Erro ao deletar usuário.');
-                }
-                if (result.affectedRows === 0) {
-                    return response.status(404).send('Usuário não encontrado.');
-                }
-                return response.status(200).json({
-                    success: true,
-                    message: "Usuário deletado com sucesso"
-                });
-            });
-        } catch (error) {
-            console.error('Erro ao deletar usuário:', error.message);
-            return response.status(500).json({ error: "Erro interno do servidor" });
-        }
-    }
+  }
+  
 }
+
+export default new UserController();

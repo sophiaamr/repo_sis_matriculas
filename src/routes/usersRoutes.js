@@ -1,13 +1,13 @@
-import { Router } from "express";
-import { UserController } from "../controllers/userController.js";
+import { Router } from 'express';
+import UserController from '../controllers/userController.js'; // Corrija para importação padrão
 
 const router = Router();
+const userController = UserController; // Instância padrão exportada
 
-const userController = new UserController();
+router.post('/aluno', userController.createAluno);
+router.post('/professor', userController.createProfessor);
+router.post('/secretaria', userController.createSecretaria);
 
-router.get('/', userController.getAll);
-router.post('/', userController.create);
-router.put('/', userController.update);
-router.delete('/addresses', userController.delete);
+// Adicione outros métodos de rota se necessário
 
 export { router as userRoutes };
