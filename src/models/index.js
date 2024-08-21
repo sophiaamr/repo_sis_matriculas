@@ -1,6 +1,6 @@
-import BaseModel from './BaseModel.js';
+import userModel from './userModel.js';
 
-class Usuario extends BaseModel {
+class Usuario extends userModel {
   constructor() {
     super('usuario'); // Nome da tabela base
   }
@@ -8,7 +8,7 @@ class Usuario extends BaseModel {
   // Métodos específicos para Usuario, se necessário
 }
 
-class Aluno extends BaseModel {
+class Aluno extends userModel {
   constructor() {
     super('aluno'); // Nome da tabela correspondente aos alunos
   }
@@ -16,7 +16,7 @@ class Aluno extends BaseModel {
   // Métodos específicos para Aluno, se necessário
 }
 
-class Professor extends BaseModel {
+class Professor extends userModel {
   constructor() {
     super('professor'); // Nome da tabela correspondente aos professores
   }
@@ -24,7 +24,7 @@ class Professor extends BaseModel {
   // Métodos específicos para Professor, se necessário
 }
 
-class Secretaria extends BaseModel {
+class Secretaria extends userModel {
   constructor() {
     super('secretaria'); // Nome da tabela correspondente à secretaria
   }

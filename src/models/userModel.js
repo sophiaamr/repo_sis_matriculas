@@ -1,6 +1,6 @@
 import { connection } from '../db/connection.js';
 
-class BaseModel {
+class UserModel {
   constructor(tableName) {
     this.tableName = tableName;
   }
@@ -53,4 +53,4 @@ class BaseModel {
   }
 }
 
-export default BaseModel;
+export default UserModel;

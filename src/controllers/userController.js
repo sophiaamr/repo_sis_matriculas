@@ -1,9 +1,8 @@
-import { UserModel } from '../models/userModel.js';
+import UserModel from '../models/userModel.js'; // Import default
 import autoBind from 'auto-bind';
 
 export class UserController {
-
-    constructor () {
+    constructor() {
         autoBind(this);
     }
 
@@ -15,7 +14,7 @@ export class UserController {
                 return response.status(400).send("Revise as informações fornecidas.");
             }
 
-            UserModel.createUser({ nome, cpf, telefone, email, senha }, (err, result) => {
+            UserModel.create({ nome, cpf, telefone, email, senha }, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar usuário:', err.message);
                     return response.status(500).send('Erro ao criar usuário.');
@@ -26,7 +25,7 @@ export class UserController {
                     result
                 });
             });
-            
+
         } catch (error) {
             console.error('Erro ao criar usuário:', error.message);
             return response.status(500).json({ error: "Erro interno do servidor" });
@@ -35,7 +34,7 @@ export class UserController {
 
     async getAll(request, response) {
         try {
-            UserModel.getUsers((err, users) => {
+            UserModel.getAll((err, users) => {
                 if (err) {
                     console.error('Erro ao buscar usuários:', err.message);
                     return response.status(500).send('Erro ao buscar usuários.');
@@ -52,7 +51,7 @@ export class UserController {
         const { id } = request.params;
 
         try {
-            UserModel.getUserById(id, (err, user) => {
+            UserModel.getById(id, (err, user) => {
                 if (err) {
                     console.error('Erro ao buscar usuário:', err.message);
                     return response.status(500).send('Erro ao buscar usuário.');
@@ -73,7 +72,7 @@ export class UserController {
         const { nome, cpf, telefone, email, senha } = request.body;
 
         try {
-            UserModel.updateUser(id, { nome, cpf, telefone, email, senha }, (err, result) => {
+            UserModel.update(id, { nome, cpf, telefone, email, senha }, (err, result) => {
                 if (err) {
                     console.error('Erro ao atualizar usuário:', err.message);
                     return response.status(500).send('Erro ao atualizar usuário.');
@@ -96,7 +95,7 @@ export class UserController {
         const { id } = request.params;
 
         try {
-            UserModel.deleteUser(id, (err, result) => {
+            UserModel.delete(id, (err, result) => {
                 if (err) {
                     console.error('Erro ao deletar usuário:', err.message);
                     return response.status(500).send('Erro ao deletar usuário.');
