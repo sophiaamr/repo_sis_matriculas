@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página de Cursos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+    section {
+      margin: 50px;
+    }
+
+    .navbar {
+      background-color: rgb(115, 115, 141);
+    }
+
+    .navbar-brand {
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .navbar-nav {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .navbar-nav .nav-item {
+      margin-right: 20px;
+    }
+
+    .nav-link {
+      color: white;
+    }
+
+    .container {
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      background-color: white;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Estilos para telas menores que 1340px */
+    @media (max-width: 1340px) {
+      .col-2, .col-3, .col-4, .col-9 {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+
+      .card {
+        width: 100%;
+        margin-bottom: 20px; /* Espaçamento entre os cards em telas menores */
+      }
+
+      .container.col-3 {
+        margin-top: 20px; /* Espaçamento superior quando a coluna é colocada abaixo dos cards */
+      }
+    }
+
+    /* Estilos para telas menores que 430px */
+    @media (max-width: 430px) {
+      .col-5 {
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin-top: 20px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de Matrículas</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/repo_sis_matriculas-main/src/views/Professor/Disciplinas.html">Disciplinas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/repo_sis_matriculas-main/src/views/Professor/Perfil.html">Meu perfil</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+  </header>
+
+  <section>
+    <div class="row">
+      <div class="col-7">
+        <div class="row mb-3">
+          <div class="col-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Cálculo II</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
+                <p class="card-text">2º período</p>
+                <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Cálculo II</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
+                <p class="card-text">2º período</p>
+                <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Cálculo II</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
+                <p class="card-text">2º período</p>
+                <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
+              </div>
+            </div>
+          </div>
+         
+        </div>
+        <div class="row mb-3">
+            <div class="col-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Cálculo II</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
+                  <p class="card-text">2º período</p>
+                  <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Cálculo II</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
+                  <p class="card-text">2º período</p>
+                  <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Cálculo II</h5>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
+                  <p class="card-text">2º período</p>
+                  <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+      </div>
+
+      <div class="container col-5 hidden" id="studentsContainer">
+        <h3>Lista de Alunos</h3>
+        <ul id="studentsList" class="list-group">
+          <!-- A lista de alunos será inserida aqui pelo JavaScript -->
+        </ul>
+      </div>
+    </div>
+  </section>
+  
+  <script>
+    const students = Array.from({ length: 30 }, (_, i) => `Aluno ${i + 1}`);
+
+    function showStudents(event) {
+      event.preventDefault();
+      const container = document.getElementById('studentsContainer');
+      const list = document.getElementById('studentsList');
+      
+      list.innerHTML = students.map(student => `<li class="list-group-item">${student}</li>`).join('');
+      
+      container.classList.toggle('hidden');
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
