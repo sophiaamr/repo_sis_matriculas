@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS Aluno (
     idAluno INT PRIMARY KEY AUTO_INCREMENT,
     matricula VARCHAR(20) NOT NULL UNIQUE,
     idUsuario INT,
+    periodo INT,
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
 
@@ -36,6 +37,7 @@ CREATE TABLE IF NOT EXISTS Disciplina (
     idDisciplina INT PRIMARY KEY AUTO_INCREMENT,
     nomeDisciplina VARCHAR(255) NOT NULL,
     status ENUM('ativa', 'inativa') NOT NULL,
+    tipo ENUM('obrigatoria', 'optativa') NOT NULL,
     qntdAluno INT,
     idCurso INT,
     FOREIGN KEY (idCurso) REFERENCES Curso(idCurso)
@@ -45,8 +47,25 @@ CREATE TABLE IF NOT EXISTS Matricula (
     idMatricula INT PRIMARY KEY AUTO_INCREMENT,
     status ENUM('ativa', 'cancelada', 'encerrada') NOT NULL,
     idAluno INT,
+    idCurso INT,
+    periodo INT,
+    FOREIGN KEY (idAluno) REFERENC/ES Aluno(idAluno),
+    FOREIGN KEY (idCurso) REFERENCES Curso(idCurso)
+);
+
+CREATE TABLE IF NOT EXISTS MatriculaDisciplinaObrigatoria (
+    idMatricula INT,
     idDisciplina INT,
-    FOREIGN KEY (idAluno) REFERENCES Aluno(idAluno),
+    PRIMARY KEY (idMatricula, idDisciplina),
+    FOREIGN KEY (idMatricula) REFERENCES Matricula(idMatricula),
+    FOREIGN KEY (idDisciplina) REFERENCES Disciplina(idDisciplina)
+);
+
+CREATE TABLE IF NOT EXISTS MatriculaDisciplinaOptativa (
+    idMatricula INT,
+    idDisciplina INT,
+    PRIMARY KEY (idMatricula, idDisciplina),
+    FOREIGN KEY (idMatricula) REFERENCES Matricula(idMatricula),
     FOREIGN KEY (idDisciplina) REFERENCES Disciplina(idDisciplina)
 );
 

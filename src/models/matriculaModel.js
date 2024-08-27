@@ -3,26 +3,64 @@ import { connection } from '../db/connection.js';
 class MatriculaModel {
     // Método para criar uma nova matrícula
     static create(data, callback) {
-        const query = `
-            INSERT INTO matricula (status)
-            VALUES (?)
+        const queryMatricula = `
+            INSERT INTO Matricula (status, idAluno, idCurso, periodo)
+            VALUES (?, ?, ?, ?)
         `;
 
-        const values = [data.status];
+        const valuesMatricula = [
+            data.status,
+            data.idAluno,
+            data.idCurso,
+            data.periodo
+        ];
 
-        connection.query(query, values, (err, result) => {
+        connection.query(queryMatricula, valuesMatricula, (err, result) => {
             if (err) {
                 console.error('Erro ao criar matrícula:', err.message);
                 return callback(err);
             }
-            callback(null, result);
+
+            const idMatricula = result.insertId;
+
+            // Inserir disciplinas obrigatórias
+            const queryObrigatorias = `
+                INSERT INTO MatriculaDisciplinaObrigatoria (idMatricula, idDisciplina)
+                VALUES ?
+            `;
+
+            const valoresObrigatorias = data.disciplinasObrigatorias.map(disciplina => [idMatricula, disciplina]);
+
+            connection.query(queryObrigatorias, [valoresObrigatorias], (err) => {
+                if (err) {
+                    console.error('Erro ao associar disciplinas obrigatórias:', err.message);
+                    return callback(err);
+                }
+
+                // Inserir disciplinas optativas
+                const queryOptativas = `
+                    INSERT INTO MatriculaDisciplinaOptativa (idMatricula, idDisciplina)
+                    VALUES ?
+                `;
+
+                const valoresOptativas = data.disciplinasOptativas.map(disciplina => [idMatricula, disciplina]);
+
+                connection.query(queryOptativas, [valoresOptativas], (err) => {
+                    if (err) {
+                        console.error('Erro ao associar disciplinas optativas:', err.message);
+                        return callback(err);
+                    }
+
+                    callback(null, result);
+                });
+            });
         });
     }
 
     // Método para buscar todas as matrículas
     static getAll(callback) {
         const query = `
-            SELECT * FROM matricula
+            SELECT * FROM Matricula
         `;
 
         connection.query(query, (err, results) => {
@@ -37,7 +75,7 @@ class MatriculaModel {
     // Método para buscar uma matrícula pelo ID
     static getById(id, callback) {
         const query = `
-            SELECT * FROM matricula WHERE idMatricula = ?
+            SELECT * FROM Matricula WHERE idMatricula = ?
         `;
 
         connection.query(query, [id], (err, result) => {
@@ -52,7 +90,7 @@ class MatriculaModel {
     // Método para atualizar uma matrícula pelo ID
     static update(id, data, callback) {
         const query = `
-            UPDATE matricula
+            UPDATE Matricula
             SET status = ?
             WHERE idMatricula = ?
         `;
@@ -71,7 +109,7 @@ class MatriculaModel {
     // Método para deletar uma matrícula pelo ID
     static delete(id, callback) {
         const query = `
-            DELETE FROM matricula WHERE idMatricula = ?
+            DELETE FROM Matricula WHERE idMatricula = ?
         `;
 
         connection.query(query, [id], (err, result) => {
@@ -80,6 +118,50 @@ class MatriculaModel {
                 return callback(err);
             }
             callback(null, result);
+        });
+    }
+    static getMatriculaByAlunoAndPeriodo(idAluno, periodo) {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT m.idMatricula, c.nome AS nomeCurso, m.periodo 
+                FROM Matricula m
+                JOIN Curso c ON m.idCurso = c.idCurso
+                WHERE m.idAluno = ? AND m.periodo = ?
+            `;
+            db.query(query, [idAluno, periodo], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });
+        });
+    }
+
+    static getDisciplinasObrigatorias(idMatricula) {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT d.nomeDisciplina, d.tipo 
+                FROM MatriculaDisciplinaObrigatoria mo
+                JOIN Disciplina d ON mo.idDisciplina = d.idDisciplina
+                WHERE mo.idMatricula = ?
+            `;
+            db.query(query, [idMatricula], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
+
+    static getDisciplinasOptativas(idMatricula) {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT d.nomeDisciplina, d.tipo 
+                FROM MatriculaDisciplinaOptativa mo
+                JOIN Disciplina d ON mo.idDisciplina = d.idDisciplina
+                WHERE mo.idMatricula = ?
+            `;
+            db.query(query, [idMatricula], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
         });
     }
 }

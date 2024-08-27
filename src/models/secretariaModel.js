@@ -5,35 +5,28 @@ class Secretaria {
     this.tableName = 'Secretaria';
   }
 
-  create(data) {
-    return new Promise((resolve, reject) => {
-      const query = `INSERT INTO ${this.tableName} (usuario_id, departamento) VALUES (?, ?)`;
-      const values = [data.usuario_id, data.departamento];
+  create(data, callback) {
+    const query = `INSERT INTO ${this.tableName} (usuario_id, departamento) VALUES (?, ?)`;
+    const values = [data.usuario_id, data.departamento];
 
-      connection.query(query, values, (err, results) => {
-        if (err) return reject(err);
-        resolve(results);
-      });
+    connection.query(query, values, (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
     });
   }
 
-  async getAllSecretaria(){
+  getAllSecretaria(callback) {
     const query = `
-      SELECT u.*, a.departamento 
-      FROM usuario u
-      JOIN secretaria a ON u.idUsuario = a.usuario_id
+      SELECT u.*, s.departamento
+      FROM Usuario u
+      JOIN Secretaria s ON u.idUsuario = s.usuario_id
       WHERE u.tipo = 'secretaria'
     `;
-    
-    return new Promise((resolve, reject) => {
-        connection.query(query, (err, results) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(results);
-          }
-        });
-      });
+
+    connection.query(query, (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
+    });
   }
 
   getByUserId(userId, callback) {

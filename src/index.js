@@ -29,10 +29,10 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use('/api', routes);
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Algo deu errado!');
-});
+//  app.use((err, req, res, next) => {
+//      console.error(err.stack);
+//      res.status(500).send('Algo deu errado!');
+//  });
 
 app.use((request, response) => {
     response.status(404).send('Rota não encontrada');

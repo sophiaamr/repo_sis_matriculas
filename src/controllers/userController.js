@@ -11,35 +11,36 @@ export class UserController {
 
     async createAluno(req, res) {
         try {
-            const { nome, cpf, telefone, email, senha, matricula } = req.body;
+            const { nome, cpf, telefone, email, senha, matricula, periodo } = req.body;
 
-            if (!nome || !cpf || !telefone || !email || !senha || !matricula) {
-                return res.status(400).render('index', { message: "Revise as informações fornecidas." });
+            if (!nome || !cpf || !telefone || !email || !senha || !matricula || !periodo) {
+                return res.status(400).render('perfil', { message: "Revise as informações fornecidas." });
             }
 
             const usuarioModel = new Usuario();
-            const result = await usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'aluno' });
-            const userId = result.insertId;
+            const result = await new Promise((resolve, reject) => {
+                usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'aluno', matricula, periodo }, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                });
+            });
 
-            const alunoModel = new Aluno();
-            await alunoModel.create({ idUsuario: userId, matricula });
-
-            return res.status(201).render('index', { success: true, message: 'Aluno criado com sucesso!' });
+            return res.status(201).render('perfil', { success: true, message: 'Aluno criado com sucesso!' });
         } catch (err) {
             console.error('Erro ao criar aluno:', err.message);
-            return res.status(500).render('index', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 
     async getAllAlunos(req, res) {
         try {
             const alunoModel = new Aluno();
-            const alunos = await alunoModel.getAllAlunos();
+            const alunos = await alunoModel.getAll();
 
-            return res.status(200).render('index', { alunos });
+            return res.status(200).render('perfil', { alunos });
         } catch (err) {
             console.error('Erro ao buscar alunos:', err.message);
-            return res.status(500).render('index', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -48,32 +49,33 @@ export class UserController {
             const { nome, cpf, telefone, email, senha, cargaHorario } = req.body;
 
             if (!nome || !cpf || !telefone || !email || !senha || !cargaHorario) {
-                return res.status(400).render('index', { message: "Revise as informações fornecidas." });
+                return res.status(400).render('perfil', { message: "Revise as informações fornecidas." });
             }
 
             const usuarioModel = new Usuario();
-            const result = await usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'professor' });
-            const userId = result.insertId;
+            const result = await new Promise((resolve, reject) => {
+                usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'professor', cargaHorario }, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                });
+            });
 
-            const professorModel = new Professor();
-            await professorModel.create({ idUsuario: userId, cargaHorario });
-
-            return res.status(201).render('index', { success: true, message: 'Professor criado com sucesso!' });
+            return res.status(201).render('perfil', { success: true, message: 'Professor criado com sucesso!' });
         } catch (err) {
             console.error('Erro ao criar professor:', err.message);
-            return res.status(500).render('index', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 
     async getAllProfessors(req, res) {
         try {
             const professorModel = new Professor();
-            const professores = await professorModel.getAllProfessors();
+            const professores = await professorModel.getAll();
 
-            return res.status(200).render('index', { professores });
+            return res.status(200).render('perfil', { professores });
         } catch (err) {
             console.error('Erro ao buscar professores:', err.message);
-            return res.status(500).render('index', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -82,38 +84,39 @@ export class UserController {
             const { nome, cpf, telefone, email, senha, departamento } = req.body;
 
             if (!nome || !cpf || !telefone || !email || !senha || !departamento) {
-                return res.status(400).render('index', { message: "Revise as informações fornecidas." });
+                return res.status(400).render('perfil', { message: "Revise as informações fornecidas." });
             }
 
             const usuarioModel = new Usuario();
-            const result = await usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'secretaria' });
-            const userId = result.insertId;
+            const result = await new Promise((resolve, reject) => {
+                usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'secretaria', departamento }, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                });
+            });
 
-            const secretariaModel = new Secretaria();
-            await secretariaModel.create({ usuario_id: userId, departamento });
-
-            return res.status(201).render('index', { success: true, message: 'Secretário criado com sucesso!' });
+            return res.status(201).render('perfil', { success: true, message: 'Secretário criado com sucesso!' });
         } catch (err) {
             console.error('Erro ao criar secretário:', err.message);
-            return res.status(500).render('index', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 
     async getAllSecretaria(req, res) {
         try {
             const secretariaModel = new Secretaria();
-            const secretarias = await secretariaModel.getAllSecretaria();
+            const secretarias = await secretariaModel.getAll();
 
-            return res.status(200).render('index', { secretarias });
+            return res.status(200).render('perfil', { secretarias });
         } catch (err) {
             console.error('Erro ao buscar secretarias:', err.message);
-            return res.status(500).render('index', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 
     async getById(req, res) {
         const { id } = req.params;
-
+    
         try {
             const usuarioModel = new Usuario();
             const usuario = await new Promise((resolve, reject) => {
@@ -122,11 +125,11 @@ export class UserController {
                     resolve(result);
                 });
             });
-
+    
             if (!usuario) {
-                return res.status(404).render('index', { message: 'Usuário não encontrado' });
+                return res.status(404).render('perfil', { message: 'Usuário não encontrado' });
             }
-
+    
             let infoadicional;
             switch (usuario.tipo) {
                 case 'aluno':
@@ -159,11 +162,11 @@ export class UserController {
                 default:
                     infoadicional = null;
             }
-
-            res.status(200).render('index', { usuario, infoadicional });
+    
+            res.status(200).render('perfil', { usuario, infoadicional });
         } catch (err) {
             console.error('Erro ao buscar usuário por ID:', err.message);
-            res.status(500).render('index', { message: 'Erro interno do servidor' });
+            res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -172,19 +175,21 @@ export class UserController {
             const { id } = req.params;
 
             const usuarioModel = new Usuario();
-            usuarioModel.deleteById(id, (err, results) => {
-                if (err) {
-                    console.error('Erro ao deletar usuário:', err.message);
-                    return res.status(500).render('index', { message: 'Erro interno do servidor' });
-                }
-                if (results.affectedRows === 0) {
-                    return res.status(404).render('index', { message: 'Usuário não encontrado' });
-                }
-                return res.status(200).render('index', { success: true, message: 'Usuário deletado com sucesso!' });
+            const result = await new Promise((resolve, reject) => {
+                usuarioModel.deleteById(id, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                });
             });
+
+            if (result.affectedRows === 0) {
+                return res.status(404).render('perfil', { message: 'Usuário não encontrado' });
+            }
+
+            return res.status(200).render('perfil', { success: true, message: 'Usuário deletado com sucesso!' });
         } catch (err) {
             console.error('Erro ao deletar usuário:', err.message);
-            return res.status(500).render('index', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -194,16 +199,17 @@ export class UserController {
             const data = req.body;
 
             const usuarioModel = new Usuario();
-            usuarioModel.updateById(id, data, (err, results) => {
-                if (err) {
-                    console.error('Erro ao atualizar usuário:', err.message);
-                    return res.status(500).render('index', { message: 'Erro interno do servidor' });
-                }
-                return res.status(200).render('index', { success: true, message: 'Usuário atualizado com sucesso!' });
+            await new Promise((resolve, reject) => {
+                usuarioModel.updateById(id, data, (err, result) => {
+                    if (err) reject(err);
+                    resolve(result);
+                });
             });
+
+            return res.status(200).render('perfil', { success: true, message: 'Usuário atualizado com sucesso!' });
         } catch (err) {
             console.error('Erro ao atualizar usuário:', err.message);
-            return res.status(500).render('index', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
 }

@@ -5,37 +5,28 @@ class Professor {
     this.tableName = 'Professor';
   }
 
-  //Método para criar Professor
-  create(data) {
-    return new Promise((resolve, reject) => {
-      const query = `INSERT INTO ${this.tableName} (idUsuario, cargaHorario) VALUES (?, ?)`;
-      const values = [data.idUsuario, data.cargaHorario];
+  create(data, callback) {
+    const query = `INSERT INTO ${this.tableName} (idUsuario, cargaHorario) VALUES (?, ?)`;
+    const values = [data.idUsuario, data.cargaHorario];
 
-      connection.query(query, values, (err, results) => {
-        if (err) return reject(err);
-        resolve(results);
-      });
+    connection.query(query, values, (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
     });
   }
 
-  //Método para mostrar todos os professores
-  async getAllProfessors(){
+  getAllProfessors(callback) {
     const query = `
-      SELECT u.*, a.cargaHorario 
-      FROM usuario u
-      JOIN professor a ON u.idUsuario = a.idUsuario
+      SELECT u.*, p.cargaHorario
+      FROM Usuario u
+      JOIN Professor p ON u.idUsuario = p.idUsuario
       WHERE u.tipo = 'professor'
     `;
 
-    return new Promise((resolve, reject) => {
-        connection.query(query, (err, results) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(results);
-          }
-        });
-      });
+    connection.query(query, (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
+    });
   }
 
   getByUserId(userId, callback) {
