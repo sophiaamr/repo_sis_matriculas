@@ -3,6 +3,7 @@ import { UserRoute } from './userRoute.js';
 import { MatriculaRoute } from './matriculaRoute.js'
 import { CobrancaRoute } from './cobrancaRoute.js'
 import { DisciplinaRoute } from './disciplinaRoute.js'
+import { CursoRoute } from './cursoRoute.js';
 
 
 const routes = Router();
@@ -11,6 +12,7 @@ routes.use('/matricula', MatriculaRoute);
 routes.use('/usuario', UserRoute);
 routes.use('/financeiro', CobrancaRoute);
 routes.use('/disciplina', DisciplinaRoute);
+routes.use('./curriculo', CursoRoute);
 
 
 

@@ -9,27 +9,21 @@ export class UserController {
         autoBind(this);
     }
 
-    async createAluno(req, res) {
-        try {
-            const { nome, cpf, telefone, email, senha, matricula, periodo } = req.body;
+    createAluno(req, res) {
+        const { nome, cpf, telefone, email, senha, matricula, periodo } = req.body;
 
-            if (!nome || !cpf || !telefone || !email || !senha || !matricula || !periodo) {
-                return res.status(400).render('perfil', { message: "Revise as informações fornecidas." });
-            }
-
-            const usuarioModel = new Usuario();
-            const result = await new Promise((resolve, reject) => {
-                usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'aluno', matricula, periodo }, (err, result) => {
-                    if (err) reject(err);
-                    resolve(result);
-                });
-            });
-
-            return res.status(201).render('perfil', { success: true, message: 'Aluno criado com sucesso!' });
-        } catch (err) {
-            console.error('Erro ao criar aluno:', err.message);
-            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+        if (!nome || !cpf || !telefone || !email || !senha || !matricula || !periodo) {
+            return res.status(400).render('perfil', { message: "Revise as informações fornecidas." });
         }
+
+        const usuarioModel = new Usuario();
+        usuarioModel.create({ nome, cpf, telefone, email, senha, tipo: 'aluno', matricula, periodo }, (err, result) => {
+            if (err) {
+                console.error('Erro ao criar aluno:', err.message);
+                return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+            }
+            return res.status(201).render('perfil', { success: true, message: 'Aluno criado com sucesso!' });
+        });
     }
 
     async getAllAlunos(req, res) {
