@@ -1,4 +1,5 @@
-import connection from '../database/connection.js';
+import { connection } from '../db/connection.js';
+
 
 class CobrancaModel {
     // Método para criar uma nova cobrança

@@ -1,4 +1,4 @@
-import connection from '../database/connection.js';
+import { connection } from '../db/connection.js';
 
 class MatriculaModel {
     // Método para criar uma nova matrícula
