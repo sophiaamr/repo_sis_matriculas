@@ -37,7 +37,7 @@ class Aluno {
     });
   }
 
-  etByUserId(userId, callback) {
+  getByUserId(userId, callback) {
     const query = `SELECT * FROM ${this.tableName} WHERE idUsuario = ?`;
     connection.query(query, [userId], (err, results) => {
       if (err) return callback(err);

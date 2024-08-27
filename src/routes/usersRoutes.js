@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import UserController from '../controllers/userController.js'; 
+import CobrancaController from '../controllers/cobrancaController.js';
 
 const router = Router();
-const userController = UserController; 
+const cobrancaController = new CobrancaController(); 
 
+router.get('/', cobrancaController.getAll)
 router.post('/aluno', userController.createAluno);
 router.get('/aluno', userController.getAllAlunos);
 router.post('/professor', userController.createProfessor);
