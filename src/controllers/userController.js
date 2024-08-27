@@ -167,25 +167,27 @@ export class UserController {
     async deleteUser(req, res) {
         try {
             const { id } = req.params;
-
             const usuarioModel = new Usuario();
-            const result = await new Promise((resolve, reject) => {
-                usuarioModel.deleteById(id, (err, result) => {
-                    if (err) reject(err);
-                    resolve(result);
-                });
+    
+            usuarioModel.deleteById(id, (err, result) => {
+                if (err) {
+                    console.error('Erro ao deletar usuário:', err.message);
+                    return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+                }
+    
+                if (result.affectedRows === 0) {
+                    return res.status(404).render('perfil', { message: 'Usuário não encontrado' });
+                }
+    
+                return res.status(200).render('perfil', { success: true, message: 'Usuário deletado com sucesso!' });
             });
-
-            if (result.affectedRows === 0) {
-                return res.status(404).render('perfil', { message: 'Usuário não encontrado' });
-            }
-
-            return res.status(200).render('perfil', { success: true, message: 'Usuário deletado com sucesso!' });
+    
         } catch (err) {
             console.error('Erro ao deletar usuário:', err.message);
             return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
+    
 
     async updateUserById(req, res) {
         try {

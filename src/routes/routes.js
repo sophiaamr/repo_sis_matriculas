@@ -11,8 +11,8 @@ const routes = Router();
 routes.use('/matricula', MatriculaRoute);
 routes.use('/usuario', UserRoute);
 routes.use('/financeiro', CobrancaRoute);
-routes.use('/disciplina', DisciplinaRoute);
-routes.use('./curriculo', CursoRoute);
+routes.use('/disciplinas', DisciplinaRoute);
+routes.use('/curriculo', CursoRoute);
 
 
 
