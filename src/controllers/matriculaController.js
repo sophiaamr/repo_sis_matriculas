@@ -9,21 +9,23 @@ export class MatriculaController {
     async create(request, response) {
         try {
             const { status, idAluno, idCurso, periodo, disciplinasObrigatorias, disciplinasOptativas } = request.body;
+
+            // Verificação dos campos
             if (!status || !idAluno || !idCurso || !periodo || !disciplinasObrigatorias || !disciplinasOptativas) {
-                return response.status(400).render('matricula', { message: "Revise as informações fornecidas." });
+                return response.status(400).json({ message: "Revise as informações fornecidas." });
             }
 
             const validStatus = ['ativa', 'cancelada', 'encerrada'];
             if (!validStatus.includes(status)) {
-                return response.status(400).render('matricula', { message: "Status inválido." });
+                return response.status(400).json({ message: "Status inválido." });
             }
 
             // Validar disciplinas obrigatórias e optativas
             if (disciplinasObrigatorias.length !== 4) {
-                return response.status(400).render('matricula', { message: "Você deve selecionar exatamente 4 disciplinas obrigatórias." });
+                return response.status(400).json({ message: "Você deve selecionar exatamente 4 disciplinas obrigatórias." });
             }
             if (disciplinasOptativas.length !== 2) {
-                return response.status(400).render('matricula', { message: "Você deve selecionar exatamente 2 disciplinas optativas." });
+                return response.status(400).json({ message: "Você deve selecionar exatamente 2 disciplinas optativas." });
             }
 
             const data = {
@@ -38,9 +40,9 @@ export class MatriculaController {
             MatriculaModel.create(data, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar matrícula:', err.message);
-                    return response.status(500).render('matricula', { message: 'Erro ao criar matrícula.' });
+                    return response.status(500).json({ message: 'Erro ao criar matrícula.' });
                 }
-                return response.status(201).render('matricula', {
+                return response.status(201).json({
                     success: true,
                     message: "Matrícula criada com sucesso",
                     result
@@ -49,7 +51,7 @@ export class MatriculaController {
 
         } catch (error) {
             console.error('Erro ao criar matrícula:', error.message);
-            return response.status(500).render('matricula', { message: "Erro interno do servidor" });
+            return response.status(500).json({ message: "Erro interno do servidor" });
         }
     }
 
@@ -141,40 +143,4 @@ export class MatriculaController {
         }
     }
 
-    async gerarCurriculo(request, response) {
-        const { idAluno, periodo } = request.params;
-        const { idUsuario } = request.user; 
-
-        try {
-            // Verifica se o usuário é do tipo 'secretaria'
-            const usuario = await UsuarioModel.getById(idUsuario);
-            if (!usuario || usuario.tipo !== 'secretaria') {
-                return response.status(403).send("Acesso negado. Apenas secretarias podem gerar currículos.");
-            }
-
-            // Primeiro, buscar a matrícula do aluno para o período especificado
-            const matricula = await MatriculaModel.getMatriculaByAlunoAndPeriodo(idAluno, periodo);
-
-            if (!matricula) {
-                return response.status(404).send("Matrícula não encontrada para este aluno e período.");
-            }
-
-            // Buscar disciplinas obrigatórias
-            const disciplinasObrigatorias = await MatriculaModel.getDisciplinasObrigatorias(matricula.idMatricula);
-
-            // Buscar disciplinas optativas
-            const disciplinasOptativas = await MatriculaModel.getDisciplinasOptativas(matricula.idMatricula);
-
-            // Retornar o currículo
-            return response.status(200).json({
-                curso: matricula.nomeCurso,
-                periodo: matricula.periodo,
-                disciplinasObrigatorias,
-                disciplinasOptativas
-            });
-        } catch (error) {
-            console.error('Erro ao gerar currículo:', error.message);
-            return response.status(500).json({ error: "Erro interno do servidor" });
-        }
-    }
 }

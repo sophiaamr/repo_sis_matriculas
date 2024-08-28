@@ -7,41 +7,64 @@ export class DisciplinaController {
     }
 
     async create(request, response) {
-        try {
-            const { nomeDisciplina, status, qtdAluno } = request.body;
+        const { nomeDisciplina, status, tipo, qntdAluno, idCurso } = request.body;
 
-            if (!nomeDisciplina || !status || qtdAluno === undefined) {
+        console.log('Dados recebidos:', { nomeDisciplina, status, tipo, qntdAluno, idCurso });
+
+        if (!nomeDisciplina || !status || tipo === undefined || qntdAluno === undefined || idCurso === undefined) {
+            console.log('Dados inválidos:', { nomeDisciplina, status, tipo, qntdAluno, idCurso });
+            return response.status(400).render('disciplinas', {
+                message: "Revise as informações fornecidas"
+            });
+        }
+
+        const validStatus = ['ativa', 'inativa'];
+        if (!validStatus.includes(status)) {
+            console.log('Status inválido:', status);
+            return response.status(400).render('disciplinas', {
+                message: "Status inválido"
+            });
+        }
+
+        const validTipo = ['obrigatoria', 'optativa'];
+        if (!validTipo.includes(tipo)) {
+            console.log('Tipo inválido:', tipo);
+            return response.status(400).render('disciplinas', {
+                message: "Tipo inválido"
+            });
+        }
+
+        // Verifique se idCurso é válido usando o método estático do modelo
+        DisciplinaModel.getCursoById(idCurso, (err, results) => {
+            if (err) {
+                console.error('Erro ao verificar curso:', err.message);
+                return response.status(500).render('disciplinas', {
+                    message: 'Erro interno do servidor'
+                });
+            }
+            if (results.length === 0) {
+                console.log('Curso não encontrado:', idCurso);
                 return response.status(400).render('disciplinas', {
-                    message: "Revise as informações fornecidas"
+                    message: "Curso não encontrado"
                 });
             }
 
-            const validStatus = ['ATIVO', 'CANCELADO', 'ENCERRADO'];
-            if (!validStatus.includes(status)) {
-                return response.status(400).render('disciplinas', {
-                    message: "Status inválido"
-                });
-            }
-
-            DisciplinaModel.create({ nomeDisciplina, status, qtdAluno }, (err, result) => {
+            DisciplinaModel.create({ nomeDisciplina, status, tipo, qntdAluno, idCurso }, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar disciplina: ', err.message);
                     return response.status(500).render('disciplinas', {
                         message: 'Erro ao criar disciplina'
                     });
                 }
+                console.log('Disciplina criada com sucesso:', result);
                 return response.status(201).render('disciplinas', {
                     message: 'Disciplina criada com sucesso',
                     result
                 });
             });
-        } catch (error) {
-            console.error('Erro ao criar disciplina: ', error.message);
-            return response.status(500).render('disciplinas', {
-                message: 'Erro interno do servidor'
-            });
-        }
+        });
     }
+
 
     async getAll(request, response) {
         try {
@@ -90,17 +113,24 @@ export class DisciplinaController {
 
     async update(request, response) {
         const { id } = request.params;
-        const { nomeDisciplina, status, qtdAluno } = request.body;
+        const { nomeDisciplina, status, tipo, qntdAluno } = request.body;
 
         try {
-            const validStatus = ['ATIVO', 'ENCERRADO', 'CANCELADO'];
+            const validStatus = ['ativa', 'inativa'];
             if (status && !validStatus.includes(status)) {
                 return response.status(400).render('disciplinas', {
                     message: "Status inválido."
                 });
             }
 
-            DisciplinaModel.update(id, { nomeDisciplina, status, qtdAluno }, (err, result) => {
+            const validTipo = ['obrigatoria', 'optativa'];
+            if (tipo && !validTipo.includes(tipo)) {
+                return response.status(400).render('disciplinas', {
+                    message: "Tipo inválido."
+                });
+            }
+
+            DisciplinaModel.update(id, { nomeDisciplina, status, tipo, qntdAluno }, (err, result) => {
                 if (err) {
                     console.error('Erro ao atualizar disciplina:', err.message);
                     return response.status(500).render('disciplinas', {
