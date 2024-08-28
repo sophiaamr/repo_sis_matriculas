@@ -6,49 +6,30 @@ class Aluno {
     this.tableName = 'Aluno';
   }
 
+  // Método para criar um aluno
   create(data, callback) {
     const query = `INSERT INTO ${this.tableName} (idUsuario, matricula, periodo) VALUES (?, ?, ?)`;
     const values = [data.idUsuario, data.matricula, data.periodo];
 
     connection.query(query, values, (err, results) => {
-      if (err) return callback(err);
-      callback(null, results);
+        if (err) return callback(err);
+        callback(null, results);
     });
-  }
+}
 
-  getAllAlunos(callback) {
-    const query = `
+getAll(callback) {
+  const query = `
       SELECT u.*, a.matricula, a.periodo
       FROM Usuario u
       JOIN Aluno a ON u.idUsuario = a.idUsuario
       WHERE u.tipo = 'aluno'
-    `;
+  `;
 
-    connection.query(query, async (err, results) => {
+  connection.query(query, (err, results) => {
       if (err) return callback(err);
-
-      // Mostrar todos os alunos
-      console.log('Todos os alunos:', results);
-
-      try {
-        // Buscar todos os usuários
-        const usuarioModel = new Usuario();
-        const usuarios = await new Promise((resolve, reject) => {
-          usuarioModel.getAll((err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        });
-        
-        // Mostrar todos os usuários
-        console.log('Todos os usuários:', usuarios);
-      } catch (err) {
-        console.error('Erro ao buscar usuários:', err.message);
-      }
-
       callback(null, results);
-    });
-  }
+  });
+}
 
   getByUserId(userId, callback) {
     const query = `SELECT * FROM ${this.tableName} WHERE idUsuario = ?`;

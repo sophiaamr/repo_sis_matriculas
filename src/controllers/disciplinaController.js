@@ -65,50 +65,79 @@ export class DisciplinaController {
         });
     }
 
-    async getAll(request, response) {
-        try {
+   async getAll(request, response) {
+    try {
+        const disciplinas = await new Promise((resolve, reject) => {
             DisciplinaModel.getAll((err, disciplinas) => {
-                if (err) {
-                    console.error('Erro ao buscar disciplinas: ', err.message);
-                    return response.status(500).render('Professor/disciplinas', {
-                        message: 'Erro ao buscar disciplinas.'
-                    });
-                }
-                return response.status(200).render('Professor/disciplinas', { disciplinas });
+                if (err) return reject(err);
+                resolve(disciplinas);
             });
-        } catch (error) {
-            console.error('Erro ao buscar disciplinas: ', error.message);
-            return response.status(500).render('Professor/disciplinas', {
-                message: 'Erro interno do servidor'
+        });
+
+        const cursos = await new Promise((resolve, reject) => {
+            DisciplinaModel.getAllCursos((err, cursos) => {
+                if (err) return reject(err);
+                resolve(cursos);
             });
-        }
+        });
+
+        const alunos = await new Promise((resolve, reject) => {
+            DisciplinaModel.getAllAlunos((err, alunos) => {
+                if (err) return reject(err);
+                resolve(alunos);
+            });
+        });
+
+        // Renderiza a view com os dados
+        return response.status(200).render('disciplinas', { disciplinas, cursos, alunos });
+    } catch (error) {
+        console.error('Erro ao buscar disciplinas, cursos ou alunos: ', error.message);
+        return response.status(500).render('disciplinas', {
+            message: 'Erro interno do servidor'
+        });
     }
+}
+
+    
+    
 
     async getById(request, response) {
         const { id } = request.params;
-
+    
         try {
-            DisciplinaModel.getById(id, (err, disciplina) => {
+            DisciplinaModel.getById(id, async (err, disciplina) => {
                 if (err) {
                     console.error('Erro ao buscar disciplina:', err.message);
-                    return response.status(500).render('Professor/disciplinas', {
+                    return response.status(500).render('disciplinas', {
                         message: 'Erro ao buscar disciplina.'
                     });
                 }
                 if (!disciplina) {
-                    return response.status(404).render('Professor/disciplinas', {
+                    return response.status(404).render('disciplinas', {
                         message: 'Disciplina não encontrada.'
                     });
                 }
-                return response.status(200).render('Professor/disciplinas', { disciplina });
+    
+                // Busca os alunos associados à disciplina
+                const alunos = await new Promise((resolve, reject) => {
+                    DisciplinaModel.getAlunosByDisciplina(id, (err, alunos) => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        resolve(alunos);
+                    });
+                });
+    
+                return response.status(200).render('disciplinas', { disciplina, alunos });
             });
         } catch (error) {
             console.error('Erro ao buscar disciplina:', error.message);
-            return response.status(500).render('Professor/disciplinas', {
+            return response.status(500).render('disciplinas', {
                 message: 'Erro interno do servidor'
             });
         }
     }
+    
 
     async update(request, response) {
         const { id } = request.params;
@@ -141,7 +170,7 @@ export class DisciplinaController {
                         message: 'Disciplina não encontrada.'
                     });
                 }
-                return response.status(200).render('Professor/disciplinas', {
+                return response.status(200).render('disciplinas', {
                     message: "Disciplina atualizada com sucesso"
                 });
             });
@@ -169,7 +198,7 @@ export class DisciplinaController {
                         message: 'Disciplina não encontrada.'
                     });
                 }
-                return response.status(200).render('Professor/disciplinas', {
+                return response.status(200).render('disciplinas', {
                     message: "Disciplina deletada com sucesso"
                 });
             });

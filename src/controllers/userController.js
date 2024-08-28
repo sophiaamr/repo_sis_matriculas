@@ -34,9 +34,15 @@ export class UserController {
     async getAllAlunos(req, res) {
         try {
             const alunoModel = new Aluno();
-            const alunos = await alunoModel.getAll();
-            console.log('Todos os alunos:', alunos);
-            return res.status(200).render('perfil', { alunos });
+            alunoModel.getAll((err, alunos) => {
+                if (err) {
+                    console.error('Erro ao buscar alunos:', err.message);
+                    return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+                }
+    
+                console.log('Todos os alunos:', alunos);
+                return res.status(200).render('perfil', { alunos });
+            });
         } catch (err) {
             console.error('Erro ao buscar alunos:', err.message);
             return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
@@ -223,12 +229,9 @@ export class UserController {
                     resolve(result);
                 });
             });
-
+    
             console.log('Todos os usuários:', usuarios);
-
-                      
-
-            
+            return res.status(200).render('usuarios', { usuarios });
         } catch (err) {
             console.error('Erro ao buscar todos os usuários:', err.message);
             return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
