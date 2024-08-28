@@ -1,5 +1,6 @@
-import CursoModel from '../models/cursoModel.js'; 
+import CursoModel from '../models/cursoModel.js';
 import autoBind from 'auto-bind';
+import DisciplinaModel from '../models/disciplinaModel.js';
 
 export class CursoController {
     constructor() {
@@ -11,7 +12,7 @@ export class CursoController {
             const { nome, numCredito } = request.body;
 
             if (!nome || numCredito === undefined) {
-                return response.status(400).render('curriculo', {
+                return response.status(400).render('curso', {
                     message: "Revise as informações fornecidas."
                 });
             } 
@@ -19,11 +20,11 @@ export class CursoController {
             CursoModel.create({ nome, numCredito }, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar curso:', err.message);
-                    return response.status(500).render('curriculo', {
+                    return response.status(500).render('curso', {
                         message: 'Erro ao criar curso.'
                     });
                 }
-                return response.status(201).render('curriculo', {
+                return response.status(201).render('curso', {
                     message: "Curso criado com sucesso",
                     result
                 });
@@ -31,7 +32,7 @@ export class CursoController {
 
         } catch (error) {
             console.error('Erro ao criar curso:', error.message);
-            return response.status(500).render('curriculo', {
+            return response.status(500).render('curso', {
                 message: "Erro interno do servidor"
             });
         }
@@ -39,18 +40,28 @@ export class CursoController {
 
     async getAll(request, response) {
         try {
-            CursoModel.getAll((err, cursos) => {
-                if (err) {
-                    console.error('Erro ao buscar cursos:', err.message);
-                    return response.status(500).render('curriculo', {
-                        message: 'Erro ao buscar cursos.'
-                    });
-                }
-                return response.status(200).render('curriculo', { cursos });
+            const cursos = await new Promise((resolve, reject) => {
+                CursoModel.getAll((err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
             });
+
+            const disciplinas = await new Promise((resolve, reject) => {
+                DisciplinaModel.getAll((err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
+            });
+
+            return response.status(200).render('curso', { cursos, disciplinas });
         } catch (error) {
-            console.error('Erro ao buscar cursos:', error.message);
-            return response.status(500).render('curriculo', {
+            console.error('Erro ao buscar cursos e disciplinas:', error.message);
+            return response.status(500).render('curso', {
                 message: "Erro interno do servidor"
             });
         }
@@ -60,23 +71,25 @@ export class CursoController {
         const { id } = request.params;
 
         try {
-            CursoModel.getById(id, (err, curso) => {
-                if (err) {
-                    console.error('Erro ao buscar curso:', err.message);
-                    return response.status(500).render('curriculo', {
-                        message: 'Erro ao buscar curso.'
-                    });
-                }
-                if (!curso) {
-                    return response.status(404).render('curriculo', {
-                        message: 'Curso não encontrado.'
-                    });
-                }
-                return response.status(200).render('curriculo', { curso });
+            const curso = await new Promise((resolve, reject) => {
+                CursoModel.getById(id, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
             });
+
+            if (!curso) {
+                return response.status(404).render('curso', {
+                    message: 'Curso não encontrado.'
+                });
+            }
+
+            return response.status(200).render('curso', { curso });
         } catch (error) {
             console.error('Erro ao buscar curso:', error.message);
-            return response.status(500).render('curriculo', {
+            return response.status(500).render('curso', {
                 message: "Erro interno do servidor"
             });
         }
@@ -87,25 +100,27 @@ export class CursoController {
         const { nome, numCredito } = request.body;
 
         try {
-            CursoModel.update(id, { nome, numCredito }, (err, result) => {
-                if (err) {
-                    console.error('Erro ao atualizar curso:', err.message);
-                    return response.status(500).render('curriculo', {
-                        message: 'Erro ao atualizar curso.'
-                    });
-                }
-                if (result.affectedRows === 0) {
-                    return response.status(404).render('curriculo', {
-                        message: 'Curso não encontrado.'
-                    });
-                }
-                return response.status(200).render('curriculo', {
-                    message: "Curso atualizado com sucesso"
+            const result = await new Promise((resolve, reject) => {
+                CursoModel.update(id, { nome, numCredito }, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
                 });
+            });
+
+            if (result.affectedRows === 0) {
+                return response.status(404).render('curso', {
+                    message: 'Curso não encontrado.'
+                });
+            }
+
+            return response.status(200).render('curso', {
+                message: "Curso atualizado com sucesso"
             });
         } catch (error) {
             console.error('Erro ao atualizar curso:', error.message);
-            return response.status(500).render('curriculo', {
+            return response.status(500).render('curso', {
                 message: "Erro interno do servidor"
             });
         }
@@ -115,25 +130,61 @@ export class CursoController {
         const { id } = request.params;
 
         try {
-            CursoModel.delete(id, (err, result) => {
-                if (err) {
-                    console.error('Erro ao deletar curso:', err.message);
-                    return response.status(500).render('curriculo', {
-                        message: 'Erro ao deletar curso.'
-                    });
-                }
-                if (result.affectedRows === 0) {
-                    return response.status(404).render('curriculo', {
-                        message: 'Curso não encontrado.'
-                    });
-                }
-                return response.status(200).render('curriculo', {
-                    message: "Curso deletado com sucesso"
+            const result = await new Promise((resolve, reject) => {
+                CursoModel.delete(id, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
                 });
+            });
+
+            if (result.affectedRows === 0) {
+                return response.status(404).render('curso', {
+                    message: 'Curso não encontrado.'
+                });
+            }
+
+            return response.status(200).render('curso', {
+                message: "Curso deletado com sucesso"
             });
         } catch (error) {
             console.error('Erro ao deletar curso:', error.message);
-            return response.status(500).render('curriculo', {
+            return response.status(500).render('curso', {
+                message: "Erro interno do servidor"
+            });
+        }
+    }
+
+    async getDisciplinasByCurso(request, response) {
+        try {
+            const { idCurso } = request.params;
+ 
+            // Buscar o curso pelo ID
+            const curso = await new Promise((resolve, reject) => {
+                CursoModel.getById(idCurso, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
+            });
+ 
+            // Buscar disciplinas do curso
+            const disciplinas = await new Promise((resolve, reject) => {
+                DisciplinaModel.getByCurso(idCurso, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
+            });
+ 
+            // Renderizar a view com os dados
+            response.status(200).render('curso', { curso, disciplinas });
+        } catch (error) {
+            console.error('Erro ao listar disciplinas:', error.message);
+            response.status(500).render('curso', {
                 message: "Erro interno do servidor"
             });
         }

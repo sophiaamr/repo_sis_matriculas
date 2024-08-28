@@ -7,66 +7,105 @@ export class DisciplinaController {
     }
 
     async create(request, response) {
-        try {
-            const { nomeDisciplina, status, qtdAluno } = request.body;
+        const { nomeDisciplina, status, tipo, qntdAluno, idCurso, valor } = request.body;
 
-            if (!nomeDisciplina || !status || qtdAluno === undefined) {
+        console.log('Dados recebidos:', { nomeDisciplina, status, tipo, qntdAluno, idCurso });
+
+        if (!nomeDisciplina || !status || !tipo || qntdAluno === undefined || idCurso === undefined || valor === undefined) {
+            console.log('Dados inválidos:', { nomeDisciplina, status, tipo, qntdAluno, idCurso });
+            return response.status(400).render('disciplinas', {
+                message: "Revise as informações fornecidas"
+            });
+        }
+
+        const validStatus = ['ativa', 'inativa'];
+        if (!validStatus.includes(status)) {
+            console.log('Status inválido:', status);
+            return response.status(400).render('disciplinas', {
+                message: "Status inválido"
+            });
+        }
+
+        const validTipo = ['obrigatoria', 'optativa'];
+        if (!validTipo.includes(tipo)) {
+            console.log('Tipo inválido:', tipo);
+            return response.status(400).render('disciplinas', {
+                message: "Tipo inválido"
+            });
+        }
+
+        // Verifique se idCurso é válido usando o método estático do modelo
+        DisciplinaModel.getCursoById(idCurso, (err, results) => {
+            if (err) {
+                console.error('Erro ao verificar curso:', err.message);
+                return response.status(500).render('disciplinas', {
+                    message: 'Erro interno do servidor'
+                });
+            }
+            if (results.length === 0) {
+                console.log('Curso não encontrado:', idCurso);
                 return response.status(400).render('disciplinas', {
-                    message: "Revise as informações fornecidas"
+                    message: "Curso não encontrado"
                 });
             }
 
-            const validStatus = ['ATIVO', 'CANCELADO', 'ENCERRADO'];
-            if (!validStatus.includes(status)) {
-                return response.status(400).render('disciplinas', {
-                    message: "Status inválido"
-                });
-            }
-
-            DisciplinaModel.create({ nomeDisciplina, status, qtdAluno }, (err, result) => {
+            DisciplinaModel.create({ nomeDisciplina, status, tipo, qntdAluno, idCurso, valor }, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar disciplina: ', err.message);
                     return response.status(500).render('disciplinas', {
                         message: 'Erro ao criar disciplina'
                     });
                 }
+                console.log('Disciplina criada com sucesso:', result);
                 return response.status(201).render('disciplinas', {
                     message: 'Disciplina criada com sucesso',
                     result
                 });
             });
-        } catch (error) {
-            console.error('Erro ao criar disciplina: ', error.message);
-            return response.status(500).render('disciplinas', {
-                message: 'Erro interno do servidor'
-            });
-        }
+        });
     }
 
-    async getAll(request, response) {
-        try {
+   async getAll(request, response) {
+    try {
+        const disciplinas = await new Promise((resolve, reject) => {
             DisciplinaModel.getAll((err, disciplinas) => {
-                if (err) {
-                    console.error('Erro ao buscar disciplinas: ', err.message);
-                    return response.status(500).render('disciplinas', {
-                        message: 'Erro ao buscar disciplinas.'
-                    });
-                }
-                return response.status(200).render('disciplinas', { disciplinas });
+                if (err) return reject(err);
+                resolve(disciplinas);
             });
-        } catch (error) {
-            console.error('Erro ao buscar disciplinas: ', error.message);
-            return response.status(500).render('disciplinas', {
-                message: 'Erro interno do servidor'
+        });
+
+        const cursos = await new Promise((resolve, reject) => {
+            DisciplinaModel.getAllCursos((err, cursos) => {
+                if (err) return reject(err);
+                resolve(cursos);
             });
-        }
+        });
+
+        const alunos = await new Promise((resolve, reject) => {
+            DisciplinaModel.getAllAlunos((err, alunos) => {
+                if (err) return reject(err);
+                resolve(alunos);
+            });
+        });
+
+        // Renderiza a view com os dados
+        return response.status(200).render('disciplinas', { disciplinas, cursos, alunos });
+    } catch (error) {
+        console.error('Erro ao buscar disciplinas, cursos ou alunos: ', error.message);
+        return response.status(500).render('disciplinas', {
+            message: 'Erro interno do servidor'
+        });
     }
+}
+
+    
+    
 
     async getById(request, response) {
         const { id } = request.params;
-
+    
         try {
-            DisciplinaModel.getById(id, (err, disciplina) => {
+            DisciplinaModel.getById(id, async (err, disciplina) => {
                 if (err) {
                     console.error('Erro ao buscar disciplina:', err.message);
                     return response.status(500).render('disciplinas', {
@@ -78,7 +117,18 @@ export class DisciplinaController {
                         message: 'Disciplina não encontrada.'
                     });
                 }
-                return response.status(200).render('disciplinas', { disciplina });
+    
+                // Busca os alunos associados à disciplina
+                const alunos = await new Promise((resolve, reject) => {
+                    DisciplinaModel.getAlunosByDisciplina(id, (err, alunos) => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        resolve(alunos);
+                    });
+                });
+    
+                return response.status(200).render('disciplinas', { disciplina, alunos });
             });
         } catch (error) {
             console.error('Erro ao buscar disciplina:', error.message);
@@ -87,20 +137,28 @@ export class DisciplinaController {
             });
         }
     }
+    
 
     async update(request, response) {
         const { id } = request.params;
-        const { nomeDisciplina, status, qtdAluno } = request.body;
+        const { nomeDisciplina, status, tipo, qntdAluno, idCurso, valor } = request.body;
 
         try {
-            const validStatus = ['ATIVO', 'ENCERRADO', 'CANCELADO'];
+            const validStatus = ['ativa', 'inativa'];
             if (status && !validStatus.includes(status)) {
                 return response.status(400).render('disciplinas', {
                     message: "Status inválido."
                 });
             }
 
-            DisciplinaModel.update(id, { nomeDisciplina, status, qtdAluno }, (err, result) => {
+            const validTipo = ['obrigatoria', 'optativa'];
+            if (tipo && !validTipo.includes(tipo)) {
+                return response.status(400).render('disciplinas', {
+                    message: "Tipo inválido."
+                });
+            }
+
+            DisciplinaModel.update(id, { nomeDisciplina, status, tipo, qntdAluno, idCurso, valor }, (err, result) => {
                 if (err) {
                     console.error('Erro ao atualizar disciplina:', err.message);
                     return response.status(500).render('disciplinas', {

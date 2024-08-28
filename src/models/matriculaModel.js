@@ -52,6 +52,7 @@ class MatriculaModel {
                     }
 
                     callback(null, result);
+                    
                 });
             });
         });

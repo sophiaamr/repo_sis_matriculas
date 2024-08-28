@@ -4,9 +4,11 @@ import { UserController } from '../controllers/userController.js';
 const router = Router();
 const userController = new UserController();
 
-router.get('/', userController.getAll);
+// Rotas para Professores
+router.post('/', userController.createProfessor);
+router.get('/', userController.getAllProfessors);
 router.get('/:id', userController.getById);
 router.delete('/:id', userController.deleteUser);
 router.put('/:id', userController.updateUserById);
 
-export { router as UserRoute };
+export { router as ProfessorRoute };

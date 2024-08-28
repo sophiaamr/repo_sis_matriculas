@@ -12,7 +12,6 @@ class Usuario {
     connection.query(query, values, (err, result) => {
       if (err) return callback(err);
 
-      // Após a inserção do usuário, insira os dados nas tabelas correspondentes
       const userId = result.insertId;
       let insertQuery;
       let insertValues;
@@ -39,98 +38,98 @@ class Usuario {
     });
   }
 
-  getAll() {
+  getAll(callback) {
     const query = `SELECT * FROM ${this.tableName}`;
-
-    return new Promise((resolve, reject) => {
-      connection.query(query, (err, results) => {
-        if (err) return reject(err);
-        resolve(results);
-      });
+    
+    connection.query(query, (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
     });
   }
 
-  getById(id) {
+  getById(id, callback) {
     const query = `SELECT * FROM ${this.tableName} WHERE idUsuario = ?`;
 
-    return new Promise((resolve, reject) => {
-      connection.query(query, [id], (err, results) => {
-        if (err) return reject(err);
-        resolve(results[0]);
+    connection.query(query, [id], (err, results) => {
+      if (err) return callback(err);
+      callback(null, results[0]);
+    });
+  }
+
+  updateById(id, data, callback) {
+    connection.beginTransaction((err) => {
+      if (err) return callback(err);
+
+      const updateUserQuery = `UPDATE ${this.tableName} SET nome = ?, cpf = ?, telefone = ?, email = ?, senha = ? WHERE idUsuario = ?`;
+      const updateUserValues = [data.nome, data.cpf, data.telefone, data.email, data.senha, id];
+  
+      connection.query(updateUserQuery, updateUserValues, (err) => {
+        if (err) {
+          return connection.rollback(() => callback(err));
+        }
+
+        let updateQuery;
+        let updateValues;
+
+        if (data.tipo === 'aluno') {
+          updateQuery = 'UPDATE Aluno SET matricula = ?, periodo = ? WHERE idUsuario = ?';
+          updateValues = [data.matricula, data.periodo, id];
+        } else if (data.tipo === 'professor') {
+          updateQuery = 'UPDATE Professor SET cargaHorario = ? WHERE idUsuario = ?';
+          updateValues = [data.cargaHorario, id];
+        } else if (data.tipo === 'secretaria') {
+          updateQuery = 'UPDATE Secretaria SET departamento = ? WHERE usuario_id = ?';
+          updateValues = [data.departamento, id];
+        }
+
+        if (updateQuery) {
+          connection.query(updateQuery, updateValues, (err) => {
+            if (err) {
+              return connection.rollback(() => callback(err));
+            }
+  
+            connection.commit((err) => {
+              if (err) {
+                return connection.rollback(() => callback(err));
+              }
+              callback(null);
+            });
+          });
+        } else {
+          connection.commit((err) => {
+            if (err) {
+              return connection.rollback(() => callback(err));
+            }
+            callback(null);
+          });
+        }
       });
     });
   }
 
-  updateById(id, data) {
-    return new Promise((resolve, reject) => {
-      connection.beginTransaction((err) => {
-        if (err) return reject(err);
+  deleteById(id, callback) {
+    connection.beginTransaction((err) => {
+      if (err) return callback(err);
 
-        const updateUser = `UPDATE ${this.tableName} SET nome = ?, cpf = ?, telefone = ?, email = ?, senha = ? WHERE idUsuario = ?`;
-        const userData = [data.nome, data.cpf, data.telefone, data.email, data.senha, id];
+      const deleteSecretariaQuery = 'DELETE FROM Secretaria WHERE usuario_id = ?';
+      connection.query(deleteSecretariaQuery, [id], (err) => {
+        if (err) return connection.rollback(() => callback(err));
 
-        connection.query(updateUser, userData, (err) => {
-          if (err) return connection.rollback(() => reject(err));
+        const deleteProfessorQuery = 'DELETE FROM Professor WHERE idUsuario = ?';
+        connection.query(deleteProfessorQuery, [id], (err) => {
+          if (err) return connection.rollback(() => callback(err));
 
-          let updateQuery;
-          let updateValues;
+          const deleteAlunoQuery = 'DELETE FROM Aluno WHERE idUsuario = ?';
+          connection.query(deleteAlunoQuery, [id], (err) => {
+            if (err) return connection.rollback(() => callback(err));
 
-          if (data.tipo === 'aluno') {
-            updateQuery = 'UPDATE Aluno SET matricula = ?, periodo = ? WHERE idUsuario = ?';
-            updateValues = [data.matricula, data.periodo, id];
-          } else if (data.tipo === 'professor') {
-            updateQuery = 'UPDATE Professor SET cargaHorario = ? WHERE idUsuario = ?';
-            updateValues = [data.cargaHorario, id];
-          } else if (data.tipo === 'secretaria') {
-            updateQuery = 'UPDATE Secretaria SET departamento = ? WHERE usuario_id = ?';
-            updateValues = [data.departamento, id];
-          }
-
-          if (updateQuery) {
-            connection.query(updateQuery, updateValues, (err) => {
-              if (err) return connection.rollback(() => reject(err));
+            const deleteUserQuery = `DELETE FROM ${this.tableName} WHERE idUsuario = ?`;
+            connection.query(deleteUserQuery, [id], (err) => {
+              if (err) return connection.rollback(() => callback(err));
 
               connection.commit((err) => {
-                if (err) return connection.rollback(() => reject(err));
-                resolve();
-              });
-            });
-          } else {
-            connection.commit((err) => {
-              if (err) return connection.rollback(() => reject(err));
-              resolve();
-            });
-          }
-        });
-      });
-    });
-  }
-
-  deleteById(id) {
-    return new Promise((resolve, reject) => {
-      connection.beginTransaction((err) => {
-        if (err) return reject(err);
-
-        const deleteSecretaria = 'DELETE FROM Secretaria WHERE usuario_id = ?';
-        connection.query(deleteSecretaria, [id], (err) => {
-          if (err) return connection.rollback(() => reject(err));
-
-          const deleteProfessor = 'DELETE FROM Professor WHERE idUsuario = ?';
-          connection.query(deleteProfessor, [id], (err) => {
-            if (err) return connection.rollback(() => reject(err));
-
-            const deleteAluno = 'DELETE FROM Aluno WHERE idUsuario = ?';
-            connection.query(deleteAluno, [id], (err) => {
-              if (err) return connection.rollback(() => reject(err));
-
-              const deleteUser = `DELETE FROM ${this.tableName} WHERE idUsuario = ?`;
-              connection.query(deleteUser, [id], (err) => {
-                if (err) return connection.rollback(() => reject(err));
-
-                connection.commit((err) => {
-                  if (err) return connection.rollback(() => reject(err));
-                  resolve();
-                });
+                if (err) return connection.rollback(() => callback(err));
+                callback(null);
               });
             });
           });

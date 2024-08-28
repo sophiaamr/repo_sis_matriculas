@@ -4,9 +4,11 @@ import { UserController } from '../controllers/userController.js';
 const router = Router();
 const userController = new UserController();
 
-router.get('/', userController.getAll);
+// Rotas para Secretarias
+router.post('/', userController.createSecretaria);
+router.get('/', userController.getAllSecretaria);
 router.get('/:id', userController.getById);
 router.delete('/:id', userController.deleteUser);
 router.put('/:id', userController.updateUserById);
 
-export { router as UserRoute };
+export { router as SecretariaRoute };
