@@ -14,7 +14,7 @@ export class CursoController {
                 return response.status(400).render('curriculo', {
                     message: "Revise as informações fornecidas."
                 });
-            }
+            } 
 
             CursoModel.create({ nome, numCredito }, (err, result) => {
                 if (err) {

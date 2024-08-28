@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <%- include('../partials/head'); %>
+   <style>
+ .section-header {
+      margin-bottom: 20px;
+    }
+
+    .section-header h4 {
+      font-size: 1.5rem;
+      color: rgb(115, 115, 141);
+    }
+
+    .form-section {
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 5px;
+    }
+
+    .btn-primary {
+      background-color: rgb(115, 115, 141);
+      border: none;
+      border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+      background-color: rgb(90, 90, 115);
+    }
+
+    .form-group p {
+      margin-bottom: 0;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .form-section {
+        padding: 15px;
+      }
+    }
+   </style>
+</head>
+<body class="container">
+    <header>
+        <%- include('../partials/headerSecretaria'); %>
+    </header>
+    <section class="container mt-4">
+        <div class="form-section">
+          <div class="section-header">
+            <h4>Alterar Período de Matrículas</h4>
+          </div>
+          <form>
+            <div class="row">
+              <div class="col-12 col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="startDate">Data de início:</label>
+                  <input type="date" class="form-control" id="startDate" required>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="endDate">Data de fim:</label>
+                  <input type="date" class="form-control" id="endDate" required>
+                </div>
+              </div>
+              <div class="col-12 mt-4">
+                <button type="submit" class="btn btn-primary">Alterar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+    
+        <div class="form-section">
+          <div class="section-header">
+            <h4>Alterar data de emissão de boletos</h4>
+          </div>
+          <form>
+            <div class="row">
+              <div class="col-12 col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="startDateBoleto">Data de emissão:</label>
+                  <input type="date" class="form-control" id="startDateBoleto" required>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="endDateBoleto">Data de vencimento:</label>
+                  <input type="date" class="form-control" id="endDateBoleto" required>
+                </div>
+              </div>
+              <div class="col-12 mt-4">
+                <button type="submit" class="btn btn-primary">Alterar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+    
