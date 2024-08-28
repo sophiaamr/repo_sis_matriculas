@@ -23,7 +23,7 @@ class Usuario {
         insertQuery = 'INSERT INTO Professor (idUsuario, cargaHorario) VALUES (?, ?)';
         insertValues = [userId, data.cargaHorario];
       } else if (data.tipo === 'secretaria') {
-        insertQuery = 'INSERT INTO Secretaria (usuario_id, departamento) VALUES (?, ?)';
+        insertQuery = 'INSERT INTO Secretaria (idUsuario, departamento) VALUES (?, ?)';
         insertValues = [userId, data.departamento];
       }
 
@@ -78,7 +78,7 @@ class Usuario {
           updateQuery = 'UPDATE Professor SET cargaHorario = ? WHERE idUsuario = ?';
           updateValues = [data.cargaHorario, id];
         } else if (data.tipo === 'secretaria') {
-          updateQuery = 'UPDATE Secretaria SET departamento = ? WHERE usuario_id = ?';
+          updateQuery = 'UPDATE Secretaria SET departamento = ? WHERE idUsuario = ?';
           updateValues = [data.departamento, id];
         }
 
@@ -108,35 +108,17 @@ class Usuario {
   }
 
   deleteById(id, callback) {
-    connection.beginTransaction((err) => {
-      if (err) return callback(err);
+    const deleteUserQuery = `DELETE FROM ${this.tableName} WHERE idUsuario = ?`;
+    connection.query(deleteUserQuery, [id], (err) => {
+      if (err) return connection.rollback(() => callback(err));
 
-      const deleteSecretariaQuery = 'DELETE FROM Secretaria WHERE usuario_id = ?';
-      connection.query(deleteSecretariaQuery, [id], (err) => {
+      connection.commit((err) => {
         if (err) return connection.rollback(() => callback(err));
-
-        const deleteProfessorQuery = 'DELETE FROM Professor WHERE idUsuario = ?';
-        connection.query(deleteProfessorQuery, [id], (err) => {
-          if (err) return connection.rollback(() => callback(err));
-
-          const deleteAlunoQuery = 'DELETE FROM Aluno WHERE idUsuario = ?';
-          connection.query(deleteAlunoQuery, [id], (err) => {
-            if (err) return connection.rollback(() => callback(err));
-
-            const deleteUserQuery = `DELETE FROM ${this.tableName} WHERE idUsuario = ?`;
-            connection.query(deleteUserQuery, [id], (err) => {
-              if (err) return connection.rollback(() => callback(err));
-
-              connection.commit((err) => {
-                if (err) return connection.rollback(() => callback(err));
-                callback(null);
-              });
-            });
-          });
-        });
+        callback(null);
       });
     });
   }
+
 }
 
 export default Usuario;

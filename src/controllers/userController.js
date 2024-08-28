@@ -5,6 +5,7 @@ import Secretaria from '../models/secretariaModel.js';
 import autoBind from 'auto-bind';
 
 export class UserController {
+
     constructor() {
         autoBind(this);
     }
@@ -76,10 +77,10 @@ export class UserController {
             const professorModel = new Professor();
             const professores = await professorModel.getAll();
             console.log('Todos os professores:', professores);
-            return res.status(200).render('perfil', { professores });
+            return res.status(200).render('perfilProf', { professores });
         } catch (err) {
             console.error('Erro ao buscar professores:', err.message);
-            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfilProf', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -171,6 +172,8 @@ export class UserController {
                 });
             });
 
+            console.log(result)
+
             if (result.affectedRows === 0) {
                 return res.status(404).render('perfil', { message: 'Usuário não encontrado' });
             }
@@ -237,4 +240,7 @@ export class UserController {
             return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
+
+
+    
 }
