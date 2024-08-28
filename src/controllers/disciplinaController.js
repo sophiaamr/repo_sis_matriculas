@@ -7,11 +7,11 @@ export class DisciplinaController {
     }
 
     async create(request, response) {
-        const { nomeDisciplina, status, tipo, tipo, qntdAluno, idCurso, valor, idCurso } = request.body;
+        const { nomeDisciplina, status, tipo, qntdAluno, idCurso, valor } = request.body;
 
         console.log('Dados recebidos:', { nomeDisciplina, status, tipo, qntdAluno, idCurso });
 
-        if (!nomeDisciplina || !status || !tipo || tipo === undefined || qntdAluno === undefined || !idCurso || valor === undefined || idCurso === undefined) {
+        if (!nomeDisciplina || !status || !tipo || qntdAluno === undefined || idCurso === undefined || valor === undefined) {
             console.log('Dados inválidos:', { nomeDisciplina, status, tipo, qntdAluno, idCurso });
             return response.status(400).render('disciplinas', {
                 message: "Revise as informações fornecidas"
@@ -49,14 +49,7 @@ export class DisciplinaController {
                 });
             }
 
-            const validTipo = ['obrigatoria', 'optativa'];
-            if (!validTipo.includes(tipo)) {
-                return response.status(400).render('disciplinas', {
-                    message: "Tipo inválido"
-                });
-            }
-
-            DisciplinaModel.create({ nomeDisciplina, status, tipo, tipo, qntdAluno, idCurso, valor, idCurso }, (err, result) => {
+            DisciplinaModel.create({ nomeDisciplina, status, tipo, qntdAluno, idCurso, valor }, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar disciplina: ', err.message);
                     return response.status(500).render('disciplinas', {
@@ -64,7 +57,7 @@ export class DisciplinaController {
                     });
                 }
                 console.log('Disciplina criada com sucesso:', result);
-                return response.status(201).render('Professor/disciplinas', {
+                return response.status(201).render('disciplinas', {
                     message: 'Disciplina criada com sucesso',
                     result
                 });
@@ -72,22 +65,20 @@ export class DisciplinaController {
         });
     }
 
-
     async getAll(request, response) {
         try {
             DisciplinaModel.getAll((err, disciplinas) => {
                 if (err) {
                     console.error('Erro ao buscar disciplinas: ', err.message);
-                    return response.status(500).render('disciplinas', {
+                    return response.status(500).render('Professor/disciplinas', {
                         message: 'Erro ao buscar disciplinas.'
                     });
                 }
-                console.log(disciplinas)
                 return response.status(200).render('Professor/disciplinas', { disciplinas });
             });
         } catch (error) {
             console.error('Erro ao buscar disciplinas: ', error.message);
-            return response.status(500).render('disciplinas', {
+            return response.status(500).render('Professor/disciplinas', {
                 message: 'Erro interno do servidor'
             });
         }
@@ -100,20 +91,20 @@ export class DisciplinaController {
             DisciplinaModel.getById(id, (err, disciplina) => {
                 if (err) {
                     console.error('Erro ao buscar disciplina:', err.message);
-                    return response.status(500).render('disciplinas', {
+                    return response.status(500).render('Professor/disciplinas', {
                         message: 'Erro ao buscar disciplina.'
                     });
                 }
                 if (!disciplina) {
-                    return response.status(404).render('disciplinas', {
+                    return response.status(404).render('Professor/disciplinas', {
                         message: 'Disciplina não encontrada.'
                     });
                 }
-                return response.status(200).render('disciplinas', { disciplina });
+                return response.status(200).render('Professor/disciplinas', { disciplina });
             });
         } catch (error) {
             console.error('Erro ao buscar disciplina:', error.message);
-            return response.status(500).render('disciplinas', {
+            return response.status(500).render('Professor/disciplinas', {
                 message: 'Erro interno do servidor'
             });
         }
@@ -121,7 +112,7 @@ export class DisciplinaController {
 
     async update(request, response) {
         const { id } = request.params;
-        const { nomeDisciplina, status, tipo, tipo, qntdAluno, idCurso, valor } = request.body;
+        const { nomeDisciplina, status, tipo, qntdAluno, idCurso, valor } = request.body;
 
         try {
             const validStatus = ['ativa', 'inativa'];
@@ -138,14 +129,7 @@ export class DisciplinaController {
                 });
             }
 
-            const validTipo = ['obrigatoria', 'optativa'];
-            if (tipo && !validTipo.includes(tipo)) {
-                return response.status(400).render('disciplinas', {
-                    message: "Tipo inválido."
-                });
-            }
-
-            DisciplinaModel.update(id, { nomeDisciplina, status, tipo, tipo, qntdAluno, idCurso, valor }, (err, result) => {
+            DisciplinaModel.update(id, { nomeDisciplina, status, tipo, qntdAluno, idCurso, valor }, (err, result) => {
                 if (err) {
                     console.error('Erro ao atualizar disciplina:', err.message);
                     return response.status(500).render('disciplinas', {
@@ -157,7 +141,7 @@ export class DisciplinaController {
                         message: 'Disciplina não encontrada.'
                     });
                 }
-                return response.status(200).render('disciplinas', {
+                return response.status(200).render('Professor/disciplinas', {
                     message: "Disciplina atualizada com sucesso"
                 });
             });
@@ -185,7 +169,7 @@ export class DisciplinaController {
                         message: 'Disciplina não encontrada.'
                     });
                 }
-                return response.status(200).render('disciplinas', {
+                return response.status(200).render('Professor/disciplinas', {
                     message: "Disciplina deletada com sucesso"
                 });
             });
