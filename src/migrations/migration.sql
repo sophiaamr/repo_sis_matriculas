@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS Curso (
 CREATE TABLE IF NOT EXISTS Disciplina (
     idDisciplina INT PRIMARY KEY AUTO_INCREMENT,
     nomeDisciplina VARCHAR(255) NOT NULL,
+    valor DOUBLE NOT NULL,
     status ENUM('ativa', 'inativa') NOT NULL,
     tipo ENUM('obrigatoria', 'optativa') NOT NULL,
     qntdAluno INT,
@@ -84,7 +85,7 @@ CREATE TABLE IF NOT EXISTS MatriculaDisciplinaOptativa (
 );
 
 CREATE TABLE IF NOT EXISTS Cobranca (
-    idCobranca INT PRIMARY KEY AUTO_INCREMENT,
+    idCobranca INT PRIMARY KEY AUTO_INCREMENT,	
     status ENUM('pendente', 'paga', 'cancelada') NOT NULL,
     juros DOUBLE NOT NULL,
     dataInicio DATE NOT NULL,
@@ -92,7 +93,8 @@ CREATE TABLE IF NOT EXISTS Cobranca (
     idAluno INT,
     FOREIGN KEY (idAluno) REFERENCES Aluno(idAluno)
 );
-
+ALTER TABLE Cobranca
+ADD COLUMN valor DOUBLE NOT NULL;
 CREATE TABLE IF NOT EXISTS Secretaria (
     idUsuario INT NOT NULL,
     departamento VARCHAR(255),

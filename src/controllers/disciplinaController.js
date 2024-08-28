@@ -7,11 +7,11 @@ export class DisciplinaController {
     }
 
     async create(request, response) {
-        const { nomeDisciplina, status, tipo, qntdAluno, idCurso } = request.body;
+        const { nomeDisciplina, status, tipo, tipo, qntdAluno, idCurso, valor, idCurso } = request.body;
 
         console.log('Dados recebidos:', { nomeDisciplina, status, tipo, qntdAluno, idCurso });
 
-        if (!nomeDisciplina || !status || tipo === undefined || qntdAluno === undefined || idCurso === undefined) {
+        if (!nomeDisciplina || !status || !tipo || tipo === undefined || qntdAluno === undefined || !idCurso || valor === undefined || idCurso === undefined) {
             console.log('Dados inválidos:', { nomeDisciplina, status, tipo, qntdAluno, idCurso });
             return response.status(400).render('disciplinas', {
                 message: "Revise as informações fornecidas"
@@ -49,7 +49,14 @@ export class DisciplinaController {
                 });
             }
 
-            DisciplinaModel.create({ nomeDisciplina, status, tipo, qntdAluno, idCurso }, (err, result) => {
+            const validTipo = ['obrigatoria', 'optativa'];
+            if (!validTipo.includes(tipo)) {
+                return response.status(400).render('disciplinas', {
+                    message: "Tipo inválido"
+                });
+            }
+
+            DisciplinaModel.create({ nomeDisciplina, status, tipo, tipo, qntdAluno, idCurso, valor, idCurso }, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar disciplina: ', err.message);
                     return response.status(500).render('disciplinas', {
@@ -57,7 +64,7 @@ export class DisciplinaController {
                     });
                 }
                 console.log('Disciplina criada com sucesso:', result);
-                return response.status(201).render('disciplinas', {
+                return response.status(201).render('Professor/disciplinas', {
                     message: 'Disciplina criada com sucesso',
                     result
                 });
@@ -75,7 +82,8 @@ export class DisciplinaController {
                         message: 'Erro ao buscar disciplinas.'
                     });
                 }
-                return response.status(200).render('disciplinas', { disciplinas });
+                console.log(disciplinas)
+                return response.status(200).render('Professor/disciplinas', { disciplinas });
             });
         } catch (error) {
             console.error('Erro ao buscar disciplinas: ', error.message);
@@ -113,7 +121,7 @@ export class DisciplinaController {
 
     async update(request, response) {
         const { id } = request.params;
-        const { nomeDisciplina, status, tipo, qntdAluno } = request.body;
+        const { nomeDisciplina, status, tipo, tipo, qntdAluno, idCurso, valor } = request.body;
 
         try {
             const validStatus = ['ativa', 'inativa'];
@@ -130,7 +138,14 @@ export class DisciplinaController {
                 });
             }
 
-            DisciplinaModel.update(id, { nomeDisciplina, status, tipo, qntdAluno }, (err, result) => {
+            const validTipo = ['obrigatoria', 'optativa'];
+            if (tipo && !validTipo.includes(tipo)) {
+                return response.status(400).render('disciplinas', {
+                    message: "Tipo inválido."
+                });
+            }
+
+            DisciplinaModel.update(id, { nomeDisciplina, status, tipo, tipo, qntdAluno, idCurso, valor }, (err, result) => {
                 if (err) {
                     console.error('Erro ao atualizar disciplina:', err.message);
                     return response.status(500).render('disciplinas', {
