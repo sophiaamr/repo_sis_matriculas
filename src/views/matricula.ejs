@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <%- include('partials/head'); %>
-   
+    <%- include('partials/head'); %>
     <title>Formulário de Matrícula</title>
     <style>
-       
         .navbar-nav .nav-link {
             color: white;
             font-size: 1rem;
@@ -14,8 +12,6 @@
         .navbar-nav .nav-link:hover {
             color: #e9ecef;
         }
-
-
 
         .form-group {
             margin-bottom: 5px;
@@ -62,7 +58,6 @@
             background-color: rgb(115, 115, 141);
             border-color:  rgb(115, 115, 141);
         }
-
     </style>
 </head>
 
@@ -74,127 +69,118 @@
 
     <main>
         <section>
-                <h3>Formulário de Matrícula</h3>
-                <form id="matriculaForm" action="/api/matricula" method="POST">
-                    <!-- Seleção do Curso -->
-                    <div class="form-group">
-                        <label for="curso">Selecione o Curso:</label>
-                        <select id="curso" name="curso" class="form-select" required>
-                            <option value="">Selecione um curso</option>
-                            <option value="Biomedicina">Biomedicina</option>
-                            <option value="Direito">Direito</option>
-                            <option value="Enfermagem">Enfermagem</option>
-                            <option value="Fisioterapia">Fisioterapia</option>
-                            <option value="Medicina">Medicina</option>
-                            <option value="Medicina Veterinária">Medicina Veterinária</option>
-                            <option value="Psicologia">Psicologia</option>
-                            <option value="Engenharia Civil">Engenharia Civil</option>
-                            <option value="Engenharia Química">Engenharia Química</option>
-                            <option value="Engenharia Mecânica">Engenharia Mecânica</option>
-                        </select>
+            <h3>Formulário de Matrícula</h3>
+            <form id="matriculaForm" action="/api/matricula" method="POST">
+                <!-- Seleção do Curso -->
+                <div class="form-group">
+                    <label for="idCurso">Selecione o Curso:</label>
+                    <select id="idCurso" name="idCurso" class="form-select" required>
+                        <option value="">Selecione um curso</option>
+                        <% cursos.forEach(curso => { %>
+                            <option value="<%= curso.idCurso %>"><%= curso.nome %></option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <!-- Seleção do Período -->
+                <div class="form-group">
+                    <label for="periodo">Selecione o Período:</label>
+                    <select id="periodo" name="periodo" class="form-select" required>
+                        <option value="">Selecione o período</option>
+                        <% for (let i = 1; i <= 12; i++) { %>
+                            <option value="<%= i %>">Período <%= i %></option>
+                        <% } %>
+                    </select>
+                </div>
+
+                <!-- Disciplinas Obrigatórias -->
+                <div class="form-group">
+                    <label>Selecione as Disciplinas Obrigatórias:</label>
+                    <div class="disciplinas-container" id="disciplinasObrigatorias">
+                        <!-- Disciplinas obrigatórias serão carregadas aqui -->
                     </div>
-    
-                    <div class="form-group">
-                        <label for="periodo">Selecione o período:</label>
-                        <select id="periodo" name="periodo" class="form-select" required>
-                            <option value="">Selecione o período</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                        </select>
+                    <div id="obrigatoriaError" class="error"></div>
+                </div>
+
+                <!-- Disciplinas Optativas -->
+                <div class="form-group">
+                    <label>Selecione as Disciplinas Optativas:</label>
+                    <div class="disciplinas-container" id="disciplinasOptativas">
+                        <!-- Disciplinas optativas serão carregadas aqui -->
                     </div>
-    
-                    <!-- Disciplinas Obrigatórias -->
-                    <div class="form-group">
-                        <label>Selecione as 4 Disciplinas Obrigatórias:</label>
-                        <div class="disciplinas-container">
-                            <p><input type="checkbox" name="obrigatorias" class="obrigatoria" value="Disciplina 1">Disciplina 1</p>
-                            <p><input type="checkbox" name="obrigatorias" class="obrigatoria" value="Disciplina 2">Disciplina 2</p>
-                            <p><input type="checkbox" name="obrigatorias" class="obrigatoria" value="Disciplina 3">Disciplina 3</p>
-                            <p><input type="checkbox" name="obrigatorias" class="obrigatoria" value="Disciplina 4">Disciplina 4</p>
-                            <p><input type="checkbox" name="obrigatorias" class="obrigatoria" value="Disciplina 5">Disciplina 5</p>
-                            <p><input type="checkbox" name="obrigatorias" class="obrigatoria" value="Disciplina 6">Disciplina 6</p>
-                        </div>
-                        <div id="obrigatoriaError" class="error"></div>
-                    </div>
-    
-                    <!-- Disciplinas Optativas -->
-                    <div class="form-group">
-                        <label>Selecione as 2 Disciplinas Alternativas:</label>
-                        <div class="disciplinas-container">
-                            <p><input type="checkbox" name="optativas" class="optativa" value="Disciplina 1">Disciplina 1</p>
-                            <p><input type="checkbox" name="optativas" class="optativa" value="Disciplina 2">Disciplina 2</p>
-                            <p><input type="checkbox" name="optativas" class="optativa" value="Disciplina 3">Disciplina 3</p>
-                            <p><input type="checkbox" name="optativas" class="optativa" value="Disciplina 4">Disciplina 4</p>
-                            <p><input type="checkbox" name="optativas" class="optativa" value="Disciplina 5">Disciplina 5</p>
-                            <p><input type="checkbox" name="optativas" class="optativa" value="Disciplina 6">Disciplina 6</p>
-                        </div>
-                        <div id="optativaError" class="error"></div>
-                    </div>
-    
-                    <button type="submit" class="btn btn-custom">Enviar</button>
-                </form>
-    
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        let obrigatorias = document.querySelectorAll('input[name="obrigatorias"]');
-                        let optativas = document.querySelectorAll('input[name="optativas"]');
-    
-                        obrigatorias.forEach((checkbox) => {
-                            checkbox.addEventListener('change', function() {
-                                let checkedCount = document.querySelectorAll('input[name="obrigatorias"]:checked').length;
-                                if (checkedCount > 4) {
-                                    this.checked = false;
-                                    alert('Você pode selecionar no máximo 4 disciplinas obrigatórias.');
-                                }
-                            });
-                        });
-    
-                        optativas.forEach((checkbox) => {
-                            checkbox.addEventListener('change', function() {
-                                let checkedCount = document.querySelectorAll('input[name="optativas"]:checked').length;
-                                if (checkedCount > 2) {
-                                    this.checked = false;
-                                    alert('Você pode selecionar no máximo 2 disciplinas alternativas.');
-                                }
-                            });
-                        });
-    
-                        document.getElementById('matriculaForm').addEventListener('submit', function(event) {
-                            event.preventDefault();
-                            
-                            let obrigatoriasChecked = document.querySelectorAll('input[name="obrigatorias"]:checked').length;
-                            let optativasChecked = document.querySelectorAll('input[name="optativas"]:checked').length;
-                            let obrigatoriaError = document.getElementById('obrigatoriaError');
-                            let optativaError = document.getElementById('optativaError');
-    
-                            obrigatoriaError.textContent = '';
-                            optativaError.textContent = '';
-    
-                            if (obrigatoriasChecked !== 4) {
-                                obrigatoriaError.textContent = 'Você deve selecionar exatamente 4 disciplinas obrigatórias.';
-                            }
-    
-                            if (optativasChecked !== 2) {
-                                optativaError.textContent = 'Você deve selecionar exatamente 2 disciplinas alternativas.';
-                            }
-    
-                            if (obrigatoriasChecked === 4 && optativasChecked === 2) {
-                                this.submit(); 
-                            }
-                        });
-                    });
-                </script>
+                    <div id="optativaError" class="error"></div>
+                </div>
+
+                <button type="submit" class="btn btn-custom">Enviar</button>
+            </form>
             
+            <script>
+                // Atualiza a lista de disciplinas quando um período é selecionado
+                document.getElementById('periodo').addEventListener('change', function() {
+                    const cursoId = document.getElementById('idCurso').value;
+                    const periodo = parseInt(this.value, 10);
+
+                    if (cursoId && periodo) {
+                        fetch(`/api/disciplinas?cursoId=${cursoId}&periodo=${periodo}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const obrigatoriasContainer = document.getElementById('disciplinasObrigatorias');
+                                const optativasContainer = document.getElementById('disciplinasOptativas');
+
+                                obrigatoriasContainer.innerHTML = '';
+                                optativasContainer.innerHTML = '';
+
+                                data.forEach(disciplina => {
+                                    const container = disciplina.numCredito === 2 ? obrigatoriasContainer : optativasContainer;
+                                    const p = document.createElement('p');
+                                    const checkbox = document.createElement('input');
+                                    checkbox.type = 'checkbox';
+                                    checkbox.name = disciplina.numCredito === 2 ? 'disciplinasObrigatorias' : 'disciplinasOptativas';
+                                    checkbox.value = disciplina.idDisciplina;
+                                    checkbox.id = `disciplina-${disciplina.idDisciplina}`;
+
+                                    const label = document.createElement('label');
+                                    label.htmlFor = checkbox.id;
+                                    label.textContent = disciplina.nomeDisciplina;
+
+                                    p.appendChild(checkbox);
+                                    p.appendChild(label);
+                                    container.appendChild(p);
+                                });
+                            })
+                            .catch(error => console.error('Erro ao carregar disciplinas:', error));
+                    } else {
+                        // Limpar disciplinas se nenhum curso ou período estiver selecionado
+                        document.getElementById('disciplinasObrigatorias').innerHTML = '';
+                        document.getElementById('disciplinasOptativas').innerHTML = '';
+                    }
+                });
+
+                // Valida a seleção de disciplinas
+                document.getElementById('matriculaForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    let obrigatoriasChecked = document.querySelectorAll('input[name="disciplinasObrigatorias"]:checked').length;
+                    let optativasChecked = document.querySelectorAll('input[name="disciplinasOptativas"]:checked').length;
+                    let obrigatoriaError = document.getElementById('obrigatoriaError');
+                    let optativaError = document.getElementById('optativaError');
+
+                    obrigatoriaError.textContent = '';
+                    optativaError.textContent = '';
+
+                    if (obrigatoriasChecked !== 4) {
+                        obrigatoriaError.textContent = 'Você deve selecionar exatamente 4 disciplinas obrigatórias.';
+                    }
+
+                    if (optativasChecked !== 2) {
+                        optativaError.textContent = 'Você deve selecionar exatamente 2 disciplinas optativas.';
+                    }
+
+                    if (obrigatoriasChecked === 4 && optativasChecked === 2) {
+                        this.submit(); 
+                    }
+                });
+            </script>
         </section>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     </main>

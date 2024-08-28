@@ -189,4 +189,39 @@ export class CursoController {
             });
         }
     }
+
+    async getPeriodos(req, res) {
+        const { id } = req.params;
+        try {
+            const curso = await db.query('SELECT periodo FROM curso WHERE idCurso = ?', [id]);
+            if (curso.length > 0) {
+                res.json({ periodo: curso[0].periodo });
+            } else {
+                res.status(404).json({ message: 'Curso não encontrado' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao buscar curso', error });
+        }
+    }
+
+    async getDisciplinasByCursoAndPeriodo(req, res) {
+        const { cursoId, periodo } = req.query;
+        try {
+            const disciplinas = await new Promise((resolve, reject) => {
+                DisciplinaModel.getByCursoAndPeriodo(cursoId, periodo, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
+            });
+
+            res.json(disciplinas);
+        } catch (error) {
+            console.error('Erro ao listar disciplinas:', error.message);
+            res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
+
+    
 }

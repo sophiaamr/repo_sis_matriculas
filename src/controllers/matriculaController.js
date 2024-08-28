@@ -1,4 +1,6 @@
+// controllers/matriculaController.js
 import MatriculaModel from '../models/matriculaModel.js';
+import CursoModel from '../models/cursoModel.js'; // Adicione a importação
 import autoBind from 'auto-bind';
 
 export class MatriculaController {
@@ -62,7 +64,15 @@ export class MatriculaController {
                     console.error('Erro ao buscar matrículas:', err.message);
                     return response.status(500).render('matricula', { message: 'Erro ao buscar matrículas.' });
                 }
-                return response.status(200).render('matricula', { matriculas });
+
+                CursoModel.getAll((err, cursos) => {
+                    if (err) {
+                        console.error('Erro ao buscar cursos:', err.message);
+                        return response.status(500).render('matricula', { message: 'Erro ao buscar cursos.' });
+                    }
+
+                    return response.status(200).render('matricula', { matriculas, cursos });
+                });
             });
         } catch (error) {
             console.error('Erro ao buscar matrículas:', error.message);
@@ -82,7 +92,15 @@ export class MatriculaController {
                 if (!matricula) {
                     return response.status(404).render('matricula', { message: 'Matrícula não encontrada.' });
                 }
-                return response.status(200).render('matricula', { matricula });
+
+                CursoModel.getAll((err, cursos) => {
+                    if (err) {
+                        console.error('Erro ao buscar cursos:', err.message);
+                        return response.status(500).render('matricula', { message: 'Erro ao buscar cursos.' });
+                    }
+
+                    return response.status(200).render('matricula', { matricula, cursos });
+                });
             });
         } catch (error) {
             console.error('Erro ao buscar matrícula:', error.message);
@@ -142,5 +160,4 @@ export class MatriculaController {
             return response.status(500).render('matricula', { message: "Erro interno do servidor" });
         }
     }
-
 }

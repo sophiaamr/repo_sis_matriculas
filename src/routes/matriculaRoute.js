@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { MatriculaController } from "../controllers/matriculaController.js";
+// routes/matriculaRoutes.js
+import { Router } from 'express';
+import { MatriculaController } from '../controllers/matriculaController.js';
 
 const router = Router();
-
 const matriculaController = new MatriculaController();
 
 router.post('/', matriculaController.create);
