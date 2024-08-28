@@ -1,14 +1,14 @@
-import {connection} from '../db/connection.js';
+import { connection } from '../db/connection.js';
 
 class DisciplinaModel {
     // Método para criar uma nova disciplina
     static create(data, callback) {
         const query = `
-            INSERT INTO disciplina (nomeDisciplina, status, qtdAluno)
-            VALUES (?, ?, ?)
+            INSERT INTO disciplina (nomeDisciplina, valor, status, tipo, qntdAluno, idCurso)
+            VALUES (?, ?, ?, ?, ?, ?)
         `;
 
-        const values = [data.nomeDisciplina, data.status, data.qtdAluno];
+        const values = [data.nomeDisciplina, data.valor, data.status, data.tipo, data.qtdAluno, data.idCurso];
 
         connection.query(query, values, (err, result) => {
             if (err) {
@@ -53,11 +53,11 @@ class DisciplinaModel {
     static update(id, data, callback) {
         const query = `
             UPDATE disciplina
-            SET nomeDisciplina = ?, status = ?, qtdAluno = ?
+            SET nomeDisciplina = ?, status = ?, tipo = ?, qtdAluno = ?, idCurso = ?, valor = ?
             WHERE idDisciplina = ?
         `;
 
-        const values = [data.nomeDisciplina, data.status, data.qtdAluno, id];
+        const values = [data.nomeDisciplina, data.status, data.tipo, data.qtdAluno, data.idCurso, data.valor, id];
 
         connection.query(query, values, (err, result) => {
             if (err) {

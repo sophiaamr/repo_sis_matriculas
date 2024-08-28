@@ -12,7 +12,7 @@ routes.use('/matricula', MatriculaRoute);
 routes.use('/usuario', UserRoute);
 routes.use('/financeiro', CobrancaRoute);
 routes.use('/disciplinas', DisciplinaRoute);
-routes.use('/curriculo', CursoRoute);
+routes.use('/curso', CursoRoute);
 
 
 
