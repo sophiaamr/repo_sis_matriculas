@@ -4,10 +4,9 @@ import { UserController } from '../controllers/userController.js';
 const router = Router();
 const userController = new UserController();
 
-// Rotas para Alunos
-router.post('/', userController.createAluno);
 router.get('/', userController.getAllAlunos);
 router.get('/disciplinas/:disciplinaId/alunos', userController.getAlunosByDisciplina);
+router.post('/', userController.createAluno);
 router.get('/:id', userController.getById);
 router.delete('/:id', userController.deleteUser);
 router.put('/:id', userController.updateUserById);

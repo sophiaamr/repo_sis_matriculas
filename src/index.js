@@ -15,7 +15,8 @@ const app = express();
 const PORT = 3000;
 
 
-//ana;isa o corpo das requisicoes em formato json
+app.use(express.urlencoded({ extended: true }));
+
 app.use(json());
 
 //requisicoes de diferentes origens
