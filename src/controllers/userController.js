@@ -21,7 +21,7 @@ export class UserController {
         try {
             const usuarioModel = new Usuario();
             const usuario = await new Promise((resolve, reject) => {
-                usuarioModel.getByEmail(email, (err, result) => {
+                usuarioModel.login(email, senha, (err, result) => {
                     if (err) reject(err);
                     resolve(result);
                 });
@@ -37,16 +37,18 @@ export class UserController {
             }
 
             // Verifica o tipo de usuário e redireciona
+
+            console.log(tipo)
             let profilePath;
             if (tipo === 'aluno') {
-                profilePath = '/perfil';
+                profilePath = 'perfil';
             } else if (tipo === 'professor') {
-                profilePath = '/perfilProf';
+                profilePath = 'perfilProf';
             } else {
                 return res.status(400).render('login', { message: "Tipo de usuário inválido." });
             }
 
-            return res.status(200).redirect(profilePath);
+            return res.status(200).render(profilePath);
         } catch (err) {
             console.error('Erro ao realizar login:', err.message);
             return res.status(500).render('login', { message: 'Erro interno do servidor' });
