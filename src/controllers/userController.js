@@ -5,6 +5,7 @@ import Secretaria from '../models/secretariaModel.js';
 import autoBind from 'auto-bind';
 
 export class UserController {
+
     constructor() {
         autoBind(this);
     }
@@ -13,7 +14,7 @@ export class UserController {
         const { nome, cpf, telefone, email, senha, matricula, periodo } = req.body;
 
         if (!nome || !cpf || !telefone || !email || !senha || !matricula || !periodo) {
-            return res.status(400).render('perfil', { message: "Revise as informações fornecidas." });
+            return res.status(400).render('cadastro', { message: "Revise as informações fornecidas." });
         }
 
         try {
@@ -24,10 +25,10 @@ export class UserController {
                     resolve(result);
                 });
             });
-            return res.status(201).render('perfil', { success: true, message: 'Aluno criado com sucesso!' });
+            return res.status(201).render('cadastro', { success: true, message: 'Aluno criado com sucesso!' });
         } catch (err) {
             console.error('Erro ao criar aluno:', err.message);
-            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+            return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -53,7 +54,7 @@ export class UserController {
         const { nome, cpf, telefone, email, senha, cargaHorario } = req.body;
 
         if (!nome || !cpf || !telefone || !email || !senha || !cargaHorario) {
-            return res.status(400).render('perfil', { message: "Revise as informações fornecidas." });
+            return res.status(400).render('cadastro', { message: "Revise as informações fornecidas." });
         }
 
         try {
@@ -64,10 +65,10 @@ export class UserController {
                     resolve(result);
                 });
             });
-            return res.status(201).render('perfil', { success: true, message: 'Professor criado com sucesso!' });
+            return res.status(201).render('cadastro', { success: true, message: 'Professor criado com sucesso!' });
         } catch (err) {
             console.error('Erro ao criar professor:', err.message);
-            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+            return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -76,10 +77,10 @@ export class UserController {
             const professorModel = new Professor();
             const professores = await professorModel.getAll();
             console.log('Todos os professores:', professores);
-            return res.status(200).render('perfil', { professores });
+            return res.status(200).render('perfilProf', { professores });
         } catch (err) {
             console.error('Erro ao buscar professores:', err.message);
-            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+            return res.status(500).render('perfilProf', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -87,7 +88,7 @@ export class UserController {
         const { nome, cpf, telefone, email, senha, departamento } = req.body;
 
         if (!nome || !cpf || !telefone || !email || !senha || !departamento) {
-            return res.status(400).render('perfil', { message: "Revise as informações fornecidas." });
+            return res.status(400).render('cadastro', { message: "Revise as informações fornecidas." });
         }
 
         try {
@@ -98,10 +99,10 @@ export class UserController {
                     resolve(result);
                 });
             });
-            return res.status(201).render('perfil', { success: true, message: 'Secretário criado com sucesso!' });
+            return res.status(201).render('cadastro', { success: true, message: 'Secretário criado com sucesso!' });
         } catch (err) {
             console.error('Erro ao criar secretário:', err.message);
-            return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
+            return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -171,6 +172,8 @@ export class UserController {
                 });
             });
 
+            console.log(result)
+
             if (result.affectedRows === 0) {
                 return res.status(404).render('perfil', { message: 'Usuário não encontrado' });
             }
@@ -237,4 +240,7 @@ export class UserController {
             return res.status(500).render('perfil', { message: 'Erro interno do servidor' });
         }
     }
+
+
+    
 }
