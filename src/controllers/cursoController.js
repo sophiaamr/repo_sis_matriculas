@@ -9,15 +9,15 @@ export class CursoController {
 
     async create(request, response) {
         try {
-            const { nome, numCredito } = request.body;
-
-            if (!nome || numCredito === undefined) {
+            const { nome, numCredito, periodo } = request.body;
+    
+            if (!nome || numCredito === undefined || periodo === undefined) {
                 return response.status(400).render('curso', {
                     message: "Revise as informações fornecidas."
                 });
             } 
-
-            CursoModel.create({ nome, numCredito }, (err, result) => {
+    
+            CursoModel.create({ nome, numCredito, periodo }, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar curso:', err.message);
                     return response.status(500).render('curso', {
@@ -29,7 +29,7 @@ export class CursoController {
                     result
                 });
             });
-
+    
         } catch (error) {
             console.error('Erro ao criar curso:', error.message);
             return response.status(500).render('curso', {
@@ -37,6 +37,7 @@ export class CursoController {
             });
         }
     }
+    
 
     async getAll(request, response) {
         try {
@@ -48,7 +49,7 @@ export class CursoController {
                     resolve(result);
                 });
             });
-
+    
             const disciplinas = await new Promise((resolve, reject) => {
                 DisciplinaModel.getAll((err, result) => {
                     if (err) {
@@ -57,7 +58,7 @@ export class CursoController {
                     resolve(result);
                 });
             });
-
+    
             return response.status(200).render('curso', { cursos, disciplinas });
         } catch (error) {
             console.error('Erro ao buscar cursos e disciplinas:', error.message);
@@ -66,7 +67,7 @@ export class CursoController {
             });
         }
     }
-
+    
     async getById(request, response) {
         const { id } = request.params;
 
@@ -220,6 +221,29 @@ export class CursoController {
         } catch (error) {
             console.error('Erro ao listar disciplinas:', error.message);
             res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
+    async gerarCurriculo(req, res) {
+        const { cursoId } = req.params;
+
+        try {
+            const disciplinas = await new Promise((resolve, reject) => {
+                DisciplinaModel.getDisciplinasByCurso(cursoId, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
+            });
+
+            if (!disciplinas || disciplinas.length === 0) {
+                return res.status(404).json({ message: 'Nenhuma disciplina encontrada para este curso.' });
+            }
+
+            return res.status(200).json({ cursoId, disciplinas });
+        } catch (error) {
+            console.error('Erro ao gerar currículo:', error.message);
+            return res.status(500).json({ message: "Erro interno do servidor" });
         }
     }
 

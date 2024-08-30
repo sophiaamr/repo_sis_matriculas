@@ -13,5 +13,6 @@ router.delete('/:id', cursoController.delete);
 
 // Rota para obter o número de períodos de um curso específico
 router.get('/cursos/:id', cursoController.getPeriodos);
+router.get('/:cursoId/curriculo', cursoController.gerarCurriculo);
 
 export { router as CursoRoute };

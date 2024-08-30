@@ -4,11 +4,11 @@ class CursoModel {
     // Método para criar um novo curso
     static create(data, callback) {
         const query = `
-            INSERT INTO curso (nome, numCredito)
-            VALUES (?, ?)
+            INSERT INTO curso (nome, numCredito, periodo)
+            VALUES (?, ?, ?)
         `;
 
-        const values = [data.nome, data.numCredito];
+        const values = [data.nome, data.numCredito, data.periodo];
 
         connection.query(query, values, (err, result) => {
             if (err) {

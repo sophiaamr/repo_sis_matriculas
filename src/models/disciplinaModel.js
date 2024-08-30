@@ -4,11 +4,11 @@ class DisciplinaModel {
     // Método para criar uma nova disciplina
     static create(data, callback) {
         const query = `
-            INSERT INTO disciplina (nomeDisciplina, valor, status, tipo, qntdAluno, idCurso, periodo, numCredito)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO disciplina (nomeDisciplina, valor, status, qntdAluno, idCurso, periodo, numCredito)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
 
-        const values = [data.nomeDisciplina, data.valor, data.status, data.tipo, data.qntdAluno, data.idCurso, data.periodo, data.numCredito];
+        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito];
 
         connection.query(query, values, (err, result) => {
             if (err) {
@@ -49,11 +49,11 @@ class DisciplinaModel {
     static update(id, data, callback) {
         const query = `
             UPDATE disciplina
-            SET nomeDisciplina = ?, valor = ?, status = ?, tipo = ?, qntdAluno = ?, idCurso = ?, periodo = ?, numCredito = ?
+            SET nomeDisciplina = ?, valor = ?, status = ?, qntdAluno = ?, idCurso = ?, periodo = ?, numCredito = ?
             WHERE idDisciplina = ?
         `;
 
-        const values = [data.nomeDisciplina, data.valor, data.status, data.tipo, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, id];
+        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, id];
 
         connection.query(query, values, (err, result) => {
             if (err) {
@@ -88,7 +88,24 @@ class DisciplinaModel {
             callback(null, results);
         });
     }
+    static getDisciplinasByCurso(cursoId, callback) {
+        const query = `
+            SELECT periodo, nomeDisciplina, valor, status, qntdAluno, numCredito
+            FROM disciplina
+            WHERE idCurso = ?
+            ORDER BY periodo ASC
+        `;
+    
+        connection.query(query, [cursoId], (err, results) => {
+            if (err) {
+                console.error('Erro ao buscar disciplinas por curso:', err.message);
+                return callback(err);
+            }
+            callback(null, results);
+        });
+    }
 }
+
 
 export default DisciplinaModel;
 
