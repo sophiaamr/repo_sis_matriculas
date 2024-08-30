@@ -7,8 +7,7 @@ class DisciplinaModel {
             INSERT INTO disciplina (nomeDisciplina, valor, status, qntdAluno, idCurso, periodo, numCredito)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
-
-        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito];
+        const values = [data.nomeDisciplina, data.valor, data.status, data.tipo, data.qntdAluno, data.idCurso, data.periodo, data.numCredito];
 
         connection.query(query, values, (err, result) => {
             if (err) {
@@ -21,7 +20,7 @@ class DisciplinaModel {
 
     // Método para buscar todas as disciplinas
     static getAll(callback) {
-        const query = `SELECT * FROM disciplina`;
+        const query = 'SELECT * FROM disciplina';
 
         connection.query(query, (err, results) => {
             if (err) {
@@ -34,7 +33,7 @@ class DisciplinaModel {
 
     // Método para buscar uma disciplina pelo ID
     static getById(id, callback) {
-        const query = `SELECT * FROM disciplina WHERE idDisciplina = ?`;
+        const query = 'SELECT * FROM disciplina WHERE idDisciplina = ?';
 
         connection.query(query, [id], (err, result) => {
             if (err) {
@@ -52,8 +51,7 @@ class DisciplinaModel {
             SET nomeDisciplina = ?, valor = ?, status = ?, qntdAluno = ?, idCurso = ?, periodo = ?, numCredito = ?
             WHERE idDisciplina = ?
         `;
-
-        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, id];
+        const values = [data.nomeDisciplina, data.valor, data.status, data.tipo, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, id];
 
         connection.query(query, values, (err, result) => {
             if (err) {
@@ -66,7 +64,7 @@ class DisciplinaModel {
 
     // Método para deletar uma disciplina pelo ID
     static delete(id, callback) {
-        const query = `DELETE FROM disciplina WHERE idDisciplina = ?`;
+        const query = 'DELETE FROM disciplina WHERE idDisciplina = ?';
 
         connection.query(query, [id], (err, result) => {
             if (err) {
@@ -78,9 +76,10 @@ class DisciplinaModel {
     }
 
     // Método para buscar disciplinas por curso e período
-    static getByCursoAndPeriodo(cursoId, periodo, callback) {
+    static getByIdAndPeriodo(idCurso, periodo, callback) {
         const query = 'SELECT * FROM disciplina WHERE idCurso = ? AND periodo = ?';
-        connection.query(query, [cursoId, periodo], (err, results) => {
+
+        connection.query(query, [idCurso, periodo], (err, results) => {
             if (err) {
                 console.error('Erro ao buscar disciplinas por curso e período:', err.message);
                 return callback(err);
@@ -108,10 +107,3 @@ class DisciplinaModel {
 
 
 export default DisciplinaModel;
-
-// Função utilitária para buscar disciplinas por curso e período
-export const getDisciplinas = async (cursoId, periodo) => {
-    const query = 'SELECT * FROM disciplina WHERE idCurso = ? AND periodo = ?';
-    const [rows] = await connection.execute(query, [cursoId, periodo]);
-    return rows;
-};

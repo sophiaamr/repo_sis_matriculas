@@ -71,6 +71,7 @@ export class MatriculaController {
                         return response.status(500).render('matricula', { message: 'Erro ao buscar cursos.' });
                     }
 
+                    console.log(cursos)
                     return response.status(200).render('matricula', { matriculas, cursos });
                 });
             });

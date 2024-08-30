@@ -1,11 +1,13 @@
-import DisciplinaModel from '../models/disciplinaModel.js'; // Certifique-se de que o caminho está correto
+
+import DisciplinaModel from '../models/disciplinaModel.js';
+
 
 class DisciplinaController {
     // Método para criar uma nova disciplina
     async create(req, res) {
         try {
             const data = req.body;
-            await DisciplinaModel.create(data, (err, result) => {
+            DisciplinaModel.create(data, (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: 'Erro ao criar disciplina' });
                 }
@@ -17,24 +19,36 @@ class DisciplinaController {
     }
 
     // Método para obter todas as disciplinas
-    async getAll(req, res) {
+    async getAll(request, response) {
         try {
-            await DisciplinaModel.getAll((err, results) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Erro ao buscar disciplinas' });
-                }
-                res.status(200).json(results);
+            const disciplinas = await new Promise((resolve, reject) => {
+                DisciplinaModel.getAll((err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
             });
+    
+            console.log('Disciplinas:', disciplinas); // Adicione isto para verificar
+    
+            return response.status(200).render('matricula', { disciplinas });
         } catch (error) {
-            res.status(500).json({ error: 'Erro interno do servidor' });
+            console.error('Erro ao buscar disciplinas:', error.message);
+            return response.status(500).render('matricula', {
+                message: "Erro interno do servidor"
+            });
         }
     }
+    
+    
+    
 
     // Método para obter uma disciplina pelo ID
     async getById(req, res) {
         const id = req.params.id;
         try {
-            await DisciplinaModel.getById(id, (err, result) => {
+            DisciplinaModel.getById(id, (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: 'Erro ao buscar disciplina' });
                 }
@@ -53,7 +67,7 @@ class DisciplinaController {
         const id = req.params.id;
         const data = req.body;
         try {
-            await DisciplinaModel.update(id, data, (err, result) => {
+            DisciplinaModel.update(id, data, (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: 'Erro ao atualizar disciplina' });
                 }
@@ -68,7 +82,7 @@ class DisciplinaController {
     async delete(req, res) {
         const id = req.params.id;
         try {
-            await DisciplinaModel.delete(id, (err, result) => {
+            DisciplinaModel.delete(id, (err, result) => {
                 if (err) {
                     return res.status(500).json({ error: 'Erro ao deletar disciplina' });
                 }
@@ -83,7 +97,7 @@ class DisciplinaController {
     async getDisciplinasByCursoAndPeriodo(req, res) {
         const { cursoId, periodo } = req.query;
         try {
-            const disciplinas = await DisciplinaModel.getByCursoAndPeriodo(cursoId, periodo, (err, results) => {
+            DisciplinaModel.getByIdAndPeriodo(cursoId, periodo, (err, results) => {
                 if (err) {
                     return res.status(500).json({ error: 'Erro ao buscar disciplinas' });
                 }

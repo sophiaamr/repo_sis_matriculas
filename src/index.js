@@ -1,39 +1,38 @@
 import express, { json } from 'express';
-import { routes } from './routes/routes.js';
+import { routes } from './routes/routes.js'; // Importa as rotas principais (talvez você tenha outras rotas aqui)
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+import { DisciplinaRoute } from './routes/disciplinaRoute.js';
+
+// Certifique-se de que o arquivo de rotas está sendo importado corretamente
 
 
-// obtem o caminho completo do arquivo atual
+
+// Obtém o caminho completo do arquivo atual
 const __filename = fileURLToPath(import.meta.url);
 
-//obtem o diretorio onde o arquivo atual esta localizado
+// Obtém o diretório onde o arquivo atual está localizado
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
 
-
-app.use(express.urlencoded({ extended: true }));
-
+// Analisa o corpo das requisições em formato JSON
 app.use(json());
 
-//requisicoes de diferentes origens
+// Requisições de diferentes origens
 app.use(cors());
 
-
+// Define o motor de visualização
 app.set('view engine', 'ejs');
 
-//define o diretorio onde as views estao
+// Define o diretório onde as views estão
 app.set('views', path.join(__dirname, 'views'));
 
+// Configura as rotas principais
 app.use('/api', routes);
 
-//  app.use((err, req, res, next) => {
-//      console.error(err.stack);
-//      res.status(500).send('Algo deu errado!');
-//  });
 
 app.use((request, response) => {
     response.status(404).send('Rota não encontrada');
@@ -42,3 +41,6 @@ app.use((request, response) => {
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
+
+  
+app.use('/api/disciplinas', DisciplinaRoute);
