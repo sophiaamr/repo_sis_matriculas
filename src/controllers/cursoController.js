@@ -240,9 +240,10 @@ export class CursoController {
             if (!disciplinas || disciplinas.length === 0) {
                 return res.status(404).json({ message: 'Nenhuma disciplina encontrada para este curso.' });
             }
-    
+            
+            const nome = disciplinas[0].nome;
             // Renderizando a view curriculo.ejs com as variáveis cursoId e disciplinas
-            return res.render('curriculo', { cursoId, disciplinas });
+            return res.render('curriculo', { nome, disciplinas });
         } catch (error) {
             console.error('Erro ao gerar currículo:', error.message);
             return res.status(500).json({ message: "Erro interno do servidor" });

@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <%- include('partials/head'); -%>
-    <title>Currículo do Curso <%= cursoId %></title>
+    <title>Currículo do Curso <%= nome %></title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -66,7 +66,7 @@
   </header>
 
   <div class="container">
-    <h1>Currículo do Curso: <%= cursoId %></h1>
+    <h1>Currículo do Curso: <%= nome %></h1>
 
     <% if (disciplinas && disciplinas.length > 0) { %>
         <table>
