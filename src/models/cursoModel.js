@@ -82,6 +82,10 @@ class CursoModel {
             callback(null, result);
         });
     }
+
+  
+    
+
 }
 
 export default CursoModel;

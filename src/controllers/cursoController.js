@@ -58,6 +58,7 @@ export class CursoController {
                 });
             });
 
+            console.log(cursos)
             return response.status(200).render('curso', { cursos, disciplinas });
         } catch (error) {
             console.error('Erro ao buscar cursos e disciplinas:', error.message);

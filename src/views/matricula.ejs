@@ -49,18 +49,17 @@
 
         .btn-custom {
             background-color: rgb(115, 115, 141);
-            border-color:  rgb(115, 115, 141);
+            border-color: rgb(115, 115, 141);
             color: #ffffff;
             width: 100%;
         }
 
         .btn-custom:hover {
             background-color: rgb(115, 115, 141);
-            border-color:  rgb(115, 115, 141);
+            border-color: rgb(115, 115, 141);
         }
     </style>
 </head>
-
 
 <body class="container">
     <header>
@@ -86,10 +85,7 @@
                 <div class="form-group">
                     <label for="periodo">Selecione o Período:</label>
                     <select id="periodo" name="periodo" class="form-select" required>
-                        <option value="">Selecione o período</option>
-                        <% for (let i = 1; i <= 12; i++) { %>
-                            <option value="<%= i %>">Período <%= i %></option>
-                        <% } %>
+                        <!-- As opções de período serão adicionadas dinamicamente -->
                     </select>
                 </div>
 
@@ -115,71 +111,84 @@
             </form>
             
             <script>
-                // Atualiza a lista de disciplinas quando um período é selecionado
-                document.getElementById('periodo').addEventListener('change', function() {
-                    const cursoId = document.getElementById('idCurso').value;
-                    const periodo = parseInt(this.value, 10);
+               const cursos = <%- JSON.stringify(cursos) %>;
+                const disciplinas = <%- JSON.stringify(disciplinas) %>;
+                /*
+                const disciplinas = [
+        { idDisciplina: 1, nomeDisciplina: "Matemática", valor: 200, status: "Ativa", qntdAluno: 30, idCurso: 1, periodo: 1, numCredito: 2 },
+        { idDisciplina: 2, nomeDisciplina: "História", valor: 150, status: "Ativa", qntdAluno: 25, idCurso: 1, periodo: 1, numCredito: 1 },
+        { idDisciplina: 3, nomeDisciplina: "Física", valor: 220, status: "Cheia", qntdAluno: 28, idCurso: 1, periodo: 2, numCredito: 2 },
+        { idDisciplina: 4, nomeDisciplina: "Química", valor: 180, status: "Ativa", qntdAluno: 20, idCurso: 1, periodo: 2, numCredito: 2 },
+        { idDisciplina: 5, nomeDisciplina: "Biologia", valor: 170, status: "Ativa", qntdAluno: 22, idCurso: 1, periodo: 2, numCredito: 1 },
+    ];
+                */
+               
 
-                    if (cursoId && periodo) {
-                        fetch(`/api/disciplinas?cursoId=${cursoId}&periodo=${periodo}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const obrigatoriasContainer = document.getElementById('disciplinasObrigatorias');
-                                const optativasContainer = document.getElementById('disciplinasOptativas');
+                // Atualiza o período com base na seleção do curso
+                document.getElementById('idCurso').addEventListener('change', function(event) {
+                    const cursoId = event.target.value;
+                    const curso = cursos.find(c => c.idCurso == cursoId);
 
-                                obrigatoriasContainer.innerHTML = '';
-                                optativasContainer.innerHTML = '';
+                    let selectPeriodo = document.getElementById('periodo');
 
-                                data.forEach(disciplina => {
-                                    const container = disciplina.numCredito === 2 ? obrigatoriasContainer : optativasContainer;
-                                    const p = document.createElement('p');
-                                    const checkbox = document.createElement('input');
-                                    checkbox.type = 'checkbox';
-                                    checkbox.name = disciplina.numCredito === 2 ? 'disciplinasObrigatorias' : 'disciplinasOptativas';
-                                    checkbox.value = disciplina.idDisciplina;
-                                    checkbox.id = `disciplina-${disciplina.idDisciplina}`;
+                    selectPeriodo.innerHTML = '<option value="">Selecione o período</option>';
 
-                                    const label = document.createElement('label');
-                                    label.htmlFor = checkbox.id;
-                                    label.textContent = disciplina.nomeDisciplina;
-
-                                    p.appendChild(checkbox);
-                                    p.appendChild(label);
-                                    container.appendChild(p);
-                                });
-                            })
-                            .catch(error => console.error('Erro ao carregar disciplinas:', error));
-                    } else {
-                        // Limpar disciplinas se nenhum curso ou período estiver selecionado
-                        document.getElementById('disciplinasObrigatorias').innerHTML = '';
-                        document.getElementById('disciplinasOptativas').innerHTML = '';
+                    if (curso) {
+                        for (let index = 1; index <= curso.periodo; index++) {
+                           selectPeriodo.innerHTML += `<option value="${index}">Período ${index}</option>`;
+                        }
                     }
                 });
 
-                // Valida a seleção de disciplinas
-                document.getElementById('matriculaForm').addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    
-                    let obrigatoriasChecked = document.querySelectorAll('input[name="disciplinasObrigatorias"]:checked').length;
-                    let optativasChecked = document.querySelectorAll('input[name="disciplinasOptativas"]:checked').length;
-                    let obrigatoriaError = document.getElementById('obrigatoriaError');
-                    let optativaError = document.getElementById('optativaError');
+                 
+// Função para carregar disciplinas com base no curso e no período
+document.getElementById('periodo').addEventListener('change', function(event) {
+        const cursoId = document.getElementById('idCurso').value;
+        const periodo = event.target.value;
 
-                    obrigatoriaError.textContent = '';
-                    optativaError.textContent = '';
+        // Filtrar disciplinas com base no curso e no período
+        const disciplinasFiltradas = disciplinas.filter(d => 
+            d.idCurso == cursoId && 
+            d.periodo == periodo && 
+            d.status === 'Ativa'
+        );
 
-                    if (obrigatoriasChecked !== 4) {
-                        obrigatoriaError.textContent = 'Você deve selecionar exatamente 4 disciplinas obrigatórias.';
-                    }
+        // Limpar contêineres de disciplinas antes de adicionar novas
+        const containerObrigatorias = document.getElementById('disciplinasObrigatorias');
+        const containerOptativas = document.getElementById('disciplinasOptativas');
+        containerObrigatorias.innerHTML = '';
+        containerOptativas.innerHTML = '';
 
-                    if (optativasChecked !== 2) {
-                        optativaError.textContent = 'Você deve selecionar exatamente 2 disciplinas optativas.';
-                    }
+        // Adicionar disciplinas filtradas aos respectivos contêineres
+        let obrigatoriasCount = 0;
+        let optativasCount = 0;
 
-                    if (obrigatoriasChecked === 4 && optativasChecked === 2) {
-                        this.submit(); 
-                    }
-                });
+        disciplinasFiltradas.forEach(disciplina => {
+            if (disciplina.numCredito === 2 && obrigatoriasCount < 4) {
+                // Adicionar disciplina obrigatória
+                const disciplinaElement = document.createElement('p');
+                disciplinaElement.innerHTML = `
+                    <input type="checkbox" name="disciplinas" value="${disciplina.idDisciplina}" />
+                    ${disciplina.nomeDisciplina} - Créditos: ${disciplina.numCredito}
+                `;
+                containerObrigatorias.appendChild(disciplinaElement);
+                obrigatoriasCount++;
+            } else if (disciplina.numCredito === 1 && optativasCount < 2) {
+                // Adicionar disciplina optativa
+                const disciplinaElement = document.createElement('p');
+                disciplinaElement.innerHTML = `
+                    <input type="checkbox" name="disciplinas" value="${disciplina.idDisciplina}" />
+                    ${disciplina.nomeDisciplina} - Créditos: ${disciplina.numCredito}
+                `;
+                containerOptativas.appendChild(disciplinaElement);
+                optativasCount++;
+            }
+        });
+
+        // Exibir mensagens de erro se não houver disciplinas
+        document.getElementById('obrigatoriaError').innerText = containerObrigatorias.children.length === 0 ? 'Nenhuma disciplina obrigatória disponível.' : '';
+        document.getElementById('optativaError').innerText = containerOptativas.children.length === 0 ? 'Nenhuma disciplina optativa disponível.' : '';
+    });
             </script>
         </section>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
