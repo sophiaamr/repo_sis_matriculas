@@ -19,17 +19,20 @@ CREATE TABLE IF NOT EXISTS Disciplina (
     nomeDisciplina VARCHAR(255) NOT NULL,
     valor DOUBLE NOT NULL,
     status ENUM('ativa', 'inativa') NOT NULL,
-    tipo ENUM('obrigatoria', 'optativa') NOT NULL,
     qntdAluno INT,
     idCurso INT,
+    periodo INT,
     FOREIGN KEY (idCurso) REFERENCES Curso(idCurso) ON DELETE SET NULL
 );
+ALTER TABLE Disciplina
+ADD COLUMN numCredito INT;
 
 -- Tabela Curso
 CREATE TABLE IF NOT EXISTS Curso (
     idCurso INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
-    numCredito INT NOT NULL
+    numCredito INT NOT NULL,
+    periodo int
 );
 
 -- Tabela CursoDisciplina
@@ -71,24 +74,6 @@ CREATE TABLE IF NOT EXISTS Matricula (
     FOREIGN KEY (idCurso) REFERENCES Curso(idCurso) ON DELETE SET NULL
 );
 
--- Tabela MatriculaDisciplinaObrigatoria
-CREATE TABLE IF NOT EXISTS MatriculaDisciplinaObrigatoria (
-    idMatricula INT,
-    idDisciplina INT,
-    PRIMARY KEY (idMatricula, idDisciplina),
-    FOREIGN KEY (idMatricula) REFERENCES Matricula(idMatricula) ON DELETE CASCADE,
-    FOREIGN KEY (idDisciplina) REFERENCES Disciplina(idDisciplina) ON DELETE CASCADE
-);
-
--- Tabela MatriculaDisciplinaOptativa
-CREATE TABLE IF NOT EXISTS MatriculaDisciplinaOptativa (
-    idMatricula INT,
-    idDisciplina INT,
-    PRIMARY KEY (idMatricula, idDisciplina),
-    FOREIGN KEY (idMatricula) REFERENCES Matricula(idMatricula) ON DELETE CASCADE,
-    FOREIGN KEY (idDisciplina) REFERENCES Disciplina(idDisciplina) ON DELETE CASCADE
-);
-
 -- Tabela Cobranca
 CREATE TABLE IF NOT EXISTS Cobranca (
     idCobranca INT PRIMARY KEY AUTO_INCREMENT,    
@@ -108,23 +93,9 @@ CREATE TABLE IF NOT EXISTS Secretaria (
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario) ON DELETE CASCADE
 );
 
--- Tabela Periodo
-CREATE TABLE IF NOT EXISTS Periodo (
-    idPeriodo INT PRIMARY KEY AUTO_INCREMENT,
-    numero INT NOT NULL,
-    idCurso INT NOT NULL,
-    FOREIGN KEY (idCurso) REFERENCES Curso(idCurso) ON DELETE CASCADE
-);
 
--- Tabela Curriculo
-CREATE TABLE IF NOT EXISTS Curriculo (
-    idCurriculo INT PRIMARY KEY AUTO_INCREMENT,
-    idCurso INT NOT NULL,
-    idPeriodo INT NOT NULL,
-    idDisciplina INT NOT NULL,
-    idProfessor INT,
-    FOREIGN KEY (idCurso) REFERENCES Curso(idCurso) ON DELETE CASCADE,
-    FOREIGN KEY (idPeriodo) REFERENCES Periodo(idPeriodo) ON DELETE CASCADE,
-    FOREIGN KEY (idDisciplina) REFERENCES Disciplina(idDisciplina) ON DELETE CASCADE,
-    FOREIGN KEY (idProfessor) REFERENCES Professor(idProfessor) ON DELETE SET NULL
-);
+
+select * from Curso;
+select * from Disciplina;
+select * from Aluno;
+select * from Usuario;
