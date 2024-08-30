@@ -118,7 +118,13 @@ class Usuario {
       });
     });
   }
-
+  login(email, senha, callback) {
+    const query = `SELECT * FROM ${this.tableName} WHERE email = ? AND senha = ?`;
+    connection.query(query, [email, senha], (err, results) => {
+      if (err) return callback(err);
+      callback(null, results[0]);
+    });	7
+  }
 }
 
 export default Usuario;
