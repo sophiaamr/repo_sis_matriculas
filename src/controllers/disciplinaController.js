@@ -29,20 +29,18 @@ class DisciplinaController {
                     resolve(result);
                 });
             });
-    
-            console.log('Disciplinas:', disciplinas); // Adicione isto para verificar
-    
-            return response.status(200).render('matricula', { disciplinas });
+
+            return response.status(200).render('disciplinas', { disciplinas });
         } catch (error) {
             console.error('Erro ao buscar disciplinas:', error.message);
-            return response.status(500).render('matricula', {
+            return response.status(500).render('disciplinas', {
                 message: "Erro interno do servidor"
             });
         }
     }
-    
-    
-    
+
+
+
 
     // Método para obter uma disciplina pelo ID
     async getById(req, res) {
@@ -107,6 +105,26 @@ class DisciplinaController {
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
+
+
+    async getAlunosByDisciplina(req, res) {
+        const { idDisciplina } = req.params;
+        try {
+            const alunos = await new Promise((resolve, reject) => {
+                AlunoModel.getAlunosByDisciplina(idDisciplina, (err, alunos) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(alunos);
+                    }
+                });
+            });
+            res.render('alunos', { alunos });
+        } catch (error) {
+            res.status(500).json({ error: 'Erro interno do servidor' });
+        }
+    }
+
 }
 
 export { DisciplinaController };

@@ -1,149 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <%- include('partials/head'); %>
 
-   <style>
-    .nav-link {
-      color: white;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    /* Estilos para telas menores que 1340px */
-    @media (max-width: 1340px) {
-      .col-2, .col-3, .col-4, .col-9 {
-        flex: 1 1 100%;
-        max-width: 100%;
+    <style>
+      .nav-link {
+        color: white;
       }
 
-      .card {
-        width: 100%;
-        margin-bottom: 20px; /* Espaçamento entre os cards em telas menores */
+      .hidden {
+        display: none;
       }
 
-      .container.col-3 {
-        margin-top: 20px; /* Espaçamento superior quando a coluna é colocada abaixo dos cards */
-      }
-    }
+      /* Estilos para telas menores que 1340px */
+      @media (max-width: 1340px) {
 
-    /* Estilos para telas menores que 430px */
-    @media (max-width: 430px) {
-      .col-5 {
-        flex: 1 1 100%;
-        max-width: 100%;
-        margin-top: 20px;
+        .col-2,
+        .col-3,
+        .col-4,
+        .col-9 {
+          flex: 1 1 100%;
+          max-width: 100%;
+        }
+
+        .card {
+          width: 100%;
+          margin-bottom: 20px;
+          /* Espaçamento entre os cards em telas menores */
+        }
+
+        .container.col-3 {
+          margin-top: 20px;
+          /* Espaçamento superior quando a coluna é colocada abaixo dos cards */
+        }
       }
-    }
-   </style>
+
+      /* Estilos para telas menores que 430px */
+      @media (max-width: 430px) {
+        .col-5 {
+          flex: 1 1 100%;
+          max-width: 100%;
+          margin-top: 20px;
+        }
+      }
+    </style>
 </head>
 
 <body class="container">
-    <header>
-        <%- include('partials/headerProf'); %>
-    </header>
+  <header>
+    <%- include('partials/headerProf'); %>
+  </header>
 
-    <section>
-      <div class="row">
-        <div class="col-7">
-          <div class="row mb-3">
-            <div class="col-4">
+  <section>
+    <div class="row">
+      <div class="col-7">
+        <div class="row mb-3">
+          <% disciplinas.forEach(disciplina=> { %>
+            <div class="col-4 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Cálculo II</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
-                  <p class="card-text">2º período</p>
-                  <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
+                  <h5 class="card-title">
+                    <%= disciplina.nomeDisciplina %>
+                  </h5>
+                  <p class="card-text">
+                    <%= disciplina.nomeCurso %>
+                  </p>
+                  <p class="card-text">
+                    <%= disciplina.periodo %>° período
+                  </p>
+                  <button onclick="showStudents(idDisciplina)" class="btn btn-primary">Ver
+                    Alunos</button>
                 </div>
               </div>
             </div>
-            <div class="col-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Cálculo II</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
-                  <p class="card-text">2º período</p>
-                  <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Cálculo II</h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
-                  <p class="card-text">2º período</p>
-                  <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
-                </div>
-              </div>
-            </div>
-  
-          </div>
-          <div class="row mb-3">
-              <div class="col-4">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Cálculo II</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
-                    <p class="card-text">2º período</p>
-                    <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Cálculo II</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
-                    <p class="card-text">2º período</p>
-                    <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Cálculo II</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Engenharia Química</h6>
-                    <p class="card-text">2º período</p>
-                    <a href="#" class="card-link" onclick="showStudents(event)">Ver alunos</a>
-                  </div>
-                </div>
-              </div>
-  
-            </div>
-        </div>
-  
-        <div class="container col-5 hidden" id="studentsContainer">
-          <h3>Lista de Alunos</h3>
-          <ul id="studentsList" class="list-group">
-            <!-- A lista de alunos será inserida aqui pelo JavaScript -->
-          </ul>
+            <% }); %>
         </div>
       </div>
-    </section>
-  
-    <script>
-      const students = Array.from({ length: 30 }, (_, i) => `Aluno ${i + 1}`);
-  
-      function showStudents(event) {
-        event.preventDefault();
-        const container = document.getElementById('studentsContainer');
-        const list = document.getElementById('studentsList');
-  
-        list.innerHTML = students.map(student => `<li class="list-group-item">${student}</li>`).join('');
-  
-        container.classList.toggle('hidden');
-      }
-    </script>
 
+      <div class="container col-5 hidden" id="studentsContainer">
+        <h3>Lista de Alunos</h3>
+        <ul id="studentsList" class="list-group">
+          <!-- A lista de alunos será inserida aqui pelo JavaScript -->
+        </ul>
+      </div>
+    </div>
+  </section>
 
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script>
 
+const alunos = <%= JSON.stringify(alunos || []) %>;
+    console.log(alunos);
+    console.log(disciplinas);
+    function showStudents(idDisciplina) {
+      const container = document.getElementById('studentsContainer');
+      const list = document.getElementById('studentsList');
 
+      list.innerHTML = '';
+
+      const alunosDaDisciplina = alunos.filter(aluno => aluno.idDisciplina === idDisciplina);
+      alunosDaDisciplina.forEach(aluno => {
+        const listItem = document.createElement('li');
+        listItem.textContent = aluno.nome;
+        listItem.classList.add('list-group-item');
+        list.appendChild(listItem);
+      });
+      container.classList.remove('hidden');
+    }
+
+  </script>
+
+  <!-- 
+
+  <script>
+    function showStudents(idDisciplina) {
+      fetch(`/disciplinas/${idDisciplina}/alunos`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('studentsContainer').classList.remove('hidden');
+          const studentsList = document.getElementById('studentsList');
+          studentsList.innerHTML = '';
+
+          data.forEach(aluno => {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            listItem.textContent = `${aluno.nome} - ${aluno.email}`;
+            studentsList.appendChild(listItem);
+          });
+        })
+        .catch(error => console.error('Erro ao listar alunos:', error));
+    }
+  </script>
+
+  -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>
