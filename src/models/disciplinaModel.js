@@ -96,10 +96,11 @@ class DisciplinaModel {
     }
     static getDisciplinasByCurso(cursoId, callback) {
         const query = `
-            SELECT periodo, nomeDisciplina, valor, status, qntdAluno, numCredito
-            FROM disciplina
-            WHERE idCurso = ?
-            ORDER BY periodo ASC
+             SELECT c.nome, d.periodo, d.nomeDisciplina, d.valor, d.status, d.qntdAluno, d.numCredito
+        FROM disciplina d
+        JOIN curso c ON d.idCurso = c.idCurso
+        WHERE d.idCurso = ?
+        ORDER BY d.periodo ASC
         `;
 
         connection.query(query, [cursoId], (err, results) => {

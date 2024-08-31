@@ -1,58 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-   <%- include('partials/head'); %>
-   <title>Página de Currículos</title>
-
-   <style>
-    .nav-link {
-      color: white;
-    }
-
-    .section-content {
-      margin: 0 145px;
-      padding: 20px;
-    }
-
-    .curso {
-      text-decoration: none;
-      color: black;
-    }
-   </style>
+    <%- include('partials/head'); -%>
+    <title>Currículo do Curso <%= nome %></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+      
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: rgb(115, 115, 141);
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .message {
+            color: #ff0000;
+            font-weight: bold;
+            text-align: center;
+        }
+        .no-disciplina {
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
 </head>
+<body>
 
-<body class="container">
-    <header>
-        <%- include('partials/headerAluno'); %>
-    </header>
-    <section class="section-content">
+  <header>
+    <%- include('partials/headerSecretaria'); %>
+  </header>
 
-      <% curriculos.forEach(curso => { %>
-        <h3>
-            <a class="curso" data-bs-toggle="collapse" href="#collapse<%= curso.nome %>" role="button" aria-expanded="false" aria-controls="collapse<%= curso.nome %>">
-                <%= curso.nome %>
-            </a>
-        </h3>
-        <div class="collapse" id="collapse<%= curso.nome %>">
-            <div class="card card-body">
-                <% curso.periodos.forEach(periodo => { %>
-                    <h4>Período <%= periodo.numero %></h4>
-                    <ul>
-                        <% periodo.disciplinas.forEach(disciplina => { %>
-                            <li>
-                                <%= disciplina.nome %> - <%= disciplina.professor %>
-                            </li>
-                        <% }) %>
-                    </ul>
+  <div class="container">
+    <h1>Currículo do Curso: <%= nome %></h1>
+
+    <% if (disciplinas && disciplinas.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Período</th>
+                    <th>Nome da Disciplina</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th>Número de Créditos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% disciplinas.forEach(disciplina => { %>
+                    <tr>
+                        <td><%= disciplina.periodo %></td>
+                        <td><%= disciplina.nomeDisciplina %></td>
+                        <td><%= disciplina.valor %></td>
+                        <td><%= disciplina.status %></td>
+                        <td><%= disciplina.numCredito %></td>
+                    </tr>
                 <% }) %>
-            </div>
-        </div>
-      <% }) %>
-
-    </section>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p class="no-disciplina">Nenhuma disciplina encontrada para este curso.</p>
+    <% } %>
+  </div>
 
 </body>
 </html>

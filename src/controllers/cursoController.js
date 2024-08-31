@@ -226,7 +226,7 @@ export class CursoController {
     }
     async gerarCurriculo(req, res) {
         const { cursoId } = req.params;
-
+    
         try {
             const disciplinas = await new Promise((resolve, reject) => {
                 DisciplinaModel.getDisciplinasByCurso(cursoId, (err, result) => {
@@ -236,12 +236,14 @@ export class CursoController {
                     resolve(result);
                 });
             });
-
+    
             if (!disciplinas || disciplinas.length === 0) {
                 return res.status(404).json({ message: 'Nenhuma disciplina encontrada para este curso.' });
             }
-
-            return res.status(200).json({ cursoId, disciplinas });
+            
+            const nome = disciplinas[0].nome;
+            // Renderizando a view curriculo.ejs com as variáveis cursoId e disciplinas
+            return res.render('curriculo', { nome, disciplinas });
         } catch (error) {
             console.error('Erro ao gerar currículo:', error.message);
             return res.status(500).json({ message: "Erro interno do servidor" });
