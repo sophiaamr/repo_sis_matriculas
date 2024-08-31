@@ -5,9 +5,7 @@ import { fileURLToPath } from 'url';
 import cors from 'cors';
 import { DisciplinaRoute } from './routes/disciplinaRoute.js';
 
-// Certifique-se de que o arquivo de rotas está sendo importado corretamente
-
-
+// Certifique-se de que o arquivo de rotas está sendo importado corretament
 
 // Obtém o caminho completo do arquivo atual
 const __filename = fileURLToPath(import.meta.url);
@@ -17,6 +15,8 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
+
+app.use('/api/disciplinas', DisciplinaRoute);
 
 // Analisa o corpo das requisições em formato JSON
 app.use(json());
@@ -43,4 +43,4 @@ app.listen(PORT, () => {
 });
 
   
-app.use('/api/disciplinas', DisciplinaRoute);
+
