@@ -30,8 +30,6 @@ class DisciplinaController {
                 });
             });
     
-            console.log('Disciplinas:', disciplinas); // Adicione isto para verificar
-    
             return response.status(200).render('matricula', { disciplinas });
         } catch (error) {
             console.error('Erro ao buscar disciplinas:', error.message);
@@ -93,20 +91,8 @@ class DisciplinaController {
         }
     }
 
-    // Método para obter disciplinas por curso e período
-    async getDisciplinasByCursoAndPeriodo(req, res) {
-        const { cursoId, periodo } = req.query;
-        try {
-            DisciplinaModel.getByIdAndPeriodo(cursoId, periodo, (err, results) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Erro ao buscar disciplinas' });
-                }
-                res.status(200).json(results);
-            });
-        } catch (error) {
-            res.status(500).json({ error: 'Erro interno do servidor' });
-        }
-    }
+    
+    
 }
 
 export { DisciplinaController };

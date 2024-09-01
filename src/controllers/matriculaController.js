@@ -1,6 +1,7 @@
-// controllers/matriculaController.js
 import MatriculaModel from '../models/matriculaModel.js';
-import CursoModel from '../models/cursoModel.js'; // Adicione a importação
+import CursoModel from '../models/cursoModel.js'; 
+import AlunoModel from '../models/alunoModel.js';
+import DisciplinaModel from '../models/disciplinaModel.js';
 import autoBind from 'auto-bind';
 
 export class MatriculaController {
@@ -10,15 +11,24 @@ export class MatriculaController {
 
     async create(request, response) {
         try {
-            const { status, idAluno, idCurso, periodo, disciplinasObrigatorias, disciplinasOptativas } = request.body;
+            const { numeroMatricula, idCurso, periodo, disciplinasObrigatorias, disciplinasOptativas } = request.body;
 
             // Verificação dos campos
-            if (!status || !idAluno || !idCurso || !periodo || !disciplinasObrigatorias || !disciplinasOptativas) {
+            if (!numeroMatricula || !idCurso || !periodo || !disciplinasObrigatorias || !disciplinasOptativas) {
                 return response.status(400).json({ message: "Revise as informações fornecidas." });
             }
 
+            // Verificar o aluno com base no número de matrícula
+            const alunoResult = await AlunoModel.getByMatricula(numeroMatricula);
+            if (!alunoResult) {
+                return response.status(404).json({ message: "Número de matrícula não encontrado." });
+            }
+
+            const idAluno = alunoResult.idAluno;
+
+            // Verificação dos campos adicionais
             const validStatus = ['ativa', 'cancelada', 'encerrada'];
-            if (!validStatus.includes(status)) {
+            if (!validStatus.includes('ativa')) { // Status fixo como 'ativa' no momento da criação
                 return response.status(400).json({ message: "Status inválido." });
             }
 
@@ -31,15 +41,15 @@ export class MatriculaController {
             }
 
             const data = {
-                status,
+                status: 'ativa', // Status fixo como 'ativa'
                 idAluno,
                 idCurso,
-                periodo,
-                disciplinasObrigatorias,
-                disciplinasOptativas
+                periodo
             };
 
-            MatriculaModel.create(data, (err, result) => {
+            // Instanciar o modelo antes de criar a matrícula
+            const matriculaModel = new MatriculaModel();
+            matriculaModel.create(data, (err, result) => {
                 if (err) {
                     console.error('Erro ao criar matrícula:', err.message);
                     return response.status(500).json({ message: 'Erro ao criar matrícula.' });
@@ -71,8 +81,16 @@ export class MatriculaController {
                         return response.status(500).render('matricula', { message: 'Erro ao buscar cursos.' });
                     }
 
-                    console.log(cursos)
-                    return response.status(200).render('matricula', { matriculas, cursos });
+                    // Fetching disciplinas to pass to the template
+                    DisciplinaModel.getAll((err, disciplinas) => {
+                        if (err) {
+                            console.error('Erro ao buscar disciplinas:', err.message);
+                            return response.status(500).render('matricula', { message: 'Erro ao buscar disciplinas.' });
+                        }
+
+                        // Pass all required data to the EJS template
+                        return response.status(200).render('matricula', { matriculas, cursos, disciplinas });
+                    });
                 });
             });
         } catch (error) {
@@ -83,7 +101,7 @@ export class MatriculaController {
 
     async getById(request, response) {
         const { id } = request.params;
-
+    
         try {
             MatriculaModel.getById(id, (err, matricula) => {
                 if (err) {
@@ -93,14 +111,21 @@ export class MatriculaController {
                 if (!matricula) {
                     return response.status(404).render('matricula', { message: 'Matrícula não encontrada.' });
                 }
-
+    
                 CursoModel.getAll((err, cursos) => {
                     if (err) {
                         console.error('Erro ao buscar cursos:', err.message);
                         return response.status(500).render('matricula', { message: 'Erro ao buscar cursos.' });
                     }
-
-                    return response.status(200).render('matricula', { matricula, cursos });
+    
+                    DisciplinaModel.getAll((err, disciplinas) => {
+                        if (err) {
+                            console.error('Erro ao buscar disciplinas:', err.message);
+                            return response.status(500).render('matricula', { message: 'Erro ao buscar disciplinas.' });
+                        }
+    
+                        return response.status(200).render('matricula', { matricula, cursos, disciplinas });
+                    });
                 });
             });
         } catch (error) {
@@ -115,7 +140,7 @@ export class MatriculaController {
 
         try {
             // Verifica se status é um valor válido do Enum
-            const validStatuses = ['ATIVA', 'ENCERRADA'];
+            const validStatuses = ['ativa', 'encerrada'];
             if (status && !validStatuses.includes(status)) {
                 return response.status(400).render('matricula', { message: "Status inválido." });
             }

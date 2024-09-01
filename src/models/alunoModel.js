@@ -59,6 +59,18 @@ getAll(callback) {
     });
   }
 
+
+  static getByNumeroMatricula(numeroMatricula) {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT * FROM Aluno WHERE numeroMatricula = ?`;
+      connection.query(query, [numeroMatricula], (err, results) => {
+        if (err) return reject(err);
+        resolve(results[0]);
+      });
+    });
+  }
+
+  
   static getAlunosByDisciplina(disciplinaId, callback) {
     const query = `
       SELECT a.* FROM Aluno a
@@ -96,5 +108,7 @@ getAll(callback) {
     });
   }
 }
+
+
 
 export default Aluno;

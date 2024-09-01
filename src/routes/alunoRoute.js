@@ -10,5 +10,6 @@ router.post('/', userController.createAluno);
 router.get('/:id', userController.getById);
 router.delete('/:id', userController.deleteUser);
 router.put('/:id', userController.updateUserById);
+router.get('/by-matricula', userController.getByNumeroMatricula);
 
 export { router as AlunoRoute };

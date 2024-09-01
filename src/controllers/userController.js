@@ -287,6 +287,30 @@ export class UserController {
         }
     }
 
+    async getByNumeroMatricula(req, res) {
+        const { matricula } = req.query;
+    
+        if (!matricula) {
+            return res.status(400).json({ message: 'Número da matrícula é obrigatório.' });
+        }
+    
+        try {
+            const aluno = await Aluno.getByNumeroMatricula(matricula);
+    
+            if (!aluno) {
+                return res.status(404).json({ message: 'Aluno não encontrado.' });
+            }
+    
+            console.log('Aluno encontrado:', aluno); // Log para depuração
+    
+            return res.status(200).json({ idAluno: aluno.id });
+        } catch (err) {
+            console.error('Erro ao buscar aluno por matrícula:', err.message);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
+    
+
     // async createUsuario(req, res) {
     //     const { tipo, nome, cpf, telefone, email, senha, matricula, periodo, cargaHorario, departamento } = req.body;
     

@@ -1,38 +1,33 @@
 import express, { json } from 'express';
-import { routes } from './routes/routes.js'; // Importa as rotas principais (talvez você tenha outras rotas aqui)
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+import { routes } from './routes/routes.js';
 import { DisciplinaRoute } from './routes/disciplinaRoute.js';
+import { OutrosRoute } from './routes/OutrosRoute.js'; // Corrigido para importação nomeada
+import { AlunoRoute } from './routes/alunoRoute.js'; // Corrigido para usar a rota de alunos
 
-// Certifique-se de que o arquivo de rotas está sendo importado corretament
 
-// Obtém o caminho completo do arquivo atual
 const __filename = fileURLToPath(import.meta.url);
-
-// Obtém o diretório onde o arquivo atual está localizado
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
 
-app.use('/api/disciplinas', DisciplinaRoute);
-
-// Analisa o corpo das requisições em formato JSON
 app.use(json());
-
-// Requisições de diferentes origens
 app.use(cors());
 
-// Define o motor de visualização
-app.set('view engine', 'ejs');
+app.use(express.json());
+app.use('/api/aluno', AlunoRoute);
 
-// Define o diretório onde as views estão
+
+app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Configura as rotas principais
+// Usar as rotas
 app.use('/api', routes);
-
+app.use('/api/disciplinas', DisciplinaRoute);
+app.use('/api/outros', OutrosRoute); // Ajustado para minúsculas, conforme o padrão
 
 app.use((request, response) => {
     response.status(404).send('Rota não encontrada');
@@ -41,6 +36,3 @@ app.use((request, response) => {
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
-
-  
-

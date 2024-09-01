@@ -9,5 +9,6 @@ router.get('/:id', userController.getById);
 router.delete('/:id', userController.deleteUser);
 router.put('/:id', userController.updateUserById);
 router.post('/auth', userController.login);
+router.get('/aluno', userController.getByNumeroMatricula);
 
 export { router as UserRoute };
