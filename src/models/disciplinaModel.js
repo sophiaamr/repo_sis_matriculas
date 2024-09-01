@@ -20,7 +20,11 @@ class DisciplinaModel {
 
     // Método para buscar todas as disciplinas
     static getAll(callback) {
-        const query = 'SELECT * FROM disciplina';
+        const query = `
+        SELECT disciplina.*, curso.nome AS nomeCurso 
+        FROM disciplina 
+        JOIN curso ON disciplina.idCurso = curso.idCurso
+    `;
 
         connection.query(query, (err, results) => {
             if (err) {
@@ -30,6 +34,9 @@ class DisciplinaModel {
             callback(null, results);
         });
     }
+
+
+
 
     // Método para buscar uma disciplina pelo ID
     static getById(id, callback) {
@@ -86,7 +93,7 @@ class DisciplinaModel {
         WHERE d.idCurso = ?
         ORDER BY d.periodo ASC
         `;
-    
+
         connection.query(query, [cursoId], (err, results) => {
             if (err) {
                 console.error('Erro ao buscar disciplinas por curso:', err.message);
@@ -95,7 +102,34 @@ class DisciplinaModel {
             callback(null, results);
         });
     }
+
+    static getAlunosByDisciplina(idDisciplina, callback) {
+        const query = `
+    SELECT 
+    D.idDisciplina AS ID_Disciplina,
+    D.nomeDisciplina AS Disciplina,
+    U.nome AS Aluno,
+    M.status AS Status_Matricula,
+    C.nome AS nomeCurso
+    FROM Disciplina D
+    INNER JOIN Matricula M ON D.idCurso = M.idCurso 
+    LEFT JOIN Aluno A ON M.idAluno = A.idAluno
+    LEFT JOIN Usuario U ON A.idUsuario = U.idUsuario
+    JOIN Curso C ON D.idCurso = C.idCurso
+    WHERE (D.numCredito = 2 OR D.numCredito = 1)
+    ORDER BY D.nomeDisciplina, U.nome;
+    `;
+        connection.query(query, [idDisciplina], (error, results) => {
+            if (error) {
+                console.error('Erro ao buscar alunos por disciplina:', error.message);
+                return callback(error);
+
+            }
+            callback(null, results);
+        });
+    };
 }
+
 
 
 export default DisciplinaModel;
