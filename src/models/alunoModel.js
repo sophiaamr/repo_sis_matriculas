@@ -107,6 +107,30 @@ getAll(callback) {
       callback(null, results);
     });
   }
+
+  async getByUserId(userId) {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM aluno WHERE idUsuario = ?';
+        connection.query(query, [userId], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0]);
+        });
+    });
+}
+
+async getDisciplinasByAlunoId(alunoId) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT disciplinas.nome 
+            FROM disciplinas 
+            JOIN matriculas ON disciplinas.id = matriculas.disciplina_id 
+            WHERE matriculas.aluno_id = ?`;
+        connection.query(query, [alunoId], (err, result) => {
+            if (err) reject(err);
+            resolve(result);
+        });
+    });
+}
 }
 
 

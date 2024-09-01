@@ -8,9 +8,6 @@ import { AlunoRoute } from './alunoRoute.js';
 import { ProfessorRoute } from './professorRoute.js';
 import { SecretariaRoute } from './secretariaRoute.js';
 import { CurriculoRoute } from './curriculoRoute.js';
-import { OutrosRoute } from './OutrosRoute.js'; // Importação nomeada
-import { GerenciarDocente } from './DocenteRoute.js'; // Ensure this path is correct
-
 
 
 const routes = Router();
@@ -24,8 +21,6 @@ routes.use('/alunos', AlunoRoute);
 routes.use('/professores', ProfessorRoute);
 routes.use('/secretarias', SecretariaRoute);
 routes.use('/curriculo', CurriculoRoute);
-routes.use('/Outros', OutrosRoute); // Adiciona a rota Outros
 routes.use('/login', UserRoute);
-routes.use('/gerenciarDocente', GerenciarDocente); // Corrigido aqui
 
 export { routes };
