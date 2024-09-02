@@ -235,20 +235,20 @@ export class UserController {
     }
 
     async getAlunosByDisciplina(req, res) {
-        const { disciplinaId } = req.params;
+        const { idDisciplina } = req.params;
 
         try {
             const alunoModel = new Aluno();
-            const alunos = await alunoModel.getAlunosByDisciplina(disciplinaId);
+            const alunos = await alunoModel.getAlunosByDisciplina(idDisciplina);
 
             if (!alunos.length) {
-                return res.status(404).render('cadastro', { message: 'Nenhum aluno encontrado para esta disciplina.' });
+                return res.status(404).render('visualizarAlunos', { message: 'Nenhum aluno encontrado para esta disciplina.' });
             }
 
-            return res.status(200).render('alunosDisciplinas', { alunos });
+            return res.status(200).render('visualizarAlunos', { alunos });
         } catch (err) {
             console.error('Erro ao buscar alunos:', err.message);
-            return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
+            return res.status(500).render('visualizarAlunos', { message: 'Erro interno do servidor' });
         }
     }
 
@@ -315,41 +315,4 @@ export class UserController {
     
     
 
-    // async createUsuario(req, res) {
-    //     const { tipo, nome, cpf, telefone, email, senha, matricula, periodo, cargaHorario, departamento } = req.body;
-    
-    //     let validationError = false;
-    //     let errorMsg = "Revise as informações fornecidas.";
-    
-    //     if (!nome || !cpf || !telefone || !email || !senha) {
-    //         validationError = true;
-    //     } else {
-    //         if (tipo === 'aluno' && (!matricula || !periodo)) {
-    //             validationError = true;
-    //         } else if (tipo === 'professor' && !cargaHorario) {
-    //             validationError = true;
-    //         } else if (tipo === 'secretaria' && !departamento) {
-    //             validationError = true;
-    //         }
-    //     }
-    
-    //     if (validationError) {
-    //         return res.status(400).render('cadastro', { message: errorMsg });
-    //     }
-    
-    //     try {
-    //         const usuarioModel = new Usuario();
-    //         await new Promise((resolve, reject) => {
-    //             usuarioModel.create({ nome, cpf, telefone, email, senha, tipo, matricula, periodo, cargaHorario, departamento }, (err, result) => {
-    //                 if (err) reject(err);
-    //                 resolve(result);
-    //             });
-    //         });
-    //         return res.status(201).render('cadastro', { success: true, message: `${tipo} criado com sucesso!` });
-    //     } catch (err) {
-    //         console.error(`Erro ao criar ${tipo}:`, err.message);
-    //         return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
-    //     }
-    // }
-    
 }

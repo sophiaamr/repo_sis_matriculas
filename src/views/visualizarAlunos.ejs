@@ -71,22 +71,13 @@
     <div class="container">
         <h1>Alunos da Disciplina: <%= nomeDisciplina %> </h1>
 
-        <% if (alunos && alunos.length > 0) { %>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome do Aluno: </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% alunos.forEach(aluno => { %>
-                        <tr>
-                            <td><%= aluno.nome %></td>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
-            <% } else { %>
+        <% if (alunos.length > 0) { %>
+            <ul>
+                <% alunos.forEach(aluno => { %>
+                    <li><%= aluno.Aluno %></li>
+                <% }) %>
+            </ul>
+        <% } else { %>
                 <p class="no-disciplina">Nenhum aluno cadastrado para esta disciplina.</p>
             <% } %>
             </div>

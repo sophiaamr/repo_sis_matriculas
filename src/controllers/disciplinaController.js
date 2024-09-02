@@ -1,5 +1,6 @@
 
 import DisciplinaModel from '../models/disciplinaModel.js';
+import AlunoModel from '../models/alunoModel.js';
 
 
 class DisciplinaController {
@@ -142,31 +143,38 @@ class DisciplinaController {
     }
 
 
-   async visualizarAlunos(req, res) {
-    const { idDisciplina } = req.params;
-
-    try {
-        const alunos = await new Promise((resolve, reject) => {
-            AlunoModel.getAlunosByDisciplina(idDisciplina, (err, result) => { 
-                if (err) {
-                    return reject(err);
-                }
-                resolve(result);
+    async visualizarAlunos(req, res) {
+        const { idDisciplina } = req.params;
+    
+        try {
+            console.log('ID da Disciplina:', idDisciplina);
+    
+            const alunos = await new Promise((resolve, reject) => {
+                AlunoModel.getAlunosByDisciplina(idDisciplina, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
             });
-        });
-
-        if (!alunos || alunos.length === 0) {
-            return res.status(404).json({ error: 'Nenhum aluno encontrado para esta disciplina' });
+    
+            console.log('Alunos encontrados:', alunos);
+    
+            if (!alunos || alunos.length === 0) {
+                return res.status(404).json({ error: 'Nenhum aluno encontrado para esta disciplina' });
+            }
+    
+            const nomeDisciplina = alunos[0].nomeDisciplina;
+            console.log('Nome da Disciplina:', nomeDisciplina);
+    
+            // Renderiza a view e passa os dados
+            return res.render('visualizarAlunos', { nomeDisciplina, alunos });
+        } catch (error) {
+            console.error('Erro ao buscar alunos:', error.message);
+            return res.status(500).json({ error: 'Erro interno do servidor' });
         }
-
-        const nomeDisciplina = alunos[0].nomeDisciplina;
-
-        return res.render('visualizarAlunos', { nomeDisciplina, alunos });
-    } catch (error) {
-        console.error('Erro ao buscar alunos:', error.message);
-        return res.status(500).json({ error: 'Erro interno do servidor' });
     }
-}
+    
 
 }
 
