@@ -148,7 +148,7 @@ class DisciplinaController {
     
         try {
             console.log('ID da Disciplina:', idDisciplina);
-    
+           
             const alunos = await new Promise((resolve, reject) => {
                 AlunoModel.getAlunosByDisciplina(idDisciplina, (err, result) => {
                     if (err) {

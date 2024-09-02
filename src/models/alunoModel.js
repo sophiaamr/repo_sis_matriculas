@@ -71,7 +71,7 @@ class Aluno {
 
   static getAlunosByDisciplina(idDisciplina, callback) {
     const query = `
-      SELECT U.nome AS Aluno
+      SELECT U.nome AS Aluno, D.nomeDisciplina
       FROM Matricula M
       INNER JOIN Aluno A ON M.idAluno = A.idAluno
       INNER JOIN Usuario U ON A.idUsuario = U.idUsuario
