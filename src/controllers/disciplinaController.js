@@ -108,23 +108,66 @@ class DisciplinaController {
 
 
     async getAlunosByDisciplina(req, res) {
-        const { idDisciplina } = req.params;
         try {
-            const alunos = await new Promise((resolve, reject) => {
-                AlunoModel.getAlunosByDisciplina(idDisciplina, (err, alunos) => {
+            const { idDisciplina } = req.params;
+
+            const disciplina = await new Promise((resolve, reject) => {
+                DisciplinaModel.getById(idDisciplina, (err, result) => {
                     if (err) {
-                        reject(err);
-                    } else {
-                        resolve(alunos);
+                        return reject(err);
                     }
+                    resolve(result);
                 });
             });
-            res.render('alunos', { alunos });
+
+            // Busca os alunos matriculados na disciplina
+            const alunos = await new Promise((resolve, reject) => {
+                AlunoModel.getAlunosByDisciplina(idDisciplina, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
+            });
+
+            res.status(200).render('disciplinas', { disciplina, alunos });
         } catch (error) {
-            res.status(500).json({ error: 'Erro interno do servidor' });
+            console.error('Erro ao lisyat disciplinas:', error.message);
+            res.status(500).render('disciplinas', {
+                message: "Erro interno do servidor"
+            });
         }
     }
 
+
+   async visualizarAlunos(req, res) {
+    const { idDisciplina } = req.params;
+
+    try {
+        const alunos = await new Promise((resolve, reject) => {
+            AlunoModel.getAlunosByDisciplina(idDisciplina, (err, result) => { 
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        });
+
+        if (!alunos || alunos.length === 0) {
+            return res.status(404).json({ error: 'Nenhum aluno encontrado para esta disciplina' });
+        }
+
+        const nomeDisciplina = alunos[0].nomeDisciplina;
+
+        return res.render('visualizarAlunos', { nomeDisciplina, alunos });
+    } catch (error) {
+        console.error('Erro ao buscar alunos:', error.message);
+        return res.status(500).json({ error: 'Erro interno do servidor' });
+    }
 }
+
+}
+
+
 
 export { DisciplinaController };
