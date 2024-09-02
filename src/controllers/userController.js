@@ -12,9 +12,9 @@ export class UserController {
 
 
     async login(req, res) {
-        const { tipo, email, senha } = req.body;
+        const {email, senha } = req.body;
 
-        if (!tipo || !email || !senha ) {
+        if (!email || !senha ) {
             return res.status(400).render('login', { message: "Por favor, preencha todos os campos." });
         }
 
@@ -37,18 +37,24 @@ export class UserController {
             }
 
             // Verifica o tipo de usuário e redireciona
-
-            console.log(tipo)
+            const tipo = usuario.tipo;
+          
             let profilePath;
-            if (tipo === 'aluno') {
-                profilePath = 'perfil';
-            } else if (tipo === 'professor') {
-                profilePath = 'perfilProf';
-            } else {
-                return res.status(400).render('login', { message: "Tipo de usuário inválido." });
+
+            switch (tipo) {
+                case "aluno":
+                    profilePath = 'perfil';
+                    break;
+                case "professor":
+                    profilePath = 'perfilProf';
+                    break;
+                case "secretaria":
+                    profilePath = 'secretaria';
+                    break;
             }
 
-            return res.status(200).render(profilePath);
+            return res.status(200).render(profilePath, { usuario: usuario});
+            
         } catch (err) {
             console.error('Erro ao realizar login:', err.message);
             return res.status(500).render('login', { message: 'Erro interno do servidor' });
@@ -58,11 +64,11 @@ export class UserController {
 
     async createAluno(req, res) {
         const { nome, cpf, telefone, email, senha, matricula, periodo } = req.body;
-
         if (!nome || !cpf || !telefone || !email || !senha || !matricula || !periodo) {
             return res.status(400).render('cadastro', { message: "Revise as informações fornecidas." });
         }
 
+        
         try {
             const usuarioModel = new Usuario();
             await new Promise((resolve, reject) => {
@@ -87,7 +93,6 @@ export class UserController {
                     return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
                 }
     
-                console.log('Todos os alunos:', alunos);
                 return res.status(200).render('cadastro', { alunos });
             });
         } catch (err) {
@@ -122,7 +127,6 @@ export class UserController {
         try {
             const professorModel = new Professor();
             const professores = await professorModel.getAll();
-            console.log('Todos os professores:', professores);
             return res.status(200).render('cadastro', { professores });
         } catch (err) {
             console.error('Erro ao buscar professores:', err.message);
@@ -156,7 +160,6 @@ export class UserController {
         try {
             const secretariaModel = new Secretaria();
             const secretarias = await secretariaModel.getAll();
-            console.log('Todas as secretarias:', secretarias);
             return res.status(200).render('cadastro', { secretarias });
         } catch (err) {
             console.error('Erro ao buscar secretarias:', err.message);
@@ -286,6 +289,31 @@ export class UserController {
             return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
         }
     }
+
+    async getByNumeroMatricula(req, res) {
+        const { matricula } = req.query;
+    
+        if (!matricula) {
+            return res.status(400).json({ message: 'Número da matrícula é obrigatório.' });
+        }
+    
+        try {
+            const aluno = await Aluno.getByNumeroMatricula(matricula);
+    
+            if (!aluno) {
+                return res.status(404).json({ message: 'Aluno não encontrado.' });
+            }
+    
+            console.log('Aluno encontrado:', aluno); // Log para depuração
+    
+            return res.status(200).json({ idAluno: aluno.id });
+        } catch (err) {
+            console.error('Erro ao buscar aluno por matrícula:', err.message);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
+    
+    
 
     // async createUsuario(req, res) {
     //     const { tipo, nome, cpf, telefone, email, senha, matricula, periodo, cargaHorario, departamento } = req.body;

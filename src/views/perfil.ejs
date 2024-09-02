@@ -50,32 +50,9 @@
                     <input class="form-control" type="text" id="senha" value="<%= usuario.senha %>" >
                 </div>
             </div>
-            <div class="row">
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="matricula" class="form-label">Matrícula:</label>
-                        <input class="form-control" type="text" id="matricula" value="<%= infoadicional.matricula %>" readonly disabled>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="periodo" class="form-label">Período:</label>
-                        <input class="form-control" type="text" id="periodo" value="<%= infoadicional.periodo %>" readonly disabled>
-                    </div>
-                </div>
-            </div>
-          </div>
           <div class="col-6">
             <div class="mb-4">
-              <label for="disciplinas" class="form-label">Disciplinas matriculadas:</label>
-              <div class="form-control disciplinas" id="disciplinas" style="height: auto;" readonly disabled>
-                <% if (infoadicional.disciplinas && infoadicional.disciplinas.length > 0) { %>
-                  <% infoadicional.disciplinas.forEach(disciplina => { %>
-                    <%= disciplina.nome %><br>
-                  <% }); %>
-                <% } else { %>
-                  Nenhuma disciplina matriculada.
-                <% } %>
+              
               </div>
             </div>
           </div>

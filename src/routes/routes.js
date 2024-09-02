@@ -21,7 +21,6 @@ routes.use('/alunos', AlunoRoute);
 routes.use('/professores', ProfessorRoute);
 routes.use('/secretarias', SecretariaRoute);
 routes.use('/curriculo', CurriculoRoute);
-routes.use('/login', UserRoute)
-
+routes.use('/login', UserRoute);
 
 export { routes };

@@ -91,6 +91,8 @@ class DisciplinaController {
         }
     }
 
+    
+    
     // Método para obter disciplinas por curso e período
     async getDisciplinasByCursoAndPeriodo(req, res) {
         const { cursoId, periodo } = req.query;

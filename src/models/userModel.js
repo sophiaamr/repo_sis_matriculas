@@ -125,6 +125,9 @@ class Usuario {
       callback(null, results[0]);
     });	7
   }
+
+
+  
 }
 
 export default Usuario;

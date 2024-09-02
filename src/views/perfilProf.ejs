@@ -26,13 +26,13 @@
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome:</label>
-                    <input class="form-control" type="text" id="nome" value="Nome do Usuário" readonly disabled>
+                    <input class="form-control" type="text" id="nome" value=" <%= usuario.nome %>" readonly disabled>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="cpf" class="form-label">CPF:</label>
-                    <input class="form-control" type="text" id="cpf" value="000.000.000-00" readonly disabled>
+                    <input class="form-control" type="text" id="cpf" value="<%= usuario.cpf %>" readonly disabled>
                 </div>
             </div>
         </div>
@@ -41,13 +41,13 @@
             <div class="col-6">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email:</label>
-                    <input class="form-control" type="text" id="email" value="email@exemplo.com">
+                    <input class="form-control" type="text" id="email" value="<%= usuario.email %>">
                 </div>
             </div>
             <div class="col-6">
                 <div class="mb-3">
                     <label for="telefone" class="form-label">Telefone:</label>
-                    <input class="form-control" type="text" id="telefone" value="(XX) XXXX-XXXX">
+                    <input class="form-control" type="text" id="telefone" value="<%= usuario.telefone %>">
                 </div>
             </div>
         </div>
@@ -56,14 +56,10 @@
             <div class="col-6">
                 <div class="mb-3">
                     <label for="senha" class="form-label">Senha:</label>
-                    <input class="form-control" type="text" id="senha" value="Senha">
+                    <input class="form-control" type="text" id="senha" value="<%= usuario.senha %>">
                 </div>
             </div>
-            <div class="col-6">
-                <div class="mb-3">
-                    <label for="ID" class="form-label">Identificador:</label>
-                    <input class="form-control" type="text" id="id" value="Número do id" readonly disabled>
-                </div>
+            
             </div>
         </div>
 

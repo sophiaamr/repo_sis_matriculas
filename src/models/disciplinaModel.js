@@ -82,18 +82,9 @@ class DisciplinaModel {
         });
     }
 
-    // Método para buscar disciplinas por curso e período
-    static getByIdAndPeriodo(idCurso, periodo, callback) {
-        const query = 'SELECT * FROM disciplina WHERE idCurso = ? AND periodo = ?';
+ 
 
-        connection.query(query, [idCurso, periodo], (err, results) => {
-            if (err) {
-                console.error('Erro ao buscar disciplinas por curso e período:', err.message);
-                return callback(err);
-            }
-            callback(null, results);
-        });
-    }
+    
     static getDisciplinasByCurso(cursoId, callback) {
         const query = `
              SELECT c.nome, d.periodo, d.nomeDisciplina, d.valor, d.status, d.qntdAluno, d.numCredito
