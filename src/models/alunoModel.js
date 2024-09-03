@@ -74,7 +74,7 @@ ORDER BY U.nome;
     });
   }
 
-  static async getDisciplinasByAlunoId(alunoId) {
+  static async getDisciplinasByAlunoId(idAluno) {
     return new Promise((resolve, reject) => {
       const query = `
         SELECT 
@@ -85,7 +85,7 @@ ORDER BY U.nome;
     Matricula m ON d.idDisciplina = m.idDisciplina
       WHERE
     m.idAluno = ?;`
-      connection.query(query, [alunoId], (err, result) => {
+      connection.query(query, [idAluno], (err, result) => {
         if (err) {
           reject(err);
         }

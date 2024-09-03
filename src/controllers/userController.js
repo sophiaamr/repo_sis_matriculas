@@ -65,6 +65,7 @@ export class UserController {
                 return res.status(404).send('Aluno não encontrado');
             }
     
+            
             Aluno.getByUserId(id, (err, alunoData) => {
                 if (err) {
                     console.error('Erro ao buscar dados adicionais do aluno:', err.message);
