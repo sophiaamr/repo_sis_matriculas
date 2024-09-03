@@ -23,4 +23,5 @@ routes.use('/secretarias', SecretariaRoute);
 routes.use('/curriculo', CurriculoRoute);
 routes.use('/login', UserRoute);
 
+
 export { routes };

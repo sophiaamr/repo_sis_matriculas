@@ -21,8 +21,12 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+routes.get('/', (req, res) => {
+    res.render('home'); // Renderiza o arquivo views/home.ejs
+});
 // Usar as rotas
 app.use('/api', routes);
+
 
 app.use((request, response) => {
     response.status(404).send('Rota não encontrada');
