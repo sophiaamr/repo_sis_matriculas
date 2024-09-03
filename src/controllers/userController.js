@@ -28,7 +28,7 @@ export class UserController {
             });
     
             if (!usuario || usuario.senha !== senha) {
-                return res.status(401).json({ success: false, message: "Email ou senha incorretos." });
+                return res.render('login', { message: "Email ou senha incorretos." });
             }
     
             const tipo = usuario.tipo;
@@ -44,9 +44,9 @@ export class UserController {
                 default:
                     return res.status(500).json({ success: false, message: "Tipo de usuário desconhecido." });
             }
-        } catch (err) {
+        }  catch (err) {
             console.error('Erro ao realizar login:', err.message);
-            return res.status(500).json({ success: false, message: 'Erro interno do servidor' });
+            return res.status(500).render('login', { message: 'Erro interno do servidor' });
         }
     }
     
@@ -61,8 +61,20 @@ export class UserController {
             if (!usuario || usuario.tipo !== 'aluno') {
                 return res.status(404).send('Aluno não encontrado');
             }
-            return res.render('perfil', { usuario });
+    
+            // Incluir dados adicionais específicos do aluno
+            const alunoModel = new Aluno();
+            alunoModel.getByUserId(id, (err, alunoData) => {
+                if (err) {
+                    console.error('Erro ao buscar dados adicionais do aluno:', err.message);
+                    return res.status(500).send('Erro interno do servidor');
+                }
+    
+                // Passar todos os dados do aluno para a view, incluindo a matrícula
+                return res.render('perfil', { usuario: { ...usuario, ...alunoData }, userId: usuario.idUsuario });
+            });
         });
+
     }
 
     async showProfessorProfile(req, res) {
@@ -91,7 +103,7 @@ export class UserController {
             if (!usuario || usuario.tipo !== 'secretaria') {
                 return res.status(404).send('Secretaria não encontrado');
             }
-            return res.render('perfilSecretaria', { usuario });
+            return res.render('perfilSecretaria', { usuario, userId: usuario.idUsuario });
         });
     }
 
@@ -289,7 +301,7 @@ export class UserController {
     async updateUserById(req, res) {
         const { id } = req.params;
         const data = req.body;
-
+      
         try {
             const usuarioModel = new Usuario();
             await new Promise((resolve, reject) => {
@@ -298,13 +310,13 @@ export class UserController {
                     resolve(result);
                 });
             });
-
-            return res.status(200).render('cadastro', { success: true, message: 'Usuário atualizado com sucesso!' });
+      
+            return res.status(200).json({ success: true, message: 'Usuário atualizado com sucesso!' });
         } catch (err) {
             console.error('Erro ao atualizar usuário:', err.message);
-            return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
+            return res.status(500).json({ success: false, message: 'Erro interno do servidor' });
         }
-    }
+      }
 
     async getAll(req, res) {
         try {
