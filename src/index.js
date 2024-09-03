@@ -3,6 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
 import { routes } from './routes/routes.js';
+import { DisciplinaRoute } from './routes/disciplinaRoute.js';
+import { OutrosRoute } from './routes/OutrosRoute.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,20 +15,20 @@ const PORT = 3000;
 
 app.use(json());
 app.use(cors());
-
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-routes.get('/', (req, res) => {
+app.get('/', (req, res) => {
     res.render('home'); // Renderiza o arquivo views/home.ejs
 });
+
 // Usar as rotas
 app.use('/api', routes);
-
+app.use('/api/disciplinas', DisciplinaRoute); // Usando a rota DisciplinaRoute
+app.use('/api/outros', OutrosRoute); // Usando a rota OutrosRoute
 
 app.use((request, response) => {
     response.status(404).send('Rota não encontrada');
