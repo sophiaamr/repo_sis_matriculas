@@ -88,7 +88,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="cpf" class="form-label">CPF:</label>
-                        <input class="form-control" type="text" id="cpf" name="cpf" value="<%= usuario.cpf %>" readonly>
+                        <input class="form-control " type="text" id="cpf" name="cpf" value="<%= usuario.cpf %>" readonly disabled>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,40 @@
                         <input class="form-control" type="password" id="senha" name="senha" value="<%= usuario.senha %>">
                     </div>
                 </div>
-            </div> 
+
+
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label for="disciplinas" class="form-label">Disciplinas Cadastradas:</label>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nome da Disciplina</th>
+                                    <th scope="col">Período</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (usuario.disciplinas && usuario.disciplinas.length > 0) { %>
+                                    <% usuario.disciplinas.forEach(function(disciplina, index) { %>
+                                        <tr>
+                                            <td><%= disciplina.idDisciplina %></td>
+                                            <td><%= disciplina.nomeDisciplina %></td>
+                                            <td><%= disciplina.periodo %></td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="4" class="text-center">Nenhuma disciplina cadastrada</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                
         
             <!-- Botão de envio -->
             <button type="submit" class="btn btn-primary"  style="width: 100%;background-color:#73738d;border-color:rgb(115, 115, 141); margin-top: 10px;">Salvar alterações</button>
