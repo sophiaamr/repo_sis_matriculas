@@ -82,9 +82,9 @@ class DisciplinaModel {
         });
     }
 
- 
 
-    
+
+
     static getDisciplinasByCurso(cursoId, callback) {
         const query = `
              SELECT c.nome, d.periodo, d.nomeDisciplina, d.valor, d.status, d.qntdAluno, d.numCredito
@@ -103,7 +103,35 @@ class DisciplinaModel {
         });
     }
 
+
+    static getDisciplinasByAluno(idAluno, callback) {
+        const query = `
+            SELECT 
+                d.nomeDisciplina, 
+                d.valor, 
+                d.status, 
+                d.idDisciplina
+            FROM 
+                Disciplina d
+            JOIN 
+                Curso c ON d.idCurso = c.idCurso
+            JOIN 
+                Aluno a ON a.idCurso = c.idCurso
+            WHERE 
+                a.idAluno = ?;  
+        `;
+    
+        connection.query(query, [idAluno], (err, results) => {
+            if (err) {
+                console.error('Erro ao buscar disciplinas por aluno:', err.message);
+                return callback(err);
+            }
+            callback(null, results);
+        });
+    }
+    
 }
+
 
 
 

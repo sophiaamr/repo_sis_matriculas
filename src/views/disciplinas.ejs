@@ -69,7 +69,7 @@
                   <p class="card-text">
                     <%= disciplina.periodo %>° período
                   </p>
-                  <button onclick="redirectToAlunos(<%= disciplina.idDisciplina %>)" class="btn btn-primary">Ver
+                  <button style="background-color:rgb(115, 115, 141);border-color:rgb(115, 115, 141); margin-top: 10px;" onclick="redirectToAlunos(<%= disciplina.idDisciplina %>)" class="btn btn-primary" >Ver
                     Alunos</button>
                 </div>
               </div>
@@ -85,7 +85,10 @@
   <script>
     function redirectToAlunos(idDisciplina) {
       window.location.href = `/api/disciplinas/${idDisciplina}/visualizarAlunos`;
+   
     }
+
+   
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

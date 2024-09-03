@@ -4,6 +4,9 @@
 <head>
     <%- include('partials/head'); %>
         <style>
+            .nav-link {
+        color: white;
+      }
             .form-section {
                 padding: 20px;
             }
@@ -16,7 +19,7 @@
 
 
 
-<body class="container">
+<body class="container-fluid">
     <header>
         <%- include('partials/headerSecretaria'); %>
     </header>
@@ -28,15 +31,15 @@
 
             <hr class="my-2">
             <form id="disciplinaForm">
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="nomeDisciplina" class="form-label">Nome da Disciplina</label>
                     <input type="text" class="form-control" id="nomeDisciplina" name="nomeDisciplina" required>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="valor" class="form-label">Valor</label>
                     <input type="number" class="form-control" id="valor" name="valor" required>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" id="status" name="status" required>
                         <option value="" disabled selected>Selecione o status</option>
@@ -44,15 +47,15 @@
                         <option value="inativa">Inativa</option>
                     </select>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="qntdAluno" class="form-label">Número de Alunos</label>
                     <input type="number" class="form-control" id="qntdAluno" name="qntdAluno" required>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="idCurso" class="form-label">ID do Curso</label>
                     <input type="text" class="form-control" id="idCurso" name="idCurso" required>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="periodo" class="form-label">Período</label>
                     <select class="form-select" id="periodo" name="periodo" required>
                         <option value="" disabled selected>Selecione o período</option>
@@ -63,7 +66,7 @@
                             <% } %>
                     </select>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="numCredito" class="form-label">Número de Créditos</label>
                     <select class="form-select" id="numCredito" name="numCredito" required>
                         <option value="" disabled selected>Selecione o número de créditos</option>
@@ -72,7 +75,7 @@
                     </select>
                 </div>
 
-                <button type="submit" id="submitBtn" class="btn btn-primary"
+                <button type="submit" id="submitBtn" class="btn btn-primary mb-3"
                     style="width: 100%;background-color:rgb(115, 115, 141);border-color:rgb(115, 115, 141); margin-top: 10px;">
                     Cadastrar Disciplina
                 </button>
@@ -92,7 +95,7 @@
             const nomeDisciplina = document.getElementById('nomeDisciplina').value;
             const valor = document.getElementById('valor').value;
             const status = document.getElementById('status').value;
-            const qntdAluno = document.getElementById('qntdAluno').value; // Alterei de 'qntdAluno' para 'numAlunos' para combinar com o ID do campo
+            const qntdAluno = document.getElementById('qntdAluno').value;
             const idCurso = document.getElementById('idCurso').value;
             const periodo = document.getElementById('periodo').value;
             const numCredito = document.getElementById('numCredito').value;
@@ -132,6 +135,9 @@
                 if (result.success) {
                     alert('Disciplina cadastrada com sucesso!');
                     document.getElementById('disciplinaForm').reset(); // Limpa o formulário após o cadastro
+                    
+                    // Redireciona para a tela de currículo
+                    window.location.href = '/api/cursos/?/curriculo'; // Substitua '/curriculo' pela rota correta para a tela de currículo
                 } else {
                     alert('Erro ao cadastrar disciplina: ' + result.message);
                 }
@@ -142,6 +148,7 @@
             });
         });
     </script>
+    
     
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

@@ -30,6 +30,7 @@ export class UserController {
             if (!usuario || usuario.senha !== senha) {
                 return res.render('login', { message: "Email ou senha incorretos." });
             }
+            
     
             const tipo = usuario.tipo;
     
@@ -62,15 +63,13 @@ export class UserController {
                 return res.status(404).send('Aluno não encontrado');
             }
     
-            // Incluir dados adicionais específicos do aluno
-            const alunoModel = new Aluno();
-            alunoModel.getByUserId(id, (err, alunoData) => {
+           
+            Aluno.getByUserId(id, (err, alunoData) => {
                 if (err) {
                     console.error('Erro ao buscar dados adicionais do aluno:', err.message);
                     return res.status(500).send('Erro interno do servidor');
                 }
     
-                // Passar todos os dados do aluno para a view, incluindo a matrícula
                 return res.render('perfil', { usuario: { ...usuario, ...alunoData }, userId: usuario.idUsuario });
             });
         });
@@ -288,13 +287,12 @@ export class UserController {
             const alunos = await alunoModel.getAlunosByDisciplina(idDisciplina);
 
             if (!alunos.length) {
-                return res.status(404).render('visualizarAlunos', { message: 'Nenhum aluno encontrado para esta disciplina.' });
+                return res.status(200).json({ message: 'Nenhum aluno encontrado para esta disciplina.' });
             }
-
-            return res.status(200).render('visualizarAlunos', { alunos });
+            return res.status(200).json({ alunos });
         } catch (err) {
             console.error('Erro ao buscar alunos:', err.message);
-            return res.status(500).render('visualizarAlunos', { message: 'Erro interno do servidor' });
+            return res.status(500).json({ message: 'Erro interno do servidor' });
         }
     }
 

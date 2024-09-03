@@ -31,7 +31,7 @@ class Aluno {
     });
   }
 
- 
+
 
   static getByNumeroMatricula(numeroMatricula) {
     return new Promise((resolve, reject) => {
@@ -45,13 +45,14 @@ class Aluno {
 
   static getAlunosByDisciplina(idDisciplina, callback) {
     const query = `
-      SELECT U.nome AS Aluno, D.nomeDisciplina
-      FROM Matricula M
-      INNER JOIN Aluno A ON M.idAluno = A.idAluno
-      INNER JOIN Usuario U ON A.idUsuario = U.idUsuario
-      INNER JOIN Disciplina D ON M.idDisciplina = D.idDisciplina
-      WHERE M.idDisciplina = ?
-      ORDER BY U.nome;
+    SELECT U.nome AS Aluno, U.email AS Email, D.nomeDisciplina
+FROM Matricula M
+INNER JOIN Aluno A ON M.idAluno = A.idAluno
+INNER JOIN Usuario U ON A.idUsuario = U.idUsuario
+INNER JOIN Disciplina D ON M.idDisciplina = D.idDisciplina
+WHERE M.idDisciplina = ?
+ORDER BY U.nome;
+
     `;
 
     connection.query(query, [idDisciplina], (err, results) => {
@@ -62,14 +63,14 @@ class Aluno {
 
       callback(null, results);
     });
-}
+  }
 
 
-  getByUserId(userId, callback) {
+  static getByUserId(userId, callback) {
     const query = `SELECT * FROM Aluno WHERE idUsuario = ?`;
     connection.query(query, [userId], (err, results) => {
-        if (err) return callback(err);
-        callback(null, results[0]);
+      if (err) return callback(err);
+      callback(null, results[0]);
     });
   }
 
@@ -86,6 +87,12 @@ class Aluno {
       });
     });
   }
+
+
+
+
 }
+
+
 
 export default Aluno;
