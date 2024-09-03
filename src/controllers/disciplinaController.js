@@ -93,18 +93,34 @@ class DisciplinaController {
 
     // Método para deletar uma disciplina pelo ID
     async delete(req, res) {
-        const id = req.params.id;
+        console.log('Parâmetros recebidos:', req.params); // Adicione este log
+        
+        const idDisciplina = parseInt(req.params.id, 10);
+    
+        if (isNaN(idDisciplina)) {
+            console.log('ID inválido:', req.params.id); // Log adicional
+            return res.status(400).json({ error: 'ID inválido fornecido' });
+        }
+    
         try {
-            DisciplinaModel.delete(id, (err, result) => {
+            DisciplinaModel.delete(idDisciplina, (err, result) => {
+                
                 if (err) {
                     return res.status(500).json({ error: 'Erro ao deletar disciplina' });
                 }
+    
+                if(result.affectedRows === 0) {
+                    return res.status(404).json({ error: 'Disciplina não encontrada' });
+                }
+    
                 res.status(200).json({ message: 'Disciplina deletada com sucesso' });
             });
         } catch (error) {
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
+    
+    
 
     // Método para obter disciplinas por curso e período
     async getDisciplinasByCursoAndPeriodo(req, res) {
@@ -182,6 +198,40 @@ class DisciplinaController {
         } catch (error) {
             console.error('Erro ao buscar alunos:', error.message);
             return res.status(500).json({ error: 'Erro interno do servidor' });
+        }
+    }
+    async associateWithProfessor(req, res) {
+        const { disciplinaId, professorId } = req.body;
+
+        if (!disciplinaId || !professorId) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "ID da disciplina e ID do professor são obrigatórios." 
+            });
+        }
+
+        try {
+            const disciplinaModel = new DisciplinaModel();
+            disciplinaModel.associateWithProfessor(disciplinaId, professorId, (err, result) => {
+                if (err) {
+                    return res.status(500).json({ 
+                        success: false, 
+                        message: "Erro ao associar disciplina ao professor", 
+                        error: err.message 
+                    });
+                }
+                res.status(200).json({ 
+                    success: true, 
+                    message: "Disciplina associada ao professor com sucesso", 
+                    result 
+                });
+            });
+        } catch (error) {
+            res.status(500).json({ 
+                success: false, 
+                message: "Erro interno do servidor", 
+                error: error.message 
+            });
         }
     }
 

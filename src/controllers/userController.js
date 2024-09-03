@@ -30,6 +30,7 @@ export class UserController {
             if (!usuario || usuario.senha !== senha) {
                 return res.render('login', { message: "Email ou senha incorretos." });
             }
+            
     
             const tipo = usuario.tipo;
     
@@ -53,29 +54,43 @@ export class UserController {
     async showAlunoProfile(req, res) {
         const { id } = req.params;
         const usuarioModel = new Usuario();
+    
         usuarioModel.getById(id, (err, usuario) => {
             if (err) {
                 console.error('Erro ao buscar dados do aluno:', err.message);
                 return res.status(500).send('Erro interno do servidor');
             }
+    
             if (!usuario || usuario.tipo !== 'aluno') {
                 return res.status(404).send('Aluno não encontrado');
             }
     
-            // Incluir dados adicionais específicos do aluno
-            const alunoModel = new Aluno();
-            alunoModel.getByUserId(id, (err, alunoData) => {
+            
+            Aluno.getByUserId(id, (err, alunoData) => {
                 if (err) {
                     console.error('Erro ao buscar dados adicionais do aluno:', err.message);
                     return res.status(500).send('Erro interno do servidor');
                 }
     
-                // Passar todos os dados do aluno para a view, incluindo a matrícula
-                return res.render('perfil', { usuario: { ...usuario, ...alunoData }, userId: usuario.idUsuario });
+                if (!alunoData) {
+                    return res.status(404).send('Aluno não encontrado');
+                }
+    
+                Aluno.getDisciplinasByAlunoId(alunoData.idAluno)
+                    .then(disciplinas => {
+                        return res.render('perfil', { 
+                            usuario: { ...usuario, ...alunoData, disciplinas }, 
+                            userId: usuario.idUsuario 
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Erro ao buscar disciplinas do aluno:', err.message);
+                        return res.status(500).send('Erro interno do servidor');
+                    });
             });
         });
-
     }
+    
 
     async showProfessorProfile(req, res) {
         const { id } = req.params;
@@ -179,6 +194,26 @@ export class UserController {
             return res.status(500).render('cadastro', { message: 'Erro interno do servidor' });
         }
     }
+
+    async getAllProfessorsWithNamee(req, res) {
+        try {
+            const professorModel = new Professor();
+            const professores = await new Promise((resolve, reject) => {
+                professorModel.getAllProfessorsWithName((err, results) => {
+                    if (err) reject(err);
+                    resolve(results);
+                });
+            });
+    
+            console.log('Professores recuperados:', professores); // Isso deve mostrar os professores
+            return res.status(200).json(professores); // Retornando os dados em formato JSON
+        } catch (err) {
+            console.error('Erro ao buscar professores:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
+    
+    
 
     async createSecretaria(req, res) {
         const { nome, cpf, telefone, email, senha, departamento } = req.body;
@@ -288,13 +323,12 @@ export class UserController {
             const alunos = await alunoModel.getAlunosByDisciplina(idDisciplina);
 
             if (!alunos.length) {
-                return res.status(404).render('visualizarAlunos', { message: 'Nenhum aluno encontrado para esta disciplina.' });
+                return res.status(200).json({ message: 'Nenhum aluno encontrado para esta disciplina.' });
             }
-
-            return res.status(200).render('visualizarAlunos', { alunos });
+            return res.status(200).json({ alunos });
         } catch (err) {
             console.error('Erro ao buscar alunos:', err.message);
-            return res.status(500).render('visualizarAlunos', { message: 'Erro interno do servidor' });
+            return res.status(500).json({ message: 'Erro interno do servidor' });
         }
     }
 

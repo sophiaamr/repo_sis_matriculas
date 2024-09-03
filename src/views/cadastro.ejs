@@ -1,79 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
   <%- include('partials/head'); %>
-    <style>
-      .form-section {
-        padding: 20px;
-      }
 
-      .hidden {
-        display: none;
-      }
-    </style>
+  <style>
+     .nav-link {
+       color: white;
+     }
+
+     .hidden {
+       display: none;
+     }
+
+     body {
+       font-family: Arial, sans-serif;
+       background-color: #f4f4f4;
+       margin: 0;
+       padding: 0;
+       color: #333;
+     }
+
+     .container {
+       width: 90%;
+       max-width: 1200px;
+       margin: 20px auto;
+       padding: 20px;
+       background-color: #fff;
+       border-radius: 8px;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+     }
+
+     h2 {
+       text-align: center;
+       color: #73738d;
+       font-weight: bold;
+       margin-bottom: 20px;
+     }
+
+     hr {
+       margin: 20px 0;
+     }
+
+     /* Estilos para telas menores que 1340px */
+     @media (max-width: 1340px) {
+       .col-2,
+       .col-3,
+       .col-4,
+       .col-9 {
+         flex: 1 1 100%;
+         max-width: 100%;
+       }
+
+       .card {
+         width: 100%;
+         margin-bottom: 20px;
+       }
+
+       .container.col-3 {
+         margin-top: 20px;
+       }
+     }
+
+     /* Estilos para telas menores que 430px */
+     @media (max-width: 430px) {
+       .col-5 {
+         flex: 1 1 100%;
+         max-width: 100%;
+         margin-top: 20px;
+       }
+     }
+
+     .btn-primary {
+       width: 100%;
+       background-color: #73738d;
+       border-color: rgb(115, 115, 141);
+       margin-top: 10px;
+     }
+  </style>
 </head>
 
-<body class="container">
-  <header>
-    <%- include('partials/headerSecretaria'); %>
-  </header>
+<body class="container-fluid">
+   <header>
+       <%- include('partials/headerSecretaria'); %>
+   </header>
 
-  <section class="form-section">
-    <div class="container">
-      <h2>Cadastro de usuário</h2>
-      <hr class="my-2">
-      <form id="userForm" action="/api/alunos/" method="POST">
-        <div class="mb-1">
-          <label for="userType" class="form-label">Tipo de Usuário</label>
-          <select class="form-select" id="userType" name="tipo" required>
-            <option value="" disabled selected>Selecione o tipo de usuário</option>
-            <option value="aluno">Aluno</option>
-            <option value="professor">Professor</option>
-          </select>
-        </div>
-        <div class="mb-1">
-          <label for="nome" class="form-label">Nome</label>
-          <input type="text" class="form-control" id="nome" name="nome" required>
-        </div>
-        <div class="mb-1">
-          <label for="cpf" class="form-label">CPF</label>
-          <input type="text" class="form-control" id="cpf" name="cpf" required>
-        </div>
-        <div class="mb-1">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="mb-1">
-          <label for="telefone" class="form-label">Telefone</label>
-          <input type="tel" class="form-control" id="telefone" name="telefone" required>
-        </div>
-        <div class="mb-1">
-          <label for="senha" class="form-label">Senha</label>
-          <input type="password" class="form-control" id="senha" name="senha" required>
-        </div>
+   <section class="container">
+       <h2>Cadastro de usuário</h2>
+       <hr class="my-2">
+       <form id="userForm" action="/api/alunos/" method="POST">
+           <div class="mb-3">
+               <label for="userType" class="form-label">Tipo de Usuário</label>
+               <select class="form-select" id="userType" name="tipo" required>
+                   <option value="" disabled selected>Selecione o tipo de usuário</option>
+                   <option value="aluno">Aluno</option>
+                   <option value="professor">Professor</option>
+               </select>
+           </div>
+           <div class="mb-3">
+               <label for="nome" class="form-label">Nome</label>
+               <input type="text" class="form-control" id="nome" name="nome" required>
+           </div>
+           <div class="mb-3">
+               <label for="cpf" class="form-label">CPF</label>
+               <input type="text" class="form-control" id="cpf" name="cpf" required>
+           </div>
+           <div class="mb-3">
+               <label for="email" class="form-label">Email</label>
+               <input type="email" class="form-control" id="email" name="email" required>
+           </div>
+           <div class="mb-3">
+               <label for="telefone" class="form-label">Telefone</label>
+               <input type="tel" class="form-control" id="telefone" name="telefone" required>
+           </div>
+           <div class="mb-3">
+               <label for="senha" class="form-label">Senha</label>
+               <input type="password" class="form-control" id="senha" name="senha" required>
+           </div>
 
-      
-        <!-- campo adicional aluno -->
-        <div class="mb-1 hidden" id="matriculaField">
-          <label for="matricula" class="form-label">Matrícula</label>
-          <input type="text" class="form-control" id="matricula" name="matricula">
-        </div>
-        <div class="mb-1 hidden" id="periodoField">
-          <label for="periodo" class="form-label">Período</label>
-          <input type="text" class="form-control" id="periodo" name="periodo">
-        </div>
+           <!-- campo adicional aluno -->
+           <div class="mb-3 hidden" id="matriculaField">
+               <label for="matricula" class="form-label">Matrícula</label>
+               <input type="text" class="form-control" id="matricula" name="matricula">
+           </div>
+           <div class="mb-3 hidden" id="periodoField">
+               <label for="periodo" class="form-label">Período</label>
+               <input type="text" class="form-control" id="periodo" name="periodo">
+           </div>
 
-        
-        <!-- campo adicional prof -->
-        <div class="mb-1 hidden" id="cargaHorarioField">
-          <label for="cargaHorario" class="form-label">Carga Horária</label>
-          <input type="text" class="form-control" id="cargaHorario" name="cargaHorario">
-        </div>
+           <!-- campo adicional professor -->
+           <div class="mb-3 hidden" id="cargaHorarioField">
+               <label for="cargaHorario" class="form-label">Carga Horária</label>
+               <input type="text" class="form-control" id="cargaHorario" name="cargaHorario">
+           </div>
 
-        <button type="submit" id="submitBtn" class="btn btn-primary"
-          style="width: 100%;background-color:rgb(115, 115, 141);border-color:rgb(115, 115, 141); margin-top: 10px;">Cadastrar</button>
-      </form>
+           <button type="submit" id="submitBtn" class="btn btn-primary">Cadastrar</button>
+       </form>
+   </section>
+
+    
+
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+
 
       <script>
         document.getElementById('userType').addEventListener('change', function () {
@@ -97,8 +166,18 @@
             document.getElementById('cargaHorarioField').classList.remove('hidden');
           }
         });
-      </script>
 
+
+
+        $(document).ready(function () {
+          var $cpf = $("#cpf");
+          var $telefone = $("#telefone");
+          $cpf.mask('000.000.000-00', { reverse: true });
+          $telefone.mask('(00) 00000-0000');
+        });
+
+      </script>
+  
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>

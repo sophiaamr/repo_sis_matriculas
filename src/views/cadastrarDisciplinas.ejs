@@ -3,40 +3,39 @@
 
 <head>
     <%- include('partials/head'); %>
-        <style>
-            .form-section {
-                padding: 20px;
-            }
+    <style>
+        .nav-link {
+            color: white;
+        }
 
-            .hidden {
-                display: none;
-            }
-        </style>
+        .form-section {
+            padding: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
-
-
-<body class="container">
+<body class="container-fluid">
     <header>
         <%- include('partials/headerSecretaria'); %>
     </header>
     <section class="form-section">
         <div class="container">
             <h2>Cadastro de Disciplina</h2>
-
-            
-
             <hr class="my-2">
             <form id="disciplinaForm">
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="nomeDisciplina" class="form-label">Nome da Disciplina</label>
                     <input type="text" class="form-control" id="nomeDisciplina" name="nomeDisciplina" required>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="valor" class="form-label">Valor</label>
                     <input type="number" class="form-control" id="valor" name="valor" required>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" id="status" name="status" required>
                         <option value="" disabled selected>Selecione o status</option>
@@ -44,15 +43,15 @@
                         <option value="inativa">Inativa</option>
                     </select>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="qntdAluno" class="form-label">Número de Alunos</label>
                     <input type="number" class="form-control" id="qntdAluno" name="qntdAluno" required>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="idCurso" class="form-label">ID do Curso</label>
                     <input type="text" class="form-control" id="idCurso" name="idCurso" required>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="periodo" class="form-label">Período</label>
                     <select class="form-select" id="periodo" name="periodo" required>
                         <option value="" disabled selected>Selecione o período</option>
@@ -60,10 +59,10 @@
                             <option value="<%= i %>">
                                 <%= i %>° período
                             </option>
-                            <% } %>
+                        <% } %>
                     </select>
                 </div>
-                <div class="mb-1">
+                <div class="mb-2">
                     <label for="numCredito" class="form-label">Número de Créditos</label>
                     <select class="form-select" id="numCredito" name="numCredito" required>
                         <option value="" disabled selected>Selecione o número de créditos</option>
@@ -71,39 +70,67 @@
                         <option value="2">2 créditos</option>
                     </select>
                 </div>
+                <div class="mb-2">
+                    <label for="professorId" class="form-label">Professor</label>
+                    <select class="form-select" id="professorId" name="professorId" required>
+                        <option value="" disabled selected>Selecione o professor</option>
+                        <!-- As opções serão preenchidas dinamicamente pelo JavaScript -->
+                    </select>
+                </div>
 
-                <button type="submit" id="submitBtn" class="btn btn-primary"
-                    style="width: 100%;background-color:rgb(115, 115, 141);border-color:rgb(115, 115, 141); margin-top: 10px;">
+                <button type="submit" id="submitBtn" class="btn btn-primary mb-3"
+                    style="width: 100%; background-color:rgb(115, 115, 141); border-color:rgb(115, 115, 141); margin-top: 10px;">
                     Cadastrar Disciplina
                 </button>
             </form>
         </div>
-
-
-        
-
     </section>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            fetch('/api/professores/professorname')
+                .then(response => response.json())
+                .then(professores => {
+                    const professorSelect = document.getElementById('professorId');
+                    if (professores.length > 0) {
+                        professores.forEach(professor => {
+                            const option = document.createElement('option');
+                            option.value = professor.idUsuario;
+                            option.textContent = professor.nome;
+                            professorSelect.appendChild(option);
+                        });
+                    } else {
+                        const option = document.createElement('option');
+                        option.value = "";
+                        option.textContent = "Nenhum professor disponível";
+                        option.disabled = true;
+                        professorSelect.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar professores:', error);
+                });
+        });
+
         document.getElementById('disciplinaForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Impede o comportamento padrão de envio do formulário
-    
+            event.preventDefault(); 
+
             // Captura os valores dos campos do formulário
             const nomeDisciplina = document.getElementById('nomeDisciplina').value;
             const valor = document.getElementById('valor').value;
             const status = document.getElementById('status').value;
-            const qntdAluno = document.getElementById('qntdAluno').value; // Alterei de 'qntdAluno' para 'numAlunos' para combinar com o ID do campo
+            const qntdAluno = document.getElementById('qntdAluno').value;
             const idCurso = document.getElementById('idCurso').value;
             const periodo = document.getElementById('periodo').value;
             const numCredito = document.getElementById('numCredito').value;
-    
-            // Verificação simples para garantir que todos os campos estão preenchidos
-            if (!nomeDisciplina || !valor || !status || !qntdAluno || !idCurso || !periodo || !numCredito) {
+            const professorId = document.getElementById('professorId').value;
+
+            if (!nomeDisciplina || !valor || !status || !qntdAluno || !idCurso || !periodo || !numCredito || !professorId) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
                 return;
             }
-    
-            // Cria o objeto com os dados do formulário
+
             const disciplinaData = {
                 nomeDisciplina: nomeDisciplina,
                 valor: valor,
@@ -111,10 +138,10 @@
                 qntdAluno: qntdAluno,
                 idCurso: idCurso,
                 periodo: periodo,
-                numCredito: numCredito
+                numCredito: numCredito,
+                professorId: professorId
             };
-    
-            // Faz o fetch para enviar os dados ao servidor
+
             fetch('/api/disciplinas/cadastrarDisciplinas', {
                 method: 'POST',
                 headers: {
@@ -131,7 +158,10 @@
             .then(result => {
                 if (result.success) {
                     alert('Disciplina cadastrada com sucesso!');
-                    document.getElementById('disciplinaForm').reset(); // Limpa o formulário após o cadastro
+                    document.getElementById('disciplinaForm').reset(); 
+                    
+                    
+                    window.location.href = '/api/cursos/?/curriculo'; 
                 } else {
                     alert('Erro ao cadastrar disciplina: ' + result.message);
                 }
@@ -142,7 +172,6 @@
             });
         });
     </script>
-    
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>

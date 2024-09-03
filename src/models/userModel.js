@@ -117,7 +117,7 @@ class Usuario {
     connection.query(query, [email, senha], (err, results) => {
       if (err) return callback(err);
       callback(null, results[0]);
-    });	7
+    });	
   }
   getById(userId, callback) {
     const query = `SELECT * FROM ${this.tableName} WHERE idUsuario = ?`;
@@ -137,8 +137,8 @@ class Usuario {
         // Determinar o tipo de usuário e buscar dados adicionais
         switch (usuario.tipo) {
             case 'aluno':
-                const alunoModel = new Aluno();
-                alunoModel.getByUserId(userId, (err, alunoData) => {
+                //const alunoModel = new Aluno();
+                Aluno.getByUserId(userId, (err, alunoData) => {
                     if (err) {
                         console.error('Erro ao buscar dados do aluno:', err.message);
                         return callback(err);

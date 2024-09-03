@@ -4,49 +4,111 @@
    <%- include('partials/head'); %>
 
    <style>
-    .nav-link {
-      color: white;
-    }
+      .nav-link {
+         color: white;
+      }
 
-    .hidden {
-      display: none;
-    }
+      .hidden {
+         display: none;
+      }
+
+      body {
+         font-family: Arial, sans-serif;
+         background-color: #f4f4f4;
+         margin: 0;
+         padding: 0;
+         color: #333;
+      }
+
+      .row {
+         margin-bottom: 20px;
+      }
+
+      .card {
+         background-color: #fff;
+         border-radius: 8px;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+         transition: transform 0.2s ease;
+      }
+
+      .card:hover {
+         transform: translateY(-5px);
+      }
+
+      .card-body {
+         padding: 15px;
+      }
+
+      .card-title {
+         color: #73738d;
+         font-weight: bold;
+      }
+
+      .btn-primary {
+         width: 100%;
+         background-color: #73738d;
+         border-color: rgb(115, 115, 141);
+         margin-top: 10px;
+      }
+
+      
+      .btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+        background-color: #5f5f75;
+        border-color: #5f5f75;
+        color: white;
+      }
+      /* Estilos para telas menores que 1340px */
+      @media (max-width: 1340px) {
+         .col-4 {
+            flex: 1 1 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+         }
+      }
+
+      /* Estilos para telas menores que 430px */
+      @media (max-width: 430px) {
+         .col-4 {
+            flex: 1 1 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+         }
+      }
    </style>
 </head>
 
-<body class="container">
-  <header>
+<body class="container-fluid">
+   <header>
       <%- include('partials/headerSecretaria'); %>
-  </header>
-  <section>
-    <div class="row">
-        <div class="col-7">
+   </header>
+
+   <section>
+      <div class="row mt-3">
+         <div class="col-12">
             <div class="row mb-3">
-                <% cursos.forEach(curso => { %>
-                    <div class="col-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= curso.nome %></h5>
-                                <p class="card-text"><%= curso.numCredito %> créditos</p>
-                                <!-- Modificação do botão -->
-                                <button onclick="redirectToCurriculo(<%= curso.idCurso %>)" class="btn btn-primary">Ver Grade Curricular</button>
-                            </div>
+               <% cursos.forEach(curso => { %>
+                  <div class="col-md-4 col-sm-6">
+                     <div class="card">
+                        <div class="card-body">
+                           <h5 class="card-title"><%= curso.nome %></h5>
+                           <p class="card-text"><%= curso.numCredito %> créditos</p>
+                           <button onclick="redirectToCurriculo(<%= curso.idCurso %>)" class="btn btn-primary">Ver Grade Curricular</button>
                         </div>
-                    </div>
-                <% }); %>
+                     </div>
+                  </div>
+               <% }); %>
             </div>
-        </div>
-    </div>
-</section>
+         </div>
+      </div>
+   </section>
 
-<script>
-  function redirectToCurriculo(cursoId) {
-    
-      window.location.href = `/api/cursos/${cursoId}/curriculo`;
-  }
-</script>
+   <script>
+      function redirectToCurriculo(cursoId) {
+         window.location.href = `/api/cursos/${cursoId}/curriculo`;
+      }
+   </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

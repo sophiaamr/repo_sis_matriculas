@@ -31,7 +31,7 @@ class Aluno {
     });
   }
 
- 
+
 
   static getByNumeroMatricula(numeroMatricula) {
     return new Promise((resolve, reject) => {
@@ -45,13 +45,14 @@ class Aluno {
 
   static getAlunosByDisciplina(idDisciplina, callback) {
     const query = `
-      SELECT U.nome AS Aluno, D.nomeDisciplina
-      FROM Matricula M
-      INNER JOIN Aluno A ON M.idAluno = A.idAluno
-      INNER JOIN Usuario U ON A.idUsuario = U.idUsuario
-      INNER JOIN Disciplina D ON M.idDisciplina = D.idDisciplina
-      WHERE M.idDisciplina = ?
-      ORDER BY U.nome;
+    SELECT U.nome AS Aluno, U.email AS Email, D.nomeDisciplina
+FROM Matricula M
+INNER JOIN Aluno A ON M.idAluno = A.idAluno
+INNER JOIN Usuario U ON A.idUsuario = U.idUsuario
+INNER JOIN Disciplina D ON M.idDisciplina = D.idDisciplina
+WHERE M.idDisciplina = ?
+ORDER BY U.nome;
+
     `;
 
     connection.query(query, [idDisciplina], (err, results) => {
@@ -62,30 +63,42 @@ class Aluno {
 
       callback(null, results);
     });
-}
+  }
 
 
-  getByUserId(userId, callback) {
+  static getByUserId(userId, callback) {
     const query = `SELECT * FROM Aluno WHERE idUsuario = ?`;
     connection.query(query, [userId], (err, results) => {
-        if (err) return callback(err);
-        callback(null, results[0]);
+      if (err) return callback(err);
+      callback(null, results[0]);
     });
   }
 
-  async getDisciplinasByAlunoId(alunoId) {
+  static async getDisciplinasByAlunoId(idAluno) {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT disciplinas.nome 
-        FROM disciplinas 
-        JOIN matriculas ON disciplinas.id = matriculas.disciplina_id 
-        WHERE matriculas.aluno_id = ?`;
-      connection.query(query, [alunoId], (err, result) => {
-        if (err) reject(err);
+        SELECT 
+    d.idDisciplina, d.nomeDisciplina, d.periodo
+      FROM
+    Disciplina d
+        JOIN
+    Matricula m ON d.idDisciplina = m.idDisciplina
+      WHERE
+    m.idAluno = ?;`
+      connection.query(query, [idAluno], (err, result) => {
+        if (err) {
+          reject(err);
+        }
         resolve(result);
       });
     });
   }
+
+
+
+
 }
+
+
 
 export default Aluno;
