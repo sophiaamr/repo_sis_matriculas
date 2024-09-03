@@ -4,6 +4,35 @@
 <head>
     <%- include('partials/head'); %>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #73738d;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
         .nav-link {
             color: white;
         }
@@ -12,78 +41,113 @@
             padding: 20px;
         }
 
+        .btn-primary {
+            width: 100%;
+            background-color: #73738d;
+            border-color: rgb(115, 115, 141);
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active {
+            background-color: #5f5f75;
+            border-color: #5f5f75;
+            color: white;
+        }
+
         .hidden {
             display: none;
+        }
+
+        /* Estilos para telas menores que 1340px */
+        @media (max-width: 1340px) {
+            .col-2,
+            .col-3,
+            .col-4,
+            .col-9 {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+        }
+
+        /* Estilos para telas menores que 430px */
+        @media (max-width: 430px) {
+            .col-5 {
+                flex: 1 1 100%;
+                max-width: 100%;
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
 
-<body class="container-fluid">
+<body>
     <header>
         <%- include('partials/headerSecretaria'); %>
     </header>
-    <section class="form-section">
-        <div class="container">
-            <h2>Cadastro de Disciplina</h2>
-            <hr class="my-2">
-            <form id="disciplinaForm">
-                <div class="mb-2">
-                    <label for="nomeDisciplina" class="form-label">Nome da Disciplina</label>
-                    <input type="text" class="form-control" id="nomeDisciplina" name="nomeDisciplina" required>
-                </div>
-                <div class="mb-2">
-                    <label for="valor" class="form-label">Valor</label>
-                    <input type="number" class="form-control" id="valor" name="valor" required>
-                </div>
-                <div class="mb-2">
-                    <label for="status" class="form-label">Status</label>
-                    <select class="form-select" id="status" name="status" required>
-                        <option value="" disabled selected>Selecione o status</option>
-                        <option value="ativa">Ativa</option>
-                        <option value="inativa">Inativa</option>
-                    </select>
-                </div>
-                <div class="mb-2">
-                    <label for="qntdAluno" class="form-label">Número de Alunos</label>
-                    <input type="number" class="form-control" id="qntdAluno" name="qntdAluno" required>
-                </div>
-                <div class="mb-2">
-                    <label for="idCurso" class="form-label">ID do Curso</label>
-                    <input type="text" class="form-control" id="idCurso" name="idCurso" required>
-                </div>
-                <div class="mb-2">
-                    <label for="periodo" class="form-label">Período</label>
-                    <select class="form-select" id="periodo" name="periodo" required>
-                        <option value="" disabled selected>Selecione o período</option>
-                        <% for (let i=1; i <=8; i++) { %>
-                            <option value="<%= i %>">
-                                <%= i %>° período
-                            </option>
-                        <% } %>
-                    </select>
-                </div>
-                <div class="mb-2">
-                    <label for="numCredito" class="form-label">Número de Créditos</label>
-                    <select class="form-select" id="numCredito" name="numCredito" required>
-                        <option value="" disabled selected>Selecione o número de créditos</option>
-                        <option value="1">1 crédito</option>
-                        <option value="2">2 créditos</option>
-                    </select>
-                </div>
-                <div class="mb-2">
-                    <label for="professorId" class="form-label">Professor</label>
-                    <select class="form-select" id="professorId" name="professorId" required>
-                        <option value="" disabled selected>Selecione o professor</option>
-                        <!-- As opções serão preenchidas dinamicamente pelo JavaScript -->
-                    </select>
-                </div>
 
-                <button type="submit" id="submitBtn" class="btn btn-primary mb-3"
-                    style="width: 100%; background-color:rgb(115, 115, 141); border-color:rgb(115, 115, 141); margin-top: 10px;">
-                    Cadastrar Disciplina
-                </button>
-            </form>
-        </div>
+    <section class="container">
+        <h2>Cadastro de Disciplina</h2>
+        <hr class="my-2">
+        <form id="disciplinaForm">
+            <div class="mb-3">
+                <label for="nomeDisciplina" class="form-label">Nome da Disciplina</label>
+                <input type="text" class="form-control" id="nomeDisciplina" name="nomeDisciplina" required>
+            </div>
+            <div class="mb-3">
+                <label for="valor" class="form-label">Valor</label>
+                <input type="number" class="form-control" id="valor" name="valor" required>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status" required>
+                    <option value="" disabled selected>Selecione o status</option>
+                    <option value="ativa">Ativa</option>
+                    <option value="inativa">Inativa</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="qntdAluno" class="form-label">Número de Alunos</label>
+                <input type="number" class="form-control" id="qntdAluno" name="qntdAluno" required>
+            </div>
+            <div class="mb-3">
+                <label for="idCurso" class="form-label">ID do Curso</label>
+                <input type="text" class="form-control" id="idCurso" name="idCurso" required>
+            </div>
+            <div class="mb-3">
+                <label for="periodo" class="form-label">Período</label>
+                <select class="form-select" id="periodo" name="periodo" required>
+                    <option value="" disabled selected>Selecione o período</option>
+                    <% for (let i=1; i <=8; i++) { %>
+                    <option value="<%= i %>">
+                        <%= i %>° período
+                    </option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="numCredito" class="form-label">Número de Créditos</label>
+                <select class="form-select" id="numCredito" name="numCredito" required>
+                    <option value="" disabled selected>Selecione o número de créditos</option>
+                    <option value="1">1 crédito</option>
+                    <option value="2">2 créditos</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="professorId" class="form-label">Professor</label>
+                <select class="form-select" id="professorId" name="professorId" required>
+                    <option value="" disabled selected>Selecione o professor</option>
+                    <!-- As opções serão preenchidas dinamicamente pelo JavaScript -->
+                </select>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn btn-primary">Cadastrar Disciplina</button>
+        </form>
     </section>
 
     <script>

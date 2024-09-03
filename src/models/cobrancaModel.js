@@ -23,7 +23,7 @@ class CobrancaModel {
     // Método para buscar todas as cobranças
     static getAll(callback) {
         const query = `
-            SELECT * FROM cobranca
+            SELECT status, dataInicio, dataFim, valor FROM cobranca
         `;
 
         connection.query(query, (err, results) => {
