@@ -3,8 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
 import { routes } from './routes/routes.js';
-import { DisciplinaRoute } from './routes/disciplinaRoute.js';
-import { OutrosRoute } from './routes/OutrosRoute.js';
+
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,8 +26,7 @@ app.get('/', (req, res) => {
 
 // Usar as rotas
 app.use('/api', routes);
-app.use('/api/disciplinas', DisciplinaRoute); // Usando a rota DisciplinaRoute
-app.use('/api/outros', OutrosRoute); // Usando a rota OutrosRoute
+
 
 app.use((request, response) => {
     response.status(404).send('Rota não encontrada');

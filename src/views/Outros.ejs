@@ -1,22 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include('./partials/head.ejs'); %>
     <style>
-        .section-header {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link {
+            color: white;
+        }
+
+        h4 {
+            text-align: center;
+            color: #73738d;
+            font-weight: bold;
             margin-bottom: 20px;
         }
 
-        .section-header h4 {
-            font-size: 1.5rem;
-            color: rgb(115, 115, 141);
+        hr {
+            margin: 20px 0;
         }
 
         .form-section {
             padding: 20px;
-            background-color: white;
+            background-color: #fff;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
@@ -25,13 +50,19 @@
         }
 
         .btn-primary {
-            background-color: rgb(115, 115, 141);
-            border: none;
+            width: 100%;
+            background-color: #73738d;
+            border-color: rgb(115, 115, 141);
+            margin-top: 10px;
             border-radius: 5px;
         }
 
-        .btn-primary:hover {
-            background-color: rgb(90, 90, 115);
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active {
+            background-color: #5f5f75;
+            border-color: #5f5f75;
+            color: white;
         }
 
         .form-group p {
@@ -46,16 +77,16 @@
         }
     </style>
 </head>
-<body class="container">
+
+<body>
     <header>
         <%- include('./partials/headerSecretaria'); %>
     </header>
+
     <section class="container mt-4">
         <!-- Alterar Período de Matrículas -->
         <div class="form-section">
-            <div class="section-header">
-                <h4>Alterar Período de Matrículas</h4>
-            </div>
+            <h4>Alterar Período de Matrículas</h4>
             <form id="matriculaForm">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-3">
@@ -79,9 +110,7 @@
 
         <!-- Alterar data de emissão de boletos -->
         <div class="form-section">
-            <div class="section-header">
-                <h4>Alterar data de emissão de boletos</h4>
-            </div>
+            <h4>Alterar data de emissão de boletos</h4>
             <form id="boletoForm">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-3">

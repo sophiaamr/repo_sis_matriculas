@@ -7,9 +7,9 @@ router.get('/', (req, res) => {
     res.render('Outros'); // Renderiza a página 'Outros.ejs'
 });
 
-router.get('/datas', getDates);
-router.post('/datas/matricula', updateMatriculaDates);
-router.post('/datas/boleto', updateBoletoDates);
-router.get('/matricula-dates', getMatriculaDates);
+router.get('/', getDates);
+router.post('/', updateMatriculaDates);
+router.post('/', updateBoletoDates);
+router.get('/', getMatriculaDates);
 
 export { router as OutrosRoute };
