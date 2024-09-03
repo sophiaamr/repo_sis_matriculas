@@ -74,15 +74,21 @@ ORDER BY U.nome;
     });
   }
 
-  async getDisciplinasByAlunoId(alunoId) {
+  static async getDisciplinasByAlunoId(idAluno) {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT disciplinas.nome 
-        FROM disciplinas 
-        JOIN matriculas ON disciplinas.id = matriculas.disciplina_id 
-        WHERE matriculas.aluno_id = ?`;
-      connection.query(query, [alunoId], (err, result) => {
-        if (err) reject(err);
+        SELECT 
+    d.idDisciplina, d.nomeDisciplina, d.periodo
+      FROM
+    Disciplina d
+        JOIN
+    Matricula m ON d.idDisciplina = m.idDisciplina
+      WHERE
+    m.idAluno = ?;`
+      connection.query(query, [idAluno], (err, result) => {
+        if (err) {
+          reject(err);
+        }
         resolve(result);
       });
     });

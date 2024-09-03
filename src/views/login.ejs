@@ -4,6 +4,23 @@
   <%- include('partials/head'); %>
 
   <style>
+
+body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     .login-box {
       width: 300px;
       padding: 20px;
@@ -31,17 +48,9 @@
   </style>
 </head>
 <body>
-<header>
-
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/api">Sistema de matrículas</a>
-    </div>
-  </nav>
-</header>
   
 <section class="login-box">
-  <h2>Login</h2>
+  <h2 style="color: #73738d;">Login</h2>
   <% if (typeof message !== 'undefined') { %>
     <p style="color: red;"><%= message %></p>
 <% } %>
