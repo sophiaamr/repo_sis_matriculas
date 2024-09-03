@@ -23,8 +23,11 @@
     <section class="form-section">
         <div class="container">
             <h2>Cadastro de Disciplina</h2>
+
+            
+
             <hr class="my-2">
-            <form id="disciplinaForm" action="/api/disciplinas/cadastrarDisciplinas" method="POST">
+            <form id="disciplinaForm">
                 <div class="mb-1">
                     <label for="nomeDisciplina" class="form-label">Nome da Disciplina</label>
                     <input type="text" class="form-control" id="nomeDisciplina" name="nomeDisciplina" required>
@@ -37,8 +40,8 @@
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" id="status" name="status" required>
                         <option value="" disabled selected>Selecione o status</option>
-                        <option value="ativo">Ativa</option>
-                        <option value="inativo">Inativa</option>
+                        <option value="ativa">Ativa</option>
+                        <option value="inativa">Inativa</option>
                     </select>
                 </div>
                 <div class="mb-1">
@@ -89,7 +92,7 @@
             const nomeDisciplina = document.getElementById('nomeDisciplina').value;
             const valor = document.getElementById('valor').value;
             const status = document.getElementById('status').value;
-            const qntdAluno = document.getElementById('numAlunos').value; // Alterei de 'qntdAluno' para 'numAlunos' para combinar com o ID do campo
+            const qntdAluno = document.getElementById('qntdAluno').value; // Alterei de 'qntdAluno' para 'numAlunos' para combinar com o ID do campo
             const idCurso = document.getElementById('idCurso').value;
             const periodo = document.getElementById('periodo').value;
             const numCredito = document.getElementById('numCredito').value;

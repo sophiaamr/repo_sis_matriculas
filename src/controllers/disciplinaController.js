@@ -1,16 +1,12 @@
-
 import DisciplinaModel from '../models/disciplinaModel.js';
 import AlunoModel from '../models/alunoModel.js';
 
-
 class DisciplinaController {
-
 
     // Método para exibir o formulário de cadastro de disciplinas
     showCadastroForm(req, res) {
         res.render('cadastrarDisciplinas'); // Renderiza a view 'cadastrarDisciplinas.ejs'
     }
-
 
     // Método para criar uma nova disciplina
     async create(req, res) {
@@ -18,25 +14,27 @@ class DisciplinaController {
             const data = req.body;
             DisciplinaModel.create(data, (err, result) => {
                 if (err) {
-                    return res.status(500).render('cadastrarDisciplinas', { 
+                    return res.status(500).json({ 
+                        success: false, 
                         message: 'Erro ao criar disciplina', 
-                        error: err 
+                        error: err.message 
                     });
                 }
                 
-                res.status(201).render('cadastrarDisciplinas', { 
+                res.status(201).json({ 
+                    success: true, 
                     message: 'Disciplina criada com sucesso', 
                     disciplina: result 
                 });
             });
         } catch (error) {
-            res.status(500).render('cadastrarDisciplinas', { 
+            res.status(500).json({ 
+                success: false, 
                 message: 'Erro interno do servidor', 
-                error 
+                error: error.message 
             });
         }
     }
-    
 
     // Método para obter todas as disciplinas
     async getAll(req, res) {
@@ -108,8 +106,6 @@ class DisciplinaController {
         }
     }
 
-    
-    
     // Método para obter disciplinas por curso e período
     async getDisciplinasByCursoAndPeriodo(req, res) {
         const { cursoId, periodo } = req.query;
@@ -124,7 +120,6 @@ class DisciplinaController {
             res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
-
 
     async getAlunosByDisciplina(req, res) {
         try {
@@ -151,13 +146,12 @@ class DisciplinaController {
 
             res.status(200).render('disciplinas', { disciplina, alunos });
         } catch (error) {
-            console.error('Erro ao lisyat disciplinas:', error.message);
+            console.error('Erro ao listar disciplinas:', error.message);
             res.status(500).render('disciplinas', {
                 message: "Erro interno do servidor"
             });
         }
     }
-
 
     async visualizarAlunos(req, res) {
         const { idDisciplina } = req.params;
@@ -190,11 +184,7 @@ class DisciplinaController {
             return res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
-    
-   
 
 }
-
-
 
 export { DisciplinaController };

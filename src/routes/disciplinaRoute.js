@@ -9,8 +9,6 @@ const disciplinaController = new DisciplinaController();
 
 router.get('/cadastrarDisciplinas', disciplinaController.showCadastroForm)
 router.post('/cadastrarDisciplinas', disciplinaController.create);
-//router.post('/', disciplinaController.create);    
-//router.post('/cadastrarDisciplinas', disciplinaController.create);    
 router.get('/', disciplinaController.getAll);        
 router.get('/:id', disciplinaController.getById);    
 router.put('/:id', disciplinaController.update);     
