@@ -7,8 +7,10 @@ import { DisciplinaController } from '../controllers/disciplinaController.js';
 const router = Router();
 const disciplinaController = new DisciplinaController();
 
-
-router.post('/', disciplinaController.create);        
+router.get('/cadastrarDisciplinas', disciplinaController.showCadastroForm)
+router.post('/cadastrarDisciplinas', disciplinaController.create);
+//router.post('/', disciplinaController.create);    
+//router.post('/cadastrarDisciplinas', disciplinaController.create);    
 router.get('/', disciplinaController.getAll);        
 router.get('/:id', disciplinaController.getById);    
 router.put('/:id', disciplinaController.update);     

@@ -68,6 +68,11 @@
   <div class="container">
     <h1>Currículo do Curso: <%= nome %></h1>
 
+    <div class="mb-3">
+        <button onclick="redirectToCadastroDisc()" class="btn btn-primary">Cadastrar Nova
+            Disciplina</button>
+    </div>
+
     <% if (disciplinas && disciplinas.length > 0) { %>
         <table>
             <thead>
@@ -95,6 +100,17 @@
         <p class="no-disciplina">Nenhuma disciplina encontrada para este curso.</p>
     <% } %>
   </div>
+
+
+  <script>
+     function redirectToCadastroDisc() {
+            window.location.href = "/api/disciplinas/cadastrarDisciplinas";
+            
+        
+        }
+
+        
+  </script>
 
 </body>
 </html>
