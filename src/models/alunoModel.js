@@ -12,27 +12,26 @@ class Aluno {
     const values = [data.idUsuario, data.matricula, data.periodo];
 
     connection.query(query, values, (err, results) => {
-        if (err) return callback(err);
-        callback(null, results);
+      if (err) return callback(err);
+      callback(null, results);
     });
-}
+  }
 
-getAll(callback) {
-  const query = `
+  getAll(callback) {
+    const query = `
       SELECT u.*, a.matricula, a.periodo
       FROM Usuario u
       JOIN Aluno a ON u.idUsuario = a.idUsuario
       WHERE u.tipo = 'aluno'
-  `;
+    `;
 
-  connection.query(query, (err, results) => {
+    connection.query(query, (err, results) => {
       if (err) return callback(err);
       callback(null, results);
-  });
-}
+    });
+  }
 
  
-
 
   static getByNumeroMatricula(numeroMatricula) {
     return new Promise((resolve, reject) => {
@@ -44,43 +43,27 @@ getAll(callback) {
     });
   }
 
-  
-  static getAlunosByDisciplina(disciplinaId, callback) {
+  static getAlunosByDisciplina(idDisciplina, callback) {
     const query = `
-      SELECT a.* FROM Aluno a
-      JOIN Matricula m ON a.idAluno = m.idAluno
-      WHERE m.idDisciplina = ?
+      SELECT U.nome AS Aluno, D.nomeDisciplina
+      FROM Matricula M
+      INNER JOIN Aluno A ON M.idAluno = A.idAluno
+      INNER JOIN Usuario U ON A.idUsuario = U.idUsuario
+      INNER JOIN Disciplina D ON M.idDisciplina = D.idDisciplina
+      WHERE M.idDisciplina = ?
+      ORDER BY U.nome;
     `;
 
-    connection.query(query, async (err, results) => {
+    connection.query(query, [idDisciplina], (err, results) => {
       if (err) {
         console.error('Erro ao buscar alunos:', err.message);
         return callback(err);
       }
 
-      // Mostrar alunos por disciplina
-      console.log('Alunos por disciplina:', results);
-
-      try {
-        const usuarioModel = new Usuario();
-        for (const aluno of results) {
-          const usuario = await new Promise((resolve, reject) => {
-            usuarioModel.getById(aluno.idUsuario, (err, result) => {
-              if (err) reject(err);
-              resolve(result);
-            });
-          });
-
-          // Mostrar dados do usuário associado ao aluno
-          console.log('Dados do usuário associado ao aluno:', usuario);
-        }
-      } catch (err) {
-        console.error('Erro ao buscar dados do usuário:', err.message);
-      }
-
       callback(null, results);
     });
-  }
+}
+
 
   getByUserId(userId, callback) {
     const query = `SELECT * FROM Aluno WHERE idUsuario = ?`;
@@ -88,23 +71,21 @@ getAll(callback) {
         if (err) return callback(err);
         callback(null, results[0]);
     });
-}
+  }
 
-async getDisciplinasByAlunoId(alunoId) {
+  async getDisciplinasByAlunoId(alunoId) {
     return new Promise((resolve, reject) => {
-        const query = `
-            SELECT disciplinas.nome 
-            FROM disciplinas 
-            JOIN matriculas ON disciplinas.id = matriculas.disciplina_id 
-            WHERE matriculas.aluno_id = ?`;
-        connection.query(query, [alunoId], (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-        });
+      const query = `
+        SELECT disciplinas.nome 
+        FROM disciplinas 
+        JOIN matriculas ON disciplinas.id = matriculas.disciplina_id 
+        WHERE matriculas.aluno_id = ?`;
+      connection.query(query, [alunoId], (err, result) => {
+        if (err) reject(err);
+        resolve(result);
+      });
     });
+  }
 }
-}
-
-
 
 export default Aluno;

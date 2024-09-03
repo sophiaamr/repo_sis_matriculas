@@ -13,7 +13,8 @@ router.get('/', disciplinaController.getAll);
 router.get('/:id', disciplinaController.getById);    
 router.put('/:id', disciplinaController.update);     
 router.delete('/:id', disciplinaController.delete);  
-// router.get('/:idDisciplina/alunos', disciplinaController.getAlunosByDisciplina);
+router.get('/:idDisciplina/alunos', disciplinaController.getAlunosByDisciplina);
+router.get('/:idDisciplina/visualizarAlunos', disciplinaController.visualizarAlunos);
 
 
 

@@ -21,11 +21,11 @@ CREATE TABLE IF NOT EXISTS Disciplina (
     status ENUM('ativa', 'inativa') NOT NULL,
     qntdAluno INT,
     idCurso INT,
+    numCredito INT,
     periodo INT,
     FOREIGN KEY (idCurso) REFERENCES Curso(idCurso) ON DELETE SET NULL
 );
-ALTER TABLE Disciplina
-ADD COLUMN numCredito INT;
+
 
 -- Tabela Curso
 CREATE TABLE IF NOT EXISTS Curso (
