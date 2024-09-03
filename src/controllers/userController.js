@@ -195,6 +195,26 @@ export class UserController {
         }
     }
 
+    async getAllProfessorsWithNamee(req, res) {
+        try {
+            const professorModel = new Professor();
+            const professores = await new Promise((resolve, reject) => {
+                professorModel.getAllProfessorsWithName((err, results) => {
+                    if (err) reject(err);
+                    resolve(results);
+                });
+            });
+    
+            console.log('Professores recuperados:', professores); // Isso deve mostrar os professores
+            return res.status(200).json(professores); // Retornando os dados em formato JSON
+        } catch (err) {
+            console.error('Erro ao buscar professores:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
+    
+    
+
     async createSecretaria(req, res) {
         const { nome, cpf, telefone, email, senha, departamento } = req.body;
 

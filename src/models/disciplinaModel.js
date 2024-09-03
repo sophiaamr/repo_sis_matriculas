@@ -7,7 +7,7 @@ class DisciplinaModel {
             INSERT INTO disciplina (nomeDisciplina, valor, status, qntdAluno, idCurso, periodo, numCredito)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
-        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito];
+        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, data.professorId];
 
         connection.query(query, values, (err, result) => {
             if (err) {
@@ -128,6 +128,17 @@ class DisciplinaModel {
                 return callback(err);
             }
             callback(null, results);
+        });
+    }
+    associateWithProfessor(disciplinaId, professorId, callback) {
+        const sql = `UPDATE Disciplina SET professorId = ? WHERE idDisciplina = ?`;
+        this.connection.query(sql, [professorId, disciplinaId], (err, result) => {
+            if (err) {
+                console.error('Erro ao associar disciplina ao professor:', err.message);
+                callback(err, null);
+                return;
+            }
+            callback(null, result);
         });
     }
     

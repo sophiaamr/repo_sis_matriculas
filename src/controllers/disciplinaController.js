@@ -200,6 +200,40 @@ class DisciplinaController {
             return res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
+    async associateWithProfessor(req, res) {
+        const { disciplinaId, professorId } = req.body;
+
+        if (!disciplinaId || !professorId) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "ID da disciplina e ID do professor são obrigatórios." 
+            });
+        }
+
+        try {
+            const disciplinaModel = new DisciplinaModel();
+            disciplinaModel.associateWithProfessor(disciplinaId, professorId, (err, result) => {
+                if (err) {
+                    return res.status(500).json({ 
+                        success: false, 
+                        message: "Erro ao associar disciplina ao professor", 
+                        error: err.message 
+                    });
+                }
+                res.status(200).json({ 
+                    success: true, 
+                    message: "Disciplina associada ao professor com sucesso", 
+                    result 
+                });
+            });
+        } catch (error) {
+            res.status(500).json({ 
+                success: false, 
+                message: "Erro interno do servidor", 
+                error: error.message 
+            });
+        }
+    }
 
 }
 

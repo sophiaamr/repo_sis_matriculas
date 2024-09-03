@@ -15,7 +15,8 @@ router.put('/:id', disciplinaController.update);
 router.delete('/:idDisciplina', disciplinaController.delete);  
 router.get('/:idDisciplina/alunos', disciplinaController.getAlunosByDisciplina);
 router.get('/:idDisciplina/visualizarAlunos', disciplinaController.visualizarAlunos);
-
+router.post('/associate', disciplinaController.associateWithProfessor);
+// router.get('/:idAluno/verDisciplinasCadastradas', disciplinaController.verDisciplinasCadastradas);
 
 
 
