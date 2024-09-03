@@ -30,7 +30,7 @@ class Secretaria {
   }
 
   getByUserId(userId, callback) {
-    const query = `SELECT * FROM ${this.tableName} WHERE usuario_id = ?`;
+    const query = `SELECT * FROM ${this.tableName} WHERE idUsuario = ?`;
     connection.query(query, [userId], (err, results) => {
       if (err) return callback(err);
       callback(null, results[0]);

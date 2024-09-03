@@ -42,6 +42,9 @@
   
 <section class="login-box">
   <h2>Login</h2>
+  <% if (typeof message !== 'undefined') { %>
+    <p style="color: red;"><%= message %></p>
+<% } %>
   <form id="loginForm" method="POST" action="/api/login/auth">
     <div class="mb-3">
       <input type="text" class="form-control" name="email" placeholder="Email" required>
@@ -54,6 +57,7 @@
   </form>
 </section>
 
+<script> </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

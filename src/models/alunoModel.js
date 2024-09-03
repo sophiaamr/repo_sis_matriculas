@@ -31,33 +31,7 @@ getAll(callback) {
   });
 }
 
-  getByUserId(userId, callback) {
-    const query = `SELECT * FROM ${this.tableName} WHERE idUsuario = ?`;
-    connection.query(query, [userId], async (err, results) => {
-      if (err) return callback(err);
-
-      // Mostrar aluno por ID
-      console.log('Aluno por ID:', results[0]);
-
-      try {
-        // Buscar dados do usuário
-        const usuarioModel = new Usuario();
-        const usuario = await new Promise((resolve, reject) => {
-          usuarioModel.getById(userId, (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-          });
-        });
-
-        // Mostrar dados do usuário
-        console.log('Dados do usuário:', usuario);
-      } catch (err) {
-        console.error('Erro ao buscar usuário:', err.message);
-      }
-
-      callback(null, results[0]);
-    });
-  }
+ 
 
 
   static getByNumeroMatricula(numeroMatricula) {
@@ -108,13 +82,11 @@ getAll(callback) {
     });
   }
 
-  async getByUserId(userId) {
-    return new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM aluno WHERE idUsuario = ?';
-        connection.query(query, [userId], (err, result) => {
-            if (err) reject(err);
-            resolve(result[0]);
-        });
+  getByUserId(userId, callback) {
+    const query = `SELECT * FROM Aluno WHERE idUsuario = ?`;
+    connection.query(query, [userId], (err, results) => {
+        if (err) return callback(err);
+        callback(null, results[0]);
     });
 }
 

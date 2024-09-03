@@ -10,5 +10,8 @@ router.delete('/:id', userController.deleteUser);
 router.put('/:id', userController.updateUserById);
 router.post('/auth', userController.login);
 router.get('/aluno', userController.getByNumeroMatricula);
+router.get('/perfil/aluno/:id', userController.showAlunoProfile);
+router.get('/perfil/professor/:id', userController.showProfessorProfile)
+router.get('/perfil/secretaria/:id', userController.showSecretariaProfile)
 
 export { router as UserRoute };

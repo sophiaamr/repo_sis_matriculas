@@ -1,5 +1,7 @@
 import { connection } from '../db/connection.js';
-
+import Aluno from './alunoModel.js';
+import Professor from './professorModel.js'
+import Secretaria from './secretariaModel.js'
 class Usuario {
   constructor() {
     this.tableName = 'Usuario';
@@ -47,14 +49,6 @@ class Usuario {
     });
   }
 
-  getById(id, callback) {
-    const query = `SELECT * FROM ${this.tableName} WHERE idUsuario = ?`;
-
-    connection.query(query, [id], (err, results) => {
-      if (err) return callback(err);
-      callback(null, results[0]);
-    });
-  }
 
   updateById(id, data, callback) {
     connection.beginTransaction((err) => {
@@ -125,7 +119,66 @@ class Usuario {
       callback(null, results[0]);
     });	7
   }
+  getById(userId, callback) {
+    const query = `SELECT * FROM ${this.tableName} WHERE idUsuario = ?`;
+    connection.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error('Erro ao buscar usuário:', err.message);
+            return callback(err);
+        }
 
+        if (results.length === 0) {
+            console.log('Nenhum usuário encontrado com esse ID.');
+            return callback(null, null); // Nenhum usuário encontrado
+        }
+
+        const usuario = results[0]; // Usuário básico encontrado
+
+        // Determinar o tipo de usuário e buscar dados adicionais
+        switch (usuario.tipo) {
+            case 'aluno':
+                const alunoModel = new Aluno();
+                alunoModel.getByUserId(userId, (err, alunoData) => {
+                    if (err) {
+                        console.error('Erro ao buscar dados do aluno:', err.message);
+                        return callback(err);
+                    }
+                    usuario.dadosEspecificos = alunoData; // Adiciona dados específicos ao objeto do usuário
+                    callback(null, usuario);
+                });
+                break;
+
+            case 'professor':
+                const professorModel = new Professor();
+                professorModel.getByUserId(userId, (err, professorData) => {
+                    if (err) {
+                        console.error('Erro ao buscar dados do professor:', err.message);
+                        return callback(err);
+                    }
+                    usuario.dadosEspecificos = professorData;
+                    callback(null, usuario);
+                });
+                break;
+
+            case 'secretaria':
+                const secretariaModel = new Secretaria();
+                secretariaModel.getByUserId(userId, (err, secretariaData) => {
+                    if (err) {
+                        console.error('Erro ao buscar dados da secretária:', err.message);
+                        return callback(err);
+                    }
+                    usuario.dadosEspecificos = secretariaData;
+                    callback(null, usuario);
+                });
+                break;
+
+            default:
+                console.log('Tipo de usuário desconhecido:', usuario.tipo);
+                callback(null, usuario); // Retorna apenas os dados básicos do usuário
+                break;
+        }
+    });
+}
 
   
 }

@@ -12,12 +12,12 @@ export class UserController {
 
 
     async login(req, res) {
-        const {email, senha } = req.body;
-
-        if (!email || !senha ) {
-            return res.status(400).render('login', { message: "Por favor, preencha todos os campos." });
+        const { email, senha } = req.body;
+    
+        if (!email || !senha) {
+            return res.status(400).json({ success: false, message: "Por favor, preencha todos os campos." });
         }
-
+    
         try {
             const usuarioModel = new Usuario();
             const usuario = await new Promise((resolve, reject) => {
@@ -26,39 +26,73 @@ export class UserController {
                     resolve(result);
                 });
             });
-
-            if (!usuario) {
-                return res.status(404).render('login', { message: "Usuário não encontrado." });
+    
+            if (!usuario || usuario.senha !== senha) {
+                return res.status(401).json({ success: false, message: "Email ou senha incorretos." });
             }
-
-            // Verifica a senha (considerando que esteja em texto plano, use hashing em produção)
-            if (usuario.senha !== senha) {
-                return res.status(401).render('login', { message: "Senha incorreta." });
-            }
-
-            // Verifica o tipo de usuário e redireciona
+    
             const tipo = usuario.tipo;
-          
-            let profilePath;
-
+    
+            // Redireciona para a rota correspondente ao tipo de usuário com dados do usuário
             switch (tipo) {
                 case "aluno":
-                    profilePath = 'perfil';
-                    break;
+                    return res.redirect(`/api/usuario/perfil/aluno/${usuario.idUsuario}`);
                 case "professor":
-                    profilePath = 'perfilProf';
-                    break;
+                    return res.redirect(`/api/usuario/perfil/professor/${usuario.idUsuario}`);
                 case "secretaria":
-                    profilePath = 'secretaria';
-                    break;
+                    return res.redirect(`/api/usuario/perfil/secretaria/${usuario.idUsuario}`);
+                default:
+                    return res.status(500).json({ success: false, message: "Tipo de usuário desconhecido." });
             }
-
-            return res.status(200).render(profilePath, { usuario: usuario});
-            
         } catch (err) {
             console.error('Erro ao realizar login:', err.message);
-            return res.status(500).render('login', { message: 'Erro interno do servidor' });
+            return res.status(500).json({ success: false, message: 'Erro interno do servidor' });
         }
+    }
+    
+    async showAlunoProfile(req, res) {
+        const { id } = req.params;
+        const usuarioModel = new Usuario();
+        usuarioModel.getById(id, (err, usuario) => {
+            if (err) {
+                console.error('Erro ao buscar dados do aluno:', err.message);
+                return res.status(500).send('Erro interno do servidor');
+            }
+            if (!usuario || usuario.tipo !== 'aluno') {
+                return res.status(404).send('Aluno não encontrado');
+            }
+            return res.render('perfil', { usuario });
+        });
+    }
+
+    async showProfessorProfile(req, res) {
+        const { id } = req.params;
+        const usuarioModel = new Usuario();
+        usuarioModel.getById(id, (err, usuario) => {
+            if (err) {
+                console.error('Erro ao buscar dados do professor:', err.message);
+                return res.status(500).send('Erro interno do servidor');
+            }
+            if (!usuario || usuario.tipo !== 'professor') {
+                return res.status(404).send('Professor não encontrado');
+            }
+            return res.render('perfilProf', { usuario });
+        });
+    }
+
+    async showSecretariaProfile(req, res) {
+        const { id } = req.params;
+        const usuarioModel = new Usuario();
+        usuarioModel.getById(id, (err, usuario) => {
+            if (err) {
+                console.error('Erro ao buscar dados do professor:', err.message);
+                return res.status(500).send('Erro interno do servidor');
+            }
+            if (!usuario || usuario.tipo !== 'secretaria') {
+                return res.status(404).send('Secretaria não encontrado');
+            }
+            return res.render('perfilSecretaria', { usuario });
+        });
     }
 
 
