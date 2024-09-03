@@ -6,10 +6,10 @@
         <title>Currículo do Curso <%= nome %>
         </title>
         <style>
+            .nav-link {
+                color: white;
+            }
 
-.nav-link {
-        color: white;
-      }
             .delete-icon {
                 color: red;
                 cursor: pointer;
@@ -90,11 +90,14 @@
     </header>
 
     <div class="container">
-        <h1>Currículo do Curso: <%= nome %>
+        <h1>Currículo do Curso: <strong>
+                <%= nome %>
+            </strong>
         </h1>
 
         <div class="mb-3">
-            <button style="background-color:#73738d;border-color:rgb(115, 115, 141); margin-top: 10px;" onclick="redirectToCadastroDisc()" class="btn btn-primary">Cadastrar Nova
+            <button style="background-color:#73738d;border-color:rgb(115, 115, 141); margin-top: 10px;"
+                onclick="redirectToCadastroDisc()" class="btn btn-primary">Cadastrar Nova
                 Disciplina</button>
         </div>
 
@@ -130,9 +133,10 @@
                             </td>
                             <td>
 
-                                <span class="delete-icon" onclick="deleteDisciplina('<%= disciplina.id %>')">
-                                    &#128465; <!-- ícone de lixeira -->
+                                <span class="delete-icon" onclick="deleteDisciplina(<%= disciplina.idDisciplina %>)">
+                                    &#128465;
                                 </span>
+
                             </td>
                         </tr>
                         <% }) %>
@@ -145,31 +149,40 @@
 
 
     <script>
+
         function redirectToCadastroDisc() {
             window.location.href = "/api/disciplinas/cadastrarDisciplinas";
         }
 
 
         function deleteDisciplina(idDisciplina) {
-    if (confirm('Você tem certeza que deseja excluir esta disciplina?')) {
-        fetch(`/api/disciplinas/${idDisciplina}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if (response.ok) {
-                alert('Disciplina excluída com sucesso!');
-                window.location.reload(); // Recarrega a página após exclusão
-            } else {
-                alert('Erro ao excluir disciplina.');
-            }
-        }).catch(error => {
-            console.error('Erro:', error);
-            alert('Erro ao excluir disciplina.');
-        });
-    }
-}
+
+            console.log('ID da Disciplina:', idDisciplina);
+
+            const deleteUrl = `/api/disciplinas/${idDisciplina}`;
+            console.log('URL de Exclusão:', deleteUrl);
+
+            fetch(deleteUrl, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Disciplina excluída com sucesso!');
+                        window.location.reload();
+                    } else {
+                        return response.json().then(data => {
+                            alert(`Erro ao excluir disciplina: ${data.error || 'Erro desconhecido'}`);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao excluir disciplina.');
+                });
+        }
 
 
 

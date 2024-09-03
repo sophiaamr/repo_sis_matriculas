@@ -70,19 +70,20 @@ class DisciplinaModel {
     }
 
     // Método para deletar uma disciplina pelo ID
-    static delete(id, callback) {
+    static delete(idDisciplina, callback) {
         const query = 'DELETE FROM disciplina WHERE idDisciplina = ?';
 
-        connection.query(query, [id], (err, result) => {
+        connection.query(query, [idDisciplina], (err, result) => {
             if (err) {
                 console.error('Erro ao deletar disciplina:', err.message);
                 return callback(err);
             }
+            if(result.affectedRows === 0) { 
+                return callback(new Error('Disciplina não encontrada'));
+            }
             callback(null, result);
         });
     }
-
-
 
 
     static getDisciplinasByCurso(cursoId, callback) {

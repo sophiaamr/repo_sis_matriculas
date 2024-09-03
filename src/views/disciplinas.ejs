@@ -3,81 +3,105 @@
 
 <head>
   <%- include('partials/head'); %>
+<title>Disciplinas</title>
+  <style>
+    .nav-link {
+      color: white;
+    }
 
-    <style>
-      .nav-link {
-        color: white;
+    .hidden {
+      display: none;
+    }
+
+    .row {
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .card-title {
+      color: #73738d;
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background-color: #73738d;
+      border-color: rgb(115, 115, 141);
+      margin-top: 10px;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active {
+      background-color: #5f5f75;
+      border-color: #5f5f75;
+      color: white;
+    }
+
+    /* Estilos para telas menores que 1340px */
+    @media (max-width: 1340px) {
+      .col-4 {
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
       }
+    }
 
-      .hidden {
-        display: none;
+    /* Estilos para telas menores que 430px */
+    @media (max-width: 430px) {
+      .col-4 {
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
       }
-
-      /* Estilos para telas menores que 1340px */
-      @media (max-width: 1340px) {
-
-        .col-2,
-        .col-3,
-        .col-4,
-        .col-9 {
-          flex: 1 1 100%;
-          max-width: 100%;
-        }
-
-        .card {
-          width: 100%;
-          margin-bottom: 20px;
-          /* Espaçamento entre os cards em telas menores */
-        }
-
-        .container.col-3 {
-          margin-top: 20px;
-          /* Espaçamento superior quando a coluna é colocada abaixo dos cards */
-        }
-      }
-
-      /* Estilos para telas menores que 430px */
-      @media (max-width: 430px) {
-        .col-5 {
-          flex: 1 1 100%;
-          max-width: 100%;
-          margin-top: 20px;
-        }
-      }
-    </style>
+    }
+  </style>
 </head>
 
-<body class="container">
+<body class="container-fluid">
   <header>
     <%- include('partials/headerProf'); %>
   </header>
 
   <section>
-    <div class="row">
-      <div class="col-12 mt-3">
+    <div class="row mt-3">
+      <div class="col-12">
         <div class="row mb-3">
-          <% disciplinas.forEach(disciplina=> { %>
-            <div class="col-4 mb-3">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">
-                    <%= disciplina.nomeDisciplina %>
-                  </h5>
-                  <p class="card-text">
-                    <%= disciplina.nomeCurso %>
-                  </p>
-                  <p class="card-text">
-                    <%= disciplina.periodo %>° período
-                  </p>
-                  <button style="background-color:#73738d;border-color:rgb(115, 115, 141); margin-top: 10px;" onclick="redirectToAlunos(<%= disciplina.idDisciplina %>)" class="btn btn-primary" >Ver
-                    Alunos</button>
-                </div>
+          <% disciplinas.forEach(disciplina => { %>
+          <div class="col-md-4 col-sm-6">
+            <div class="card  mb-3">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <%= disciplina.nomeDisciplina %>
+                </h5>
+                <p class="card-text">
+                  <%= disciplina.nomeCurso %>
+                </p>
+                <p class="card-text">
+                  <%= disciplina.periodo %>° período
+                </p>
+                <button onclick="redirectToAlunos(<%= disciplina.idDisciplina %>)" class="btn btn-primary">Ver
+                  Alunos</button>
               </div>
             </div>
-            <% }); %>
+          </div>
+          <% }); %>
         </div>
       </div>
-
     </div>
   </section>
 
