@@ -4,23 +4,42 @@ import AlunoModel from '../models/alunoModel.js';
 
 
 class DisciplinaController {
+
+
+    // Método para exibir o formulário de cadastro de disciplinas
+    showCadastroForm(req, res) {
+        res.render('cadastrarDisciplinas'); // Renderiza a view 'cadastrarDisciplinas.ejs'
+    }
+
+
     // Método para criar uma nova disciplina
     async create(req, res) {
         try {
             const data = req.body;
             DisciplinaModel.create(data, (err, result) => {
                 if (err) {
-                    return res.status(500).json({ error: 'Erro ao criar disciplina' });
+                    return res.status(500).render('cadastrarDisciplinas', { 
+                        message: 'Erro ao criar disciplina', 
+                        error: err 
+                    });
                 }
-                res.status(201).json({ message: 'Disciplina criada com sucesso', result });
+                
+                res.status(201).render('cadastrarDisciplinas', { 
+                    message: 'Disciplina criada com sucesso', 
+                    disciplina: result 
+                });
             });
         } catch (error) {
-            res.status(500).json({ error: 'Erro interno do servidor' });
+            res.status(500).render('cadastrarDisciplinas', { 
+                message: 'Erro interno do servidor', 
+                error 
+            });
         }
     }
+    
 
     // Método para obter todas as disciplinas
-    async getAll(request, response) {
+    async getAll(req, res) {
         try {
             const disciplinas = await new Promise((resolve, reject) => {
                 DisciplinaModel.getAll((err, result) => {
@@ -31,17 +50,14 @@ class DisciplinaController {
                 });
             });
 
-            return response.status(200).render('disciplinas', { disciplinas });
+            return res.status(200).render('disciplinas', { disciplinas });
         } catch (error) {
             console.error('Erro ao buscar disciplinas:', error.message);
-            return response.status(500).render('disciplinas', {
+            return res.status(500).render('disciplinas', {
                 message: "Erro interno do servidor"
             });
         }
     }
-
-
-
 
     // Método para obter uma disciplina pelo ID
     async getById(req, res) {
@@ -175,6 +191,7 @@ class DisciplinaController {
         }
     }
     
+   
 
 }
 
