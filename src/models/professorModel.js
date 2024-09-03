@@ -36,6 +36,24 @@ class Professor {
       callback(null, results[0]);
     });
   }
+
+  getAllProfessorsWithName(callback) {
+    const query = `
+        SELECT u.idUsuario, u.nome
+        FROM Usuario u
+        JOIN Professor p ON u.idUsuario = p.idUsuario
+        WHERE u.tipo = 'professor'
+    `;
+
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Erro ao executar a query:', err);
+            return callback(err); // Certifique-se de que o erro é tratado
+        }
+        console.log('Resultados da query:', results); // Isso deve mostrar os resultados
+        callback(null, results); // Certifique-se de que os resultados estão sendo passados
+    });
+}
 }
 
 export default Professor;
