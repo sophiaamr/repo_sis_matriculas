@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <head>
+  <title>Cadastro de Usuário</title>
   <%- include('partials/head'); %>
 
   <style>
@@ -80,81 +81,75 @@
   </style>
 </head>
 
-<body class="container-fluid">
+<body>
    <header>
        <%- include('partials/headerSecretaria'); %>
    </header>
+   <section class="form-section">
+    <div class="container">
+      <h2>Cadastro de usuário</h2>
+      <hr class="my-2">
+      <form id="userForm" action="/api/alunos/" method="POST">
+        <div class="mb-1">
+          <label for="userType" class="form-label">Tipo de Usuário</label>
+          <select class="form-select" id="userType" name="tipo" required>
+            <option value="" disabled selected>Selecione o tipo de usuário</option>
+            <option value="aluno">Aluno</option>
+            <option value="professor">Professor</option>
+          </select>
+        </div>
+        <div class="mb-1">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+        <div class="mb-1">
+          <label for="cpf" class="form-label">CPF</label>
+          <input type="text" class="form-control" id="cpf" name="cpf" required>
+        </div>
+        <div class="mb-1">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-1">
+          <label for="telefone" class="form-label">Telefone</label>
+          <input type="tel" class="form-control" id="telefone" name="telefone" required>
+        </div>
+        <div class="mb-1">
+          <label for="senha" class="form-label">Senha</label>
+          <input type="password" class="form-control" id="senha" name="senha" required>
+        </div>
 
-   <section class="container">
-       <h2>Cadastro de usuário</h2>
-       <hr class="my-2">
-       <form id="userForm" action="/api/alunos/" method="POST">
-           <div class="mb-3">
-               <label for="userType" class="form-label">Tipo de Usuário</label>
-               <select class="form-select" id="userType" name="tipo" required>
-                   <option value="" disabled selected>Selecione o tipo de usuário</option>
-                   <option value="aluno">Aluno</option>
-                   <option value="professor">Professor</option>
-               </select>
-           </div>
-           <div class="mb-3">
-               <label for="nome" class="form-label">Nome</label>
-               <input type="text" class="form-control" id="nome" name="nome" required>
-           </div>
-           <div class="mb-3">
-               <label for="cpf" class="form-label">CPF</label>
-               <input type="text" class="form-control" id="cpf" name="cpf" required>
-           </div>
-           <div class="mb-3">
-               <label for="email" class="form-label">Email</label>
-               <input type="email" class="form-control" id="email" name="email" required>
-           </div>
-           <div class="mb-3">
-               <label for="telefone" class="form-label">Telefone</label>
-               <input type="tel" class="form-control" id="telefone" name="telefone" required>
-           </div>
-           <div class="mb-3">
-               <label for="senha" class="form-label">Senha</label>
-               <input type="password" class="form-control" id="senha" name="senha" required>
-           </div>
 
-           <!-- campo adicional aluno -->
-           <div class="mb-3 hidden" id="matriculaField">
-               <label for="matricula" class="form-label">Matrícula</label>
-               <input type="text" class="form-control" id="matricula" name="matricula">
-           </div>
-           <div class="mb-3 hidden" id="periodoField">
-               <label for="periodo" class="form-label">Período</label>
-               <input type="text" class="form-control" id="periodo" name="periodo">
-           </div>
+        <!-- campo adicional aluno -->
+        <div class="mb-1 hidden" id="matriculaField">
+          <label for="matricula" class="form-label">Matrícula</label>
+          <input type="text" class="form-control" id="matricula" name="matricula">
+        </div>
+        <div class="mb-1 hidden" id="periodoField">
+          <label for="periodo" class="form-label">Período</label>
+          <input type="text" class="form-control" id="periodo" name="periodo">
+        </div>
 
-           <!-- campo adicional professor -->
-           <div class="mb-3 hidden" id="cargaHorarioField">
-               <label for="cargaHorario" class="form-label">Carga Horária</label>
-               <input type="text" class="form-control" id="cargaHorario" name="cargaHorario">
-           </div>
 
-           <button type="submit" id="submitBtn" class="btn btn-primary">Cadastrar</button>
-       </form>
-   </section>
+        <!-- campo adicional prof -->
+        <div class="mb-1 hidden" id="cargaHorarioField">
+          <label for="cargaHorario" class="form-label">Carga Horária</label>
+          <input type="text" class="form-control" id="cargaHorario" name="cargaHorario">
+        </div>
 
-    
-
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
-
+        <button type="submit" id="submitBtn" class="btn btn-primary"
+          style="width: 100%;background-color:rgb(115, 115, 141);border-color:rgb(115, 115, 141); margin-top: 10px;">Cadastrar</button>
+      </form>
 
       <script>
         document.getElementById('userType').addEventListener('change', function () {
           const form = document.getElementById('userForm');
           const submitBtn = document.getElementById('submitBtn');
           const userType = this.value;
-
         
           document.getElementById('matriculaField').classList.add('hidden');
           document.getElementById('periodoField').classList.add('hidden');
           document.getElementById('cargaHorarioField').classList.add('hidden');
-
           if (userType === 'aluno') {
             form.action = '/api/alunos';
             submitBtn.textContent = 'Cadastrar Aluno';
@@ -166,20 +161,9 @@
             document.getElementById('cargaHorarioField').classList.remove('hidden');
           }
         });
-
-
-
-        $(document).ready(function () {
-          var $cpf = $("#cpf");
-          var $telefone = $("#telefone");
-          $cpf.mask('000.000.000-00', { reverse: true });
-          $telefone.mask('(00) 00000-0000');
-        });
-
       </script>
-  
+
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-</body>
-
-</html>
+    </body>
+    </html>
