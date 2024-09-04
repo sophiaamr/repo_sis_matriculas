@@ -95,7 +95,7 @@ class DisciplinaController {
     async delete(req, res) {
         console.log('Parâmetros recebidos:', req.params); // Adicione este log
         
-        const idDisciplina = parseInt(req.params.id, 10);
+        const idDisciplina = req.params.idDisciplina;
     
         if (isNaN(idDisciplina)) {
             console.log('ID inválido:', req.params.id); // Log adicional

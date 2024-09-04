@@ -80,6 +80,65 @@
                 text-align: center;
                 font-style: italic;
             }
+            .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            max-width: 500px; 
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            text-align: right;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-confirm {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
         </style>
 </head>
 
@@ -110,7 +169,7 @@
                         <th>Valor</th>
                         <th>Status</th>
                         <th>Número de Créditos</th>
-                        <th>Professor</th> <!-- Nova coluna para o professor -->
+                        <th>Professor</th> 
                         <th></th>
                     </tr>
                 </thead>
@@ -135,7 +194,7 @@
                             <td><%= disciplina.nomeProfessor || 'Não atribuído' %></td>
                             <td>
 
-                                <span class="delete-icon" onclick="deleteDisciplina(<%= disciplina.idDisciplina %>)">
+                                <span class="delete-icon" onclick="openModal(<%= disciplina.idDisciplina %>)">
                                     &#128465;
                                 </span>
 
@@ -148,17 +207,45 @@
                 <p class="no-disciplina">Nenhuma disciplina encontrada para este curso.</p>
                 <% } %>
     </div>
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p>Você tem certeza que deseja excluir esta disciplina?</p>
+            <div class="modal-buttons">
+                <button class="btn-confirm" onclick="confirmDeletion()">Sim</button>
+                <button class="btn-cancel" onclick="closeModal()">Não</button>
+            </div>
+        </div>
+    </div>
 
 
     <script>
 
-        function redirectToCadastroDisc() {
+function redirectToCadastroDisc() {
+    
             window.location.href = "/api/disciplinas/cadastrarDisciplinas";
         }
 
+let disciplinaIdToDelete = null;
+
+        function openModal(idDisciplina) {
+            disciplinaIdToDelete = idDisciplina;
+            document.getElementById('confirmationModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+            disciplinaIdToDelete = null;
+        }
+
+        function confirmDeletion() {
+            if (disciplinaIdToDelete !== null) {
+                deleteDisciplina(disciplinaIdToDelete);
+            }
+            closeModal();
+        }
 
         function deleteDisciplina(idDisciplina) {
-
             console.log('ID da Disciplina:', idDisciplina);
 
             const deleteUrl = `/api/disciplinas/${idDisciplina}`;
