@@ -39,10 +39,10 @@ class Professor {
 
   getAllProfessorsWithName(callback) {
     const query = `
-        SELECT u.idUsuario, u.nome
-        FROM Usuario u
-        JOIN Professor p ON u.idUsuario = p.idUsuario
-        WHERE u.tipo = 'professor'
+         SELECT p.idProfessor, u.nome
+            FROM Professor p
+            JOIN Usuario u ON p.idUsuario = u.idUsuario
+            WHERE u.tipo = 'professor'
     `;
 
     connection.query(query, (err, results) => {

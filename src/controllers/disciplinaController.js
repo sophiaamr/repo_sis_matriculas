@@ -200,10 +200,34 @@ class DisciplinaController {
             return res.status(500).json({ error: 'Erro interno do servidor' });
         }
     }
-    async associateWithProfessor(req, res) {
-        const { disciplinaId, professorId } = req.body;
 
-        if (!disciplinaId || !professorId) {
+    async getAllWithProfessorInfo(req, res) {
+        try {
+            const disciplinas = await new Promise((resolve, reject) => {
+                DisciplinaModel.getAllWithProfessorInfo((err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(result);
+                });
+            });
+
+            return res.status(200).render('disciplinas', { disciplinas });
+        } catch (error) {
+            console.error('Erro ao buscar disciplinas com informações do professor:', error.message);
+            return res.status(500).render('disciplinas', {
+                message: "Erro interno do servidor"
+            });
+
+        }
+    }
+
+
+
+    async associateWithProfessor(req, res) {
+        const { idDisciplina, idProfessor } = req.body;
+
+        if (!idDisciplina || !idProfessor) {
             return res.status(400).json({ 
                 success: false, 
                 message: "ID da disciplina e ID do professor são obrigatórios." 
@@ -211,8 +235,8 @@ class DisciplinaController {
         }
 
         try {
-            const disciplinaModel = new DisciplinaModel();
-            disciplinaModel.associateWithProfessor(disciplinaId, professorId, (err, result) => {
+            //const disciplinaModel = new DisciplinaModel();
+            DisciplinaModel.associateWithProfessor(idDisciplina, idProfessor, (err, result) => {
                 if (err) {
                     return res.status(500).json({ 
                         success: false, 

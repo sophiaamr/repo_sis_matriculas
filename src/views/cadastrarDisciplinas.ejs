@@ -140,8 +140,8 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="professorId" class="form-label">Professor</label>
-                <select class="form-select" id="professorId" name="professorId" required>
+                <label for="idProfessor" class="form-label">Professor</label>
+                <select class="form-select" id="idProfessor" name="idProfessor" required>
                     <option value="" disabled selected>Selecione o professor</option>
                     <!-- As opções serão preenchidas dinamicamente pelo JavaScript -->
                 </select>
@@ -154,14 +154,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
-            fetch('/api/professores/professorname')
+            fetch('/api/professores/nomeProfessor')
                 .then(response => response.json())
                 .then(professores => {
-                    const professorSelect = document.getElementById('professorId');
+                    const professorSelect = document.getElementById('idProfessor');
                     if (professores.length > 0) {
                         professores.forEach(professor => {
                             const option = document.createElement('option');
-                            option.value = professor.idUsuario;
+                            option.value = professor.idProfessor;
                             option.textContent = professor.nome;
                             professorSelect.appendChild(option);
                         });
@@ -189,9 +189,9 @@
             const idCurso = document.getElementById('idCurso').value;
             const periodo = document.getElementById('periodo').value;
             const numCredito = document.getElementById('numCredito').value;
-            const professorId = document.getElementById('professorId').value;
+            const idProfessor = document.getElementById('idProfessor').value;
 
-            if (!nomeDisciplina || !valor || !status || !qntdAluno || !idCurso || !periodo || !numCredito || !professorId) {
+            if (!nomeDisciplina || !valor || !status || !qntdAluno || !idCurso || !periodo || !numCredito || !idProfessor) {
                 alert('Por favor, preencha todos os campos obrigatórios.');
                 return;
             }
@@ -204,7 +204,7 @@
                 idCurso: idCurso,
                 periodo: periodo,
                 numCredito: numCredito,
-                professorId: professorId
+                idProfessor: idProfessor
             };
 
             fetch('/api/disciplinas/cadastrarDisciplinas', {

@@ -110,6 +110,7 @@
                         <th>Valor</th>
                         <th>Status</th>
                         <th>Número de Créditos</th>
+                        <th>Professor</th> <!-- Nova coluna para o professor -->
                         <th></th>
                     </tr>
                 </thead>
@@ -131,6 +132,7 @@
                             <td>
                                 <%= disciplina.numCredito %>
                             </td>
+                            <td><%= disciplina.nomeProfessor || 'Não atribuído' %></td>
                             <td>
 
                                 <span class="delete-icon" onclick="deleteDisciplina(<%= disciplina.idDisciplina %>)">

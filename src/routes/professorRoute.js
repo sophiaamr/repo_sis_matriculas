@@ -6,7 +6,7 @@ const userController = new UserController();
 
 router.post('/', userController.createProfessor);
 router.get('/', userController.getAllProfessors);
-router.get('/professorname', userController.getAllProfessorsWithNamee);
+router.get('/nomeProfessor', userController.getAllProfessorsWithNamee);
 router.get('/:id', userController.getById);
 router.delete('/:id', userController.deleteUser);
 router.put('/:id', userController.updateUserById);

@@ -4,10 +4,10 @@ class DisciplinaModel {
     // Método para criar uma nova disciplina
     static create(data, callback) {
         const query = `
-            INSERT INTO disciplina (nomeDisciplina, valor, status, qntdAluno, idCurso, periodo, numCredito)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO disciplina (nomeDisciplina, valor, status, qntdAluno, idCurso, periodo, numCredito, idProfessor)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, data.professorId];
+        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, data.idProfessor];
 
         connection.query(query, values, (err, result) => {
             if (err) {
@@ -35,9 +35,6 @@ class DisciplinaModel {
         });
     }
 
-
-
-
     // Método para buscar uma disciplina pelo ID
     static getById(id, callback) {
         const query = 'SELECT * FROM disciplina WHERE idDisciplina = ?';
@@ -58,7 +55,7 @@ class DisciplinaModel {
             SET nomeDisciplina = ?, valor = ?, status = ?, qntdAluno = ?, idCurso = ?, periodo = ?, numCredito = ?
             WHERE idDisciplina = ?
         `;
-        const values = [data.nomeDisciplina, data.valor, data.status, data.tipo, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, id];
+        const values = [data.nomeDisciplina, data.valor, data.status, data.qntdAluno, data.idCurso, data.periodo, data.numCredito, id];
 
         connection.query(query, values, (err, result) => {
             if (err) {
@@ -78,21 +75,41 @@ class DisciplinaModel {
                 console.error('Erro ao deletar disciplina:', err.message);
                 return callback(err);
             }
-            if(result.affectedRows === 0) { 
+            if (result.affectedRows === 0) {
                 return callback(new Error('Disciplina não encontrada'));
             }
             callback(null, result);
         });
     }
 
-
+    // Método para buscar disciplinas por curso
     static getDisciplinasByCurso(cursoId, callback) {
         const query = `
-             SELECT c.nome, d.periodo, d.nomeDisciplina, d.valor, d.status, d.qntdAluno, d.numCredito
-        FROM disciplina d
-        JOIN curso c ON d.idCurso = c.idCurso
-        WHERE d.idCurso = ?
-        ORDER BY d.periodo ASC
+       SELECT 
+    d.idDisciplina, 
+    d.nomeDisciplina, 
+    d.valor, 
+    d.status, 
+    d.qntdAluno, 
+    d.idCurso, 
+    c.nome AS nome, 
+    d.periodo, 
+    d.numCredito, 
+    d.idProfessor, 
+    u.nome AS nomeProfessor 
+FROM 
+    Disciplina d
+JOIN 
+    Curso c ON d.idCurso = c.idCurso
+LEFT JOIN 
+    Professor p ON d.idProfessor = p.idProfessor
+LEFT JOIN 
+    Usuario u ON p.idUsuario = u.idUsuario
+WHERE 
+    d.idCurso = ?
+ORDER BY 
+    d.periodo ASC;
+
         `;
 
         connection.query(query, [cursoId], (err, results) => {
@@ -104,7 +121,7 @@ class DisciplinaModel {
         });
     }
 
-
+    // Método para buscar disciplinas por aluno
     static getDisciplinasByAluno(idAluno, callback) {
         const query = `
             SELECT 
@@ -121,7 +138,7 @@ class DisciplinaModel {
             WHERE 
                 a.idAluno = ?;  
         `;
-    
+
         connection.query(query, [idAluno], (err, results) => {
             if (err) {
                 console.error('Erro ao buscar disciplinas por aluno:', err.message);
@@ -130,21 +147,50 @@ class DisciplinaModel {
             callback(null, results);
         });
     }
-    associateWithProfessor(disciplinaId, professorId, callback) {
-        const sql = `UPDATE Disciplina SET professorId = ? WHERE idDisciplina = ?`;
-        this.connection.query(sql, [professorId, disciplinaId], (err, result) => {
+
+    // Método para buscar todas as informações dos professores associados às disciplinas
+    static getAllProfInfo(callback) {
+        const query = `
+            SELECT 
+                d.idDisciplina,
+                d.nomeDisciplina,
+                d.valor,
+                d.status,
+                d.qntdAluno,
+                d.periodo,
+                d.numCredito,
+                c.nome AS nomeCurso,
+                u.nome AS nomeProfessor
+            FROM 
+                Disciplina d
+            JOIN 
+                Curso c ON d.idCurso = c.idCurso
+            LEFT JOIN 
+                Professor p ON d.idProfessor = p.idProfessor
+            LEFT JOIN 
+                Usuario u ON p.idUsuario = u.idUsuario;
+        `;
+
+        connection.query(query, (err, results) => {
+            if (err) {
+                console.error('Erro ao buscar disciplinas com informações do professor:', err.message);
+                return callback(err);
+            }
+            callback(null, results);
+        });
+    }
+
+    // Método para associar uma disciplina a um professor
+    static associateWithProfessor(idDisciplina, idProfessor, callback) {
+        const query = `UPDATE Disciplina SET idProfessor = ? WHERE idDisciplina = ?`;
+        connection.query(query, [idProfessor, idDisciplina], (err, result) => {
             if (err) {
                 console.error('Erro ao associar disciplina ao professor:', err.message);
-                callback(err, null);
-                return;
+                return callback(err);
             }
             callback(null, result);
         });
     }
-    
 }
-
-
-
 
 export default DisciplinaModel;
