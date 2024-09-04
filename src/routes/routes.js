@@ -10,7 +10,6 @@ import { SecretariaRoute } from './secretariaRoute.js';
 import { CurriculoRoute } from './curriculoRoute.js';
 import { OutrosRoute } from './OutrosRoute.js';
 
-
 const routes = Router();
 
 routes.use('/matricula', MatriculaRoute);
@@ -24,6 +23,5 @@ routes.use('/secretarias', SecretariaRoute);
 routes.use('/curriculo', CurriculoRoute);
 routes.use('/login', UserRoute);
 routes.use('/outros', OutrosRoute);
-
 
 export { routes };

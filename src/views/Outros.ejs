@@ -152,75 +152,73 @@
     </div>
 
     <script>
-      // Form submission for Matricula
-document.getElementById('matriculaForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = {
-        startDate: formData.get('startDate'),
-        endDate: formData.get('endDate')
-    };
-
-    try {
-        const response = await fetch('/api/Outros/datas/matricula', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+        // Form submission for Matricula
+        document.getElementById('matriculaForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {
+                startDate: formData.get('startDate'),
+                endDate: formData.get('endDate')
+            };
+      
+            try {
+                const response = await fetch('/api/Outros/matricula-dates', { // Alterar a rota para '/matricula-dates'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+      
+                if (response.ok) {
+                    const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                    confirmationModal.show();
+                } else {
+                    const error = await response.json();
+                    console.error('Erro ao alterar datas de matrícula:', error);
+                    alert('Erro ao alterar datas de matrícula: ' + error.error);
+                }
+            } catch (err) {
+                console.error('Erro ao enviar dados de matrícula:', err);
+                alert('Erro ao alterar datas de matrícula.');
+            }
         });
-
-        if (response.ok) {
-            const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-            confirmationModal.show();
-        } else {
-            const error = await response.json();
-            console.error('Erro ao alterar datas de matrícula:', error);
-            alert('Erro ao alterar datas de matrícula: ' + error.error);
-        }
-    } catch (err) {
-        console.error('Erro ao enviar dados de matrícula:', err);
-        alert('Erro ao alterar datas de matrícula.');
-    }
-});
-
-// Form submission for Boleto
-document.getElementById('boletoForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = {
-    faturaDate: formData.get('faturaDate'),
-    dataDeVencimento: formData.get('dataDeVencimento')
-};
-
-
-
-    try {
-        const response = await fetch('/api/Outros/datas/boleto', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+      
+        // Form submission for Boleto
+        document.getElementById('boletoForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const data = {
+                faturaDate: formData.get('faturaDate'),
+                dataDeVencimento: formData.get('dataDeVencimento')
+            };
+      
+            try {
+                const response = await fetch('/api/Outros/boleto-dates', { // Alterar a rota para '/boleto-dates'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+      
+                if (response.ok) {
+                    const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                    confirmationModal.show();
+                } else {
+                    const error = await response.json();
+                    console.error('Erro ao alterar datas de boletos:', error);
+                    alert('Erro ao alterar datas de boletos: ' + error.error);
+                }
+            } catch (err) {
+                console.error('Erro ao enviar dados de boletos:', err);
+                alert('Erro ao alterar datas de boletos.');
+            }
         });
-
-        if (response.ok) {
-            const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-            confirmationModal.show();
-        } else {
-            const error = await response.json();
-            console.error('Erro ao alterar datas de boletos:', error);
-            alert('Erro ao alterar datas de boletos: ' + error.error);
-        }
-    } catch (err) {
-        console.error('Erro ao enviar dados de boletos:', err);
-        alert('Erro ao alterar datas de boletos.');
-    }
-});
-
-    </script>
+      </script>
+      
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>

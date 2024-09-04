@@ -4,12 +4,12 @@ import { getDates, updateMatriculaDates, updateBoletoDates, getMatriculaDates } 
 const router = Router();
 
 router.get('/', (req, res) => {
-    res.render('Outros'); // Renderiza a página 'Outros.ejs'
+    res.render('Outros'); 
 });
 
-router.get('/', getDates);
-router.post('/', updateMatriculaDates);
-router.post('/', updateBoletoDates);
-router.get('/', getMatriculaDates);
+router.get('/dates', getDates);
+router.post('/matricula-dates', updateMatriculaDates);
+router.post('/boleto-dates', updateBoletoDates);
+router.get('/matricula-dates', getMatriculaDates);
 
 export { router as OutrosRoute };
