@@ -7,6 +7,10 @@ class Usuario {
     this.tableName = 'Usuario';
   }
 
+/*Nomes de variáveis e métodos: Embora existam boas práticas em alguns locais, há inconsistências na
+nomenclatura, com mistura de inglês e português.(front e back, este é um exemplo de codigo onde isso 
+acontece, porém a maioria tem essa inconsistência) */
+
   create(data, callback) {
     const query = `INSERT INTO ${this.tableName} (nome, cpf, telefone, email, senha, tipo) VALUES (?, ?, ?, ?, ?, ?)`;
     const values = [data.nome, data.cpf, data.telefone, data.email, data.senha, data.tipo];

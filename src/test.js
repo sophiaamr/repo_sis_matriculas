@@ -70,3 +70,13 @@ const createSecretaria = (nome, cpf, telefone, email, senha, departamento) => {
 createAluno('João', '12345678901', '11987654321', 'joao@example.com', 'senha123', '123456');
 createProfessor('Maria', '98765432101', '11987654322', 'maria@example.com', 'senha123', 20);
 createSecretaria('Carlos', '45678912301', '11987654323', 'carlos@example.com', 'senha123', 'Administração');
+
+/*Os testes apresentados nas funções createAluno, createProfessor e createSecretaria são um bom ponto 
+de partida, mas não são suficientes para cobrir todas as funcionalidades do sistema. Os testes então
+devem ser ampliados.
+1. Cobertura de Casos de Teste (incluir uma variedade de cenários)
+2. Testes de Integração (os testes unitários estão focados em cada função isoladamente)
+3. Testes Automatizados (permitirá que você execute os testes regularmente e detecte quebras na 
+funcionalidade do sistema durante alterações ou adições de código)
+4. Teste de escalabilidade (testar se o sistema consegue lidar com um grande volume de usuários)
+ */
