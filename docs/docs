@@ -1,1 +1,16 @@
-
+O que foi implementado nos Models reflete corretamente o que está modelado no diagrama de classes. 
+As classes e métodos estão alinhados, o que ajuda a garantir que o design planejado foi seguido e 
+evita que a implementação se desvie da arquitetura prevista. Esse alinhamento fortalece a aderência
+entre o sistema desenvolvido e a modelagem inicial, o que é essencial para a qualidade e a 
+consistência do projeto.
+"Há períodos para efetuar matrículas, durante os quais um aluno pode acessar o sistema
+para se matricular em disciplinas e/ou para cancelar matrículas feitas anteriormente."
+Contudo, foi identificada a ausência da representação do período de matrícula no diagrama de classes. 
+Embora a funcionalidade de definir o período de matrícula tenha sido implementada corretamente no 
+sistema e esteja devidamente registrada no banco de dados, a ausência desse elemento no diagrama de
+classes indica uma falta de correspondência entre a modelagem e a implementação real. 
+Essa desconexão pode comprometer a documentação do projeto e dificultar o entendimento do sistema 
+por novos desenvolvedores, além de trazer riscos à manutenção futura. Modelar o período de matrícula 
+explicitamente no diagrama de classes permitiria uma visão completa e alinhada com a lógica de negócios
+estabelecida, facilitando a validação e compreensão do comportamento esperado do sistema em relação 
+aos prazos de matrícula.

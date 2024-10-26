@@ -4,6 +4,13 @@ import Professor from '../models/professorModel.js';
 import Secretaria from '../models/secretariaModel.js';
 import autoBind from 'auto-bind';
 
+/* O sistema adota o estilo arquitetural MVC (Model-View-Controller), garantindo que cada componente 
+tenha seu papel claro e bem definido. Os Models estão focados na lógica de negócio e persistência de 
+dados, enquanto os Controllers gerenciam a interação com o usuário e orquestram as operações entre os 
+diferentes componentes. No entanto, atualmente existe apenas um Controller para o usuário, que importa
+vários Models. O ideal seria ter um Controller dedicado para cada tabela, como um AlunoController, 
+ProfessorController e SecretariaController, para garantir uma melhor organização.*/
+
 export class UserController {
 
     constructor() {
