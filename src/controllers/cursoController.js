@@ -2,6 +2,11 @@ import CursoModel from '../models/cursoModel.js';
 import autoBind from 'auto-bind';
 import DisciplinaModel from '../models/disciplinaModel.js';
 
+//Inconsistência em respostas:
+//Ao longo do código, podemos observar dois meios para renderizar as respostas, sendo eles, o render e o JSON, 
+//é recomendável a padronização, destinando render para views, e json para APIs.
+
+
 export class CursoController {
     constructor() {
         autoBind(this);
