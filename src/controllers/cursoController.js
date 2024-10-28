@@ -37,7 +37,14 @@ export class CursoController {
             });
         }
     }
-    
+
+//Excesso de responsabilidades do método:
+//Alguns métodos estão possuindo um número excessivo de responsabilidades, como por exemplo, o método getAll(), 
+//do controller de cursos, possui a função de obter todas as disciplinas e todos os cursos, 
+//isso viola o princípio de responsabilidade única, diminuindo a coesão do método, recomenda-se neste caso, 
+//que existam métodos específicos para cada tipo de busca, como por exemplo getAllCourses() e getAllDisciplines().
+
+
 
     async getAll(request, response) {
         try {
