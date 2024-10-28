@@ -248,6 +248,12 @@ export class UserController {
         }
     }
 
+//Repetição de blocos de código:
+//No método getById(), do controller de users, é utilizado um switchCase, baseando-se no tipo do usuário, e a partir disso, 
+//se busca as informações dos usuários. Recomenda-se a utilização de um método auxiliar, que pode ser chamado por exemplo de getUserInformations(), 
+//onde o mesmo recebera o tipo de usuário como parâmetro, e retornará as informações necessárias. Esta estratégia aumenta a leitura, e a modularização do código. 
+
+    
     async getById(req, res) {
         const { id } = req.params;
 

@@ -9,6 +9,18 @@ export class MatriculaController {
         autoBind(this);
     }
 
+//Testes de condicionais:
+//Ao testar condicionais em ifs, é recomendado que se teste a confirmação da veracidade do elemento, e não ao contrário, pois assim,
+//o código fica mais legível e direto.
+//Ex:
+//Ao invés disso: 
+//if (!nome || numCredito === undefined || periodo === undefined)
+//Utilize isso: 
+//if (nome && numCredito !== undefined && periodo !== undefined)
+//(vale citar que dependendo das regras de negocios, e valores que tal campo pode assumir, deve-se se precaver de possiveis valores 
+// que gerariam erros no codigo, como por exemplo "0", '', e afins, deve-se se prevenir destas situações com condicionais especificas)
+
+    
     async create(request, response) {
         try {
             const { numeroMatricula, idCurso, periodo, disciplinasObrigatorias, disciplinasOptativas } = request.body;

@@ -91,6 +91,12 @@ class DisciplinaController {
         }
     }
 
+
+    //Indicação de localização da disciplina de forma não recomendada:
+//No código, a forma de indicação da não localização da disciplina foi a partir de uma condicional if(result.affectedRows === 0), 
+//isso não é recomendado, pois pode expor dados internos e também dificultar o entendimento do código, a sugestão seria a modificação do model, 
+//para caso a disciplina não for encontrada, seja retornado um NULL.
+
     // Método para deletar uma disciplina pelo ID
     async delete(req, res) {
         console.log('Parâmetros recebidos:', req.params); // Adicione este log

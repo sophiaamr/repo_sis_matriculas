@@ -1,5 +1,11 @@
 import OutrosModel from '../models/OutrosModel.js';
 
+
+//Utilização de um controller para datas:
+//Acredito que esta prática pode causar um trabalho extra no desenvolvimento das funcionalidades, e prejudicaria um pouco a compreensão do código como um todo. 
+//Recomendo a inserção dos métodos relacionados as datas, em suas respectivas entidades 
+//(EX: getMatriculaDates(req, res) pode ser inserido no controller relacionado as matriculas).
+//
 export async function getDates(req, res) {
     try {
         const dates = await OutrosModel.getDates();

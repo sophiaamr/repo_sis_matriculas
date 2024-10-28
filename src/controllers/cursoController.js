@@ -2,6 +2,11 @@ import CursoModel from '../models/cursoModel.js';
 import autoBind from 'auto-bind';
 import DisciplinaModel from '../models/disciplinaModel.js';
 
+//Inconsistência em respostas:
+//Ao longo do código, podemos observar dois meios para renderizar as respostas, sendo eles, o render e o JSON, 
+//é recomendável a padronização, destinando render para views, e json para APIs.
+
+
 export class CursoController {
     constructor() {
         autoBind(this);
@@ -37,7 +42,14 @@ export class CursoController {
             });
         }
     }
-    
+
+//Excesso de responsabilidades do método:
+//Alguns métodos estão possuindo um número excessivo de responsabilidades, como por exemplo, o método getAll(), 
+//do controller de cursos, possui a função de obter todas as disciplinas e todos os cursos, 
+//isso viola o princípio de responsabilidade única, diminuindo a coesão do método, recomenda-se neste caso, 
+//que existam métodos específicos para cada tipo de busca, como por exemplo getAllCourses() e getAllDisciplines().
+
+
 
     async getAll(request, response) {
         try {
