@@ -6,6 +6,19 @@ export class CobrancaController {
         autoBind(this);
     }
 
+   // Utilização de async/await:
+    //Utilize o recurso await para as funções que realizam requisições ao banco de dados, ao utilizar este recurso, o código ficará mais limpo,
+    //pois ocorreria a redução do uso de condicionais de erros nas respostas das requisições. 
+    //Exemplo: 
+    //try { 
+        //const result = await CurriculoModel.create(request.body); 
+        //return renderResponse(response, 201, 'Currículo criado com sucesso!'); 
+    //} catch (err) {
+        //console.error('Erro ao criar currículo:', err.message); 
+        //return renderResponse(response, 500, 'Erro interno do servidor.'); 
+    //}
+
+
     async create(request, response) {
         try {
             const { status, juros, dataInicio, dataFim } = request.body;
